@@ -32,6 +32,7 @@ action :remove do
         action :remove
       end
     end
+    new_resource.updated_by_last_action(true)
   end
 end
 
@@ -109,4 +110,5 @@ action :create do
     gid new_resource.group_id
     members security_group
   end
+  new_resource.updated_by_last_action(true)
 end

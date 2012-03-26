@@ -27,7 +27,7 @@ action :remove do
   if Chef::Config[:solo]
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
   else
-    search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
+    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
       user rm_user['id'] do
         action :remove
       end
@@ -42,7 +42,7 @@ action :create do
   if Chef::Config[:solo]
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
   else
-    search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} NOT action:remove") do |u|
+    search(new_resource.data_bag, "groups:#{new_resource.search_group} NOT action:remove") do |u|
       security_group << u['id']
 
       if node['apache'] and node['apache']['allowed_openids']
@@ -106,7 +106,7 @@ action :create do
     end
   end
 
-  group "#{new_resource.group_name}" do
+  group new_resource.group_name do
     gid new_resource.group_id
     members security_group
   end

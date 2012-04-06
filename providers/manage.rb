@@ -32,6 +32,19 @@ action :remove do
 end
 
 action :create do
+
+  shadow_available = begin
+                        load 'shadow'
+                      rescue LoadError
+                        false
+                      end
+
+  unless shadow_available
+    gem_package 'ruby-shadow' do
+      action :install
+    end
+  end
+
   security_group = Array.new
 
   search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} NOT action:remove") do |u|
@@ -75,6 +88,9 @@ action :create do
         supports :manage_home => true
       end
       home home_dir
+      if u['password']
+          password u['password']
+      end
     end
 
     if home_dir != "/dev/null"

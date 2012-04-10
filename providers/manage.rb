@@ -1,5 +1,6 @@
+# LWRP for managing users and groups from Data Bag Items.
 #
-# Cookbook Name:: users 
+# Cookbook Name:: users
 # Provider:: manage
 #
 # Copyright 2011, Eric G. Wolfe
@@ -18,37 +19,40 @@
 # limitations under the License.
 #
 
-def initialize(*args)
-  super
-  @action = :create
-end
 
 action :remove do
-  search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
-    user rm_user['id'] do
-      action :remove
-    end
+  search(
+    new_resource.data_bag,
+    "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
+      user rm_user['id'] do
+        action :remove
+      end
   end
+  new_resource.updated_by_last_action(true)
 end
+
 
 action :create do
   security_group = Array.new
 
-  search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} NOT action:remove") do |u|
+  search(
+    new_resource.data_bag,
+    "groups:#{new_resource.search_group} NOT action:remove") do |u|
     security_group << u['id']
 
-    if node[:apache] and node[:apache][:allowed_openids]
+    if node['apache'] and node['apache']['allowed_openids']
       Array(u['openid']).compact.each do |oid|
-        node[:apache][:allowed_openids] << oid unless node[:apache][:allowed_openids].include?(oid)
+        unless node['apache']['allowed_openids'].include?(oid)
+          node['apache']['allowed_openids'] << oid
+        end
       end
-    end
 
     # Set home to location in data bag,
     # or a reasonable default (/home/$user).
     if u['home']
       home_dir = u['home']
     else
-      home_dir = "/home/#{u['id']}"
+      home_dir = File.join(::File::SEPARATOR, 'home', u['id'])
     end
 
     # The user block will fail if the group does not yet exist.
@@ -69,7 +73,7 @@ action :create do
       end
       shell u['shell']
       comment u['comment']
-      if home_dir == "/dev/null"
+      if home_dir == '/dev/null'
         supports :manage_home => false
       else
         supports :manage_home => true
@@ -77,28 +81,30 @@ action :create do
       home home_dir
     end
 
-    if home_dir != "/dev/null"
-      directory "#{home_dir}/.ssh" do
+    if home_dir != '/dev/null'
+      directory File.join(home_dir, '.ssh') do 
         owner u['id']
         group u['gid'] || u['id']
-        mode "0700"
+        mode '0700'
       end
 
       if u['ssh_keys']
-        template "#{home_dir}/.ssh/authorized_keys" do
-          source "authorized_keys.erb"
+        template File.join(home_dir, '.ssh', 'authorized_keys') do
+          source 'authorized_keys.erb'
           cookbook new_resource.cookbook
           owner u['id']
           group u['gid'] || u['id']
-          mode "0600"
-          variables :ssh_keys => u['ssh_keys']
+          mode '0600'
+          variables(:ssh_keys => u['ssh_keys'])
         end
       end
     end
   end
 
-  group "#{new_resource.group_name}" do
+  group new_resource.group_name do
     gid new_resource.group_id
     members security_group
   end
+
+  new_resource.updated_by_last_action(true)
 end

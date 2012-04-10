@@ -1,7 +1,7 @@
 Description
 ===========
 
-Creates users from a databag search.
+Creates users from Data Bag Items.
 
 Requirements
 ============
@@ -13,22 +13,29 @@ Platform
 * CentOS, Red Hat, Fedora
 * FreeBSD
 
-A data bag populated with user objects must exist.  The default data bag in this recipe is "users".  See USAGE.
+A Data Bag populated with user Items must exist. The default Data Bag in
+this recipe is 'users'.
 
 Usage
 =====
 
 This cookbook is specific for setting up sysadmin group and users for now.
 
-    include_recipe 'users::sysadmins'
+```ruby
+include_recipe 'users::sysadmins'
+```
 
 Use knife to create a data bag for users:
 
-    $ knife data bag create users
+```bash
+knife data bag create users
+```
 
-Create a user.
+Create a user:
 
-    $ knife data bag users bofh
+```bash
+knife data bag users bofh
+```
 ```json
 {
   "id": "bofh",
@@ -45,12 +52,14 @@ Create a user.
 }
 ```
 
-Remove a user *johndoe1*:
+Remove the user 'johndoe':
 
-    $ knife data bag users johndoe1
+```bash
+knife data bag users johndoe
+```
 ```json
 {
-  "id": "johndoe1",
+  "id": "johndoe",
   "groups": [ "sysadmin", "dba", "devops" ],
   "uid": 2002,
   "action": "remove",
@@ -58,10 +67,10 @@ Remove a user *johndoe1*:
 }
 ```
 
-* Note: Only Data Bag Items with the `"action": "remove"` and a searchable
+* Note: Only Data Bag Items with the action *remove* and a searchable
   `group` attribute will be purged by the `:remove` action.
 
-The default recipe makes use of the 'users_manage' Lightweight Resource
+The `sysadmin.rb` Recipe makes use of the `users_manage` Lightweight Resource
 Provider (LWRP), and looks like this:
 
 ```ruby
@@ -72,9 +81,9 @@ end
 ```
 
 Note this LWRP searches the 'users' Data Bag for the 'sysadmin' group
-attribute, and adds those users to a Unix security group 'sysadmin'. The only
-required attribute is `group_id`, which represents the numeric Unix gid and
-*must* be unique. The default action for the LWRP is `:create` only.
+attribute, and adds those users to a Unix group 'sysadmin'. The only required
+attribute is `group_id`, which represents the numeric Unix GID and must be
+unique. The default action for the LWRP is `:create`.
 
 If you have different requirements, for example:
 

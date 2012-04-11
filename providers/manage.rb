@@ -53,7 +53,7 @@ action :create do
     if u['home']
       home_dir = u['home']
     else
-      home_dir = File.join(::File::SEPARATOR, 'home', u['id'])
+      home_dir = ::File.join(::File::SEPARATOR, 'home', u['id'])
     end
 
     # The user block will fail if the group does not yet exist.
@@ -83,14 +83,14 @@ action :create do
     end
 
     if home_dir != '/dev/null'
-      directory File.join(home_dir, '.ssh') do 
+      directory ::File.join(home_dir, '.ssh') do 
         owner u['id']
         group u['gid'] || u['id']
         mode '0700'
       end
 
       if u['ssh_keys']
-        template File.join(home_dir, '.ssh', 'authorized_keys') do
+        template ::File.join(home_dir, '.ssh', 'authorized_keys') do
           source 'authorized_keys.erb'
           cookbook new_resource.cookbook
           owner u['id']

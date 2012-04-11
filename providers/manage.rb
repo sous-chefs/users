@@ -46,6 +46,7 @@ action :create do
           node['apache']['allowed_openids'] << oid
         end
       end
+    end
 
     # Set home to location in data bag,
     # or a reasonable default (/home/$user).

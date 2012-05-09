@@ -13,12 +13,12 @@ Platform
 * CentOS, Red Hat, Fedora
 * FreeBSD
 
-A data bag populated with user objects must exist.  The default data bag in this recipe is "users".  See USAGE.
+A data bag populated with user objects must exist.  The default data bag in this recipe is `users`.  See USAGE.
 
 Usage
 =====
 
-This cookbook is specific for setting up sysadmin group and users for now.
+This cookbook is specific for setting up `sysadmin` group and users for now.
 
     include_recipe "users::sysadmins"
 
@@ -26,7 +26,7 @@ Use knife to create a data bag for users.
 
     knife data bag create users
 
-Create a user.
+Create a user in the data_bag/users/ directory.
 
     knife data bag users bofh
     {
@@ -56,7 +56,7 @@ Remove a user, johndoe1.
 
     * Note only user bags with the "action : remove" and a search-able "group" attribute will be purged by the :remove action.
 
-The default recipe makes use of the "users_manage" Lightweight Resource Provider (LWRP), and looks like this:
+The default recipe makes use of the `users_manage` Lightweight Resource Provider (LWRP), and looks like this:
 
 
 ```
@@ -66,16 +66,16 @@ The default recipe makes use of the "users_manage" Lightweight Resource Provider
   end
 ```
 
-Note this LWRP searches the "users" data bag for the "sysadmin" group attribute, and adds those users to a Unix security group "sysadmin".  The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique.  The default action for the LWRP is ":create" only.
+Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`.  The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique.  The default action for the LWRP is `:create` only.
 
 If you have different requirements, for example:
 
  * You want to search a different data bag specific to a role such as mail.  You may change the data_bag searched.
-   - data_bag "mail"
- * You want to search for a different group attribute named "postmaster".  You may change the search_group attribute.  This attribute defaults to the LWRP resource name.
-   - search_group "postmaster"
+   - data_bag `mail`
+ * You want to search for a different group attribute named `postmaster`.  You may change the search_group attribute.  This attribute defaults to the LWRP resource name.
+   - search_group `postmaster`
  * You want to add the users to a security group other than the lightweight resource name.  You may change the group_name attribute.  This attribute also defaults to the LWRP resource name.
-   - group_name "wheel"
+   - group_name `wheel`
 
 Putting these requirements together our recipe might look like this:
 

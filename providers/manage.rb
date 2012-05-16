@@ -34,7 +34,8 @@ end
 action :create do
 
   shadow_available = begin
-                        load 'shadow'
+                        require 'shadow'
+                        Shadow::Passwd::Entry::const_get("Shadow") ? true : false
                       rescue LoadError
                         false
                       end

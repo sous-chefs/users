@@ -40,9 +40,10 @@ action :create do
                       end
 
   unless shadow_available
-    gem_package 'ruby-shadow' do
-      action :install
+   shadow = gem_package 'ruby-shadow' do
+      action :nothing
     end
+   shadow.run_action(:install)
   end
 
   security_group = Array.new

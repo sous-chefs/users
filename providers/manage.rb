@@ -44,6 +44,7 @@ action :create do
       action :nothing
     end
    shadow.run_action(:install)
+   Gem.clear_paths
   end
 
   security_group = Array.new

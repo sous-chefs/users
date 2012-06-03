@@ -98,6 +98,8 @@ action :create do
       if u['delete_password_on_create']
         execute "delete password for " + u['id'] do
           command "passwd -d #{u['id']}"
+          # if passwd -S USER 2'nd field is L(ocked), which can be
+          # if admin locks password, or account was created without one.
           only_if "test $(passwd -S #{u['id']} | awk '{print $2}') = L"
         end
       end

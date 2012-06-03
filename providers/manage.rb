@@ -94,6 +94,14 @@ action :create do
           variables :ssh_keys => u['ssh_keys']
         end
       end
+
+      if u['delete_password_on_create']
+        execute "delete password for " + u['id'] do
+          command "passwd -d #{u['id']}"
+          only_if "test $(passwd -S #{u['id']} | awk '{print $2}') = L"
+        end
+      end
+
     end
   end
 

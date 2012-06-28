@@ -34,7 +34,7 @@ end
 action :create do
   security_group = Array.new
 
-  search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} NOT action:remove") do |u|
+  search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
     security_group << u['id']
 
     if node[:apache] and node[:apache][:allowed_openids]

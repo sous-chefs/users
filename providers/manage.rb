@@ -80,7 +80,11 @@ action :create do
     if home_dir != "/dev/null"
       directory "#{home_dir}/.ssh" do
         owner u['id']
-        group u['gid'] || u['id']
+        if u['gid']
+          group u['gid']
+        else 
+          u['id']
+        end
         mode "0700"
       end
 
@@ -89,7 +93,11 @@ action :create do
           source "authorized_keys.erb"
           cookbook new_resource.cookbook
           owner u['id']
-          group u['gid'] || u['id']
+          if u['gid']
+              group u['gid']
+          else 
+              u['id']
+          end
           mode "0600"
           variables :ssh_keys => u['ssh_keys']
         end
@@ -98,6 +106,7 @@ action :create do
   end
 
   group "#{new_resource.group_name}" do
+    append true
     gid new_resource.group_id
     members security_group
   end

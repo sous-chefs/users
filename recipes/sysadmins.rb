@@ -21,6 +21,6 @@
 # Searches data bag "users" for groups attribute "sysadmin".
 # Places returned users in Unix group "sysadmin" with GID 2300.
 users_manage "sysadmin" do
-  group_id 2300
+  group_id 14
   action [ :remove, :create ]
 end

@@ -103,6 +103,13 @@ action :create do
         end
       end
     end
+     
+    case node[:platform]
+    when "smartos"
+      user u['id'] do
+        action :unlock
+      end
+    end
   end
 
   group "#{new_resource.group_name}" do
@@ -110,4 +117,6 @@ action :create do
     gid new_resource.group_id
     members security_group
   end
+  
+  
 end

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: users 
+# Cookbook Name:: users
 # Provider:: manage
 #
 # Copyright 2011, Eric G. Wolfe
@@ -26,8 +26,8 @@ end
 action :remove do
   search("#{new_resource.data_bag}", "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
     user rm_user['id'] do
-      action :remove
-    end
+    action :remove
+  end
   end
 end
 
@@ -82,7 +82,7 @@ action :create do
         owner u['id']
         if u['gid']
           group u['gid']
-        else 
+        else
           u['id']
         end
         mode "0700"
@@ -94,18 +94,17 @@ action :create do
           cookbook new_resource.cookbook
           owner u['id']
           if u['gid']
-              group u['gid']
-          else 
-              u['id']
+            group u['gid']
+          else
+            u['id']
           end
           mode "0600"
           variables :ssh_keys => u['ssh_keys']
         end
       end
     end
-     
-    case node[:platform]
-    when "smartos"
+
+    if node[:platform] == 'smartos'
       user u['id'] do
         action :unlock
       end
@@ -117,6 +116,4 @@ action :create do
     gid new_resource.group_id
     members security_group
   end
-  
-  
 end

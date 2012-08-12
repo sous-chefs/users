@@ -40,6 +40,7 @@ Create a user in the data_bag/users/ directory.
         "pager": "8005551212@txt.att.net",
         "email": "bofh@example.com"
       },
+      "delete_password_on_create" : true,
       "openid": "bofh.myopenid.com"
     }
 
@@ -67,6 +68,8 @@ The default recipe makes use of the `users_manage` Lightweight Resource Provider
 ```
 
 Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`.  The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique.  The default action for the LWRP is `:create` only.
+
+If `delete_password_on_create` is true, when user is created, his password is deleted (using passwd -d USER). Then, when user logs into the system using his ssh key, he can create a new password without specifying the "old" one (which does not make sense when creating a user via Chef). See [1] for more information how this is achieved.
 
 If you have different requirements, for example:
 
@@ -99,6 +102,8 @@ The recipe, by default, will also create the sysadmin group. If you're using the
 The sysadmin group will be created with GID 2300. This may become an attribute at a later date.
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Opscode 'apache2' cookbook for more information about this.
+
+[1]: http://serverfault.com/questions/350064/new-user-with-authorized-keys-how-to-not-ask-for-the-old-password-when-setting
 
 License and Author
 ==================

@@ -28,10 +28,15 @@ Use knife to create a data bag for users.
 
 Create a user in the data_bag/users/ directory.
 
+Note: The ssh_keys attribute below can be either a String or an Array.  However, we are recommending the use of an Array.
+
     knife data bag users bofh
     {
       "id": "bofh",
-      "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh",
+      "ssh_keys": [
+        "ssh-rsa AAA123...xyz== foo",
+        "ssh-rsa AAA456...uvw== bar"
+      ],
       "groups": [ "sysadmin", "dba", "devops" ],
       "uid": 2001,
       "shell": "\/bin\/bash",

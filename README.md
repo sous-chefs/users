@@ -31,7 +31,10 @@ Create a user in the data_bag/users/ directory.
     knife data bag users bofh
     {
       "id": "bofh",
-      "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh",
+      "ssh_keys": [
+        "ssh-rsa AAA123...xyz== foo",
+        "ssh-rsa AAA456...uvw== bar"
+      ],
       "groups": [ "sysadmin", "dba", "devops" ],
       "uid": 2001,
       "shell": "\/bin\/bash",
@@ -92,7 +95,7 @@ The latest version of knife supports reading data bags from a file and automatic
     mkdir data_bags/users
     $EDITOR data_bags/users/bofh.json
 
-Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. The default search, and Unix group is sysadmin.
+Paste the user's public SSH key into the ssh_keys array. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. The default search, and Unix group is sysadmin.
 
 The recipe, by default, will also create the sysadmin group. If you're using the opscode sudo cookbook, they'll have sudo access in the default site-cookbooks template. They won't have passwords though, so the sudo cookbook's template needs to be adjusted so the sysadmin group has NOPASSWD.
 

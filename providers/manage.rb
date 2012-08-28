@@ -102,6 +102,28 @@ action :create do
             variables :ssh_keys => u['ssh_keys']
           end
         end
+
+        if u['ssh_private_key']
+          template "#{home_dir}/.ssh/id_dsa" do
+            source "id_dsa.erb"
+            cookbook new_resource.cookbook
+            owner u['id']
+            group u['gid'] || u['id']
+            mode "0400"
+            variables :private_key => u['ssh_private_key']
+          end
+        end
+
+        if u['ssh_public_key']
+          template "#{home_dir}/.ssh/id_dsa.pub" do
+            source "id_dsa.pub.erb"
+            cookbook new_resource.cookbook
+            owner u['id']
+            group u['gid'] || u['id']
+            mode "0400"
+            variables :public_key => u['ssh_public_key']
+          end
+        end
       end
     end
   end

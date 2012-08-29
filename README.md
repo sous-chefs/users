@@ -28,10 +28,18 @@ Use knife to create a data bag for users.
 
 Create a user in the data_bag/users/ directory.
 
+When using an [Omnibus ruby](http://tickets.opscode.com/browse/CHEF-2848), one can specify an optional password hash.  This
+will be used as the user's password.
+
+The hash can be generated with the following command.
+
+    openssl passwd -1 "plaintextpassword"
+
     knife data bag users bofh
     {
       "id": "bofh",
       "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh",
+      "password": "$1$d...HgH0",
       "groups": [ "sysadmin", "dba", "devops" ],
       "uid": 2001,
       "shell": "\/bin\/bash",

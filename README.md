@@ -74,7 +74,11 @@ The default recipe makes use of the `users_manage` Lightweight Resource Provider
   end
 ```
 
-Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`.  The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique.  The default action for the LWRP is `:create` only.
+Note this LWRP searches the `users` data bag for the `sysadmin` group attribute,
+and adds those users to a Unix security group `sysadmin`, replacing existing
+members.  The only required attribute is group_id, which represents the numeric
+Unix gid and *must* be unique.  The default action for the LWRP is `:create`
+only.
 
 If you have different requirements, for example:
 
@@ -84,14 +88,28 @@ If you have different requirements, for example:
    - search_group `postmaster`
  * You want to add the users to a security group other than the lightweight resource name.  You may change the group_name attribute.  This attribute also defaults to the LWRP resource name.
    - group_name `wheel`
+ * You want to append users to an existing group. You may set the `group_append` attribute. This is the only case where group_id is not required.
+   - group_append True
 
 Putting these requirements together our recipe might look like this:
+
+If you want to replace all the members:
 
 ```
   users_manage "postmaster" do
     data_bag "mail"
     group_name "wheel"
     group_id 10
+  end
+```
+
+If you wanted to append the new members:
+
+```
+  users_manage "postmaster" do
+    data_bag "mail"
+    group_name "wheel"
+    group_append True
   end
 ```
 

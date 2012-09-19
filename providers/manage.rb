@@ -41,6 +41,8 @@ action :create do
 
   if Chef::Config[:solo]
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+  elsif not new_resource.group_append and not new_resource.group_id
+    Chef::Log.warn("This recipe requires you either append users to a group, or specify the group ID to replace users in.")
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       security_group << u['id']
@@ -108,7 +110,13 @@ action :create do
   end
 
   group new_resource.group_name do
-    gid new_resource.group_id
+    if new_resource.group_append
+        action :modify
+        append true
+    else
+        gid new_resource.group_id
+    end
+
     members security_group
   end
   new_resource.updated_by_last_action(true)

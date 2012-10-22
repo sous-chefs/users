@@ -18,6 +18,10 @@
 # limitations under the License.
 #
 
+def whyrun_supported?
+  true
+end
+
 def initialize(*args)
   super
   @action = :create

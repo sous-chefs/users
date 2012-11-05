@@ -39,6 +39,7 @@ when "centos","redhat","fedora","amazon"
   %w{gcc gcc-c++ kernel-devel make}.each do |pkg|
     to_install = package pkg do
       action :nothing
+      not_if 'which gcc > /dev/null'
     end
     to_install.run_action(:install)
   end

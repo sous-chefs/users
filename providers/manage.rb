@@ -29,8 +29,8 @@ action :remove do
     else
 	search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
 	    user rm_user['id'] do
-	    action :remove
-	end
+		action :remove
+	    end
 	end
 	new_resource.updated_by_last_action(true)
     end
@@ -43,68 +43,90 @@ action :create do
 	Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
     else
 	search(new_resource.data_bag, "groups:#{new_resource.search_group} NOT action:remove") do |u|
+	    # add the current user to the unix group we're going to create
 	    security_group << u['id']
 
-	    if node['apache'] and node['apache']['allowed_openids']
-		Array(u['openid']).compact.each do |oid|
-		    node['apache']['allowed_openids'] << oid unless node['apache']['allowed_openids'].include?(oid)
-		end
-	    end
+	    # if no gid was provided create a group based on the u['uid']
+	    # if neither were provided then don't specify ids
+	    if u[:gid] || u[:uid]
+		primary_group = Integer(u[:gid] || u[:uid])
 
-	    # Set home to location in data bag,
-	    # or a reasonable default (/home/$user).
-	    if u['home']
-		home_dir = u['home']
+		group u[:id] do
+		    action :create
+		    gid primary_group
+		end
 	    else
-		home_dir = "/home/#{u['id']}"
-	    end
-
-	    # The user block will fail if the group does not yet exist.
-	    # See the -g option limitations in man 8 useradd for an explanation.
-	    # This should correct that without breaking functionality.
-	    if u['gid'] and u['gid'].kind_of?(Numeric)
-		group u['id'] do
-		    gid u['gid']
+		group u[:id] do
+		    action :create
 		end
 	    end
 
-	    # Create user object.
-	    # Do NOT try to manage null home directories.
-	    user u['id'] do
-		uid u['uid']
-		if u['gid']
-		    gid u['gid']
+	    # The home directory we're going to create is u['home'] or /home/#{u['home']
+	    create_home = u[:home] || "/home/#{u[:id]}"
+
+	    # if u['chroot'] exists then the password_home is it, otherwise it's the same as create_home
+	    password_home = u[:chroot] || create_home
+
+	    user u[:id] do
+		# Set the uid if provided
+		if u[:uid]
+		    uid u[:uid]
 		end
-		shell u['shell']
-		comment u['comment']
+
+		gid u[:id]
+
+		# u['home'] is defaulted to /home/u['id'] if not present
+		home password_home
+		# we create the home directory manually
+		supports :manage_home => false
+
+		shell u[:shell] || '/usr/sbin/nologin'
+
+		comment u[:comment] || ''
+
 		if u.include? :password
 		    password u[:password]
 		end
-		if home_dir == "/dev/null"
-		    supports :manage_home => false
-		else
-		    supports :manage_home => true
-		end
-		home home_dir
 	    end
 
-	    if home_dir != "/dev/null"
-		directory "#{home_dir}/.ssh" do
-		    owner u['id']
-		    group u['gid'] || u['id']
-		    mode "0700"
+	    # create the home directory (and chroot) for the user
+	    if u[:chroot]
+		directory create_home do
+		    mode 0755
+		    owner 'root'
+		    group 'root'
 		end
 
-		if u['ssh_keys']
-		    template "#{home_dir}/.ssh/authorized_keys" do
-			source "authorized_keys.erb"
-			cookbook new_resource.cookbook
-			owner u['id']
-			group u['gid'] || u['id']
-			mode "0600"
-			variables :ssh_keys => u['ssh_keys']
-		    end
+		directory "#{create_home}#{password_home}" do
+		    mode 0755
+		    owner u[:id]
+		    group u[:id]
 		end
+	    else
+		directory create_home do
+		    mode 0755
+		    owner u[:id]
+		    group u[:id]
+		end
+	    end
+
+	    # create the .ssh/authorized_keys if ssh_keys are provided
+	    if u[:ssh_keys]
+		directory "#{create_home}/.ssh" do
+		    mode 0700
+		    owner u[:id]
+		    group u[:id]
+		end
+
+		template "#{create_home}/.ssh/authorized_keys" do
+		    source "authorized_keys.erb"
+		    cookbook new_resource.cookbook
+		    owner u[:id]
+		    group u[:id]
+		    mode "0600"
+		    variables :ssh_keys => u['ssh_keys']
+		end
+
 	    end
 	end
     end

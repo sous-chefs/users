@@ -110,8 +110,9 @@ action :create do
         end
 
         if u['ssh_private_key']
-          template "#{home_dir}/.ssh/id_dsa" do
-            source "id_dsa.erb"
+          key_type = u['ssh_private_key'].include?("BEGIN RSA PRIVATE KEY") ? "rsa" : "dsa"
+          template "#{home_dir}/.ssh/id_#{key_type}" do
+            source "private_key.erb"
             cookbook new_resource.cookbook
             owner u['id']
             group u['gid'] || u['id']
@@ -121,8 +122,9 @@ action :create do
         end
 
         if u['ssh_public_key']
-          template "#{home_dir}/.ssh/id_dsa.pub" do
-            source "id_dsa.pub.erb"
+          key_type = u['ssh_public_key'].include?("ssh-rsa") ? "rsa" : "dsa"
+          template "#{home_dir}/.ssh/id_#{key_type}.pub" do
+            source "public_key.pub.erb"
             cookbook new_resource.cookbook
             owner u['id']
             group u['gid'] || u['id']

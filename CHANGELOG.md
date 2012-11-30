@@ -1,3 +1,9 @@
+## v1.2.0:
+
+* [COOK-1398] - Provider manage.rb ignores username attribute
+* [COOK-1582] - ssh_keys should take an array in addition to a string
+  separated by new lines
+
 ## v1.1.4:
 
 * [COOK-1396] - removed users get recreated

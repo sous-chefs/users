@@ -19,7 +19,11 @@ bag in this recipe is `users`. See USAGE.
 Usage
 =====
 
-This cookbook is specific for setting up `sysadmin` group and users for now.
+To include just the LWRPs in your cookbook, use:
+
+    include_recipe "users"
+
+Otherwise, this cookbook is specific for setting up `sysadmin` group and users with the sysadmins recipe for now.
 
     include_recipe "users::sysadmins"
 
@@ -78,7 +82,7 @@ Remove a user, johndoe1.
 * Note only user bags with the "action : remove" and a search-able
   "group" attribute will be purged by the :remove action.
 
-The default recipe makes use of the `users_manage` Lightweight
+The sysadmins recipe makes use of the `users_manage` Lightweight
 Resource Provider (LWRP), and looks like this:
 
     users_manage "sysadmin" do

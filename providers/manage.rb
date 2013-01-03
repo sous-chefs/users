@@ -133,10 +133,17 @@ action :create do
           end
         end
       end
+       
+      if node['platform'] == 'smartos'
+        user u['username'] do
+        action :unlock
+      end
     end
   end
+end
 
   group new_resource.group_name do
+    append true
     gid new_resource.group_id
     members security_group
   end

@@ -71,6 +71,8 @@ action :create do
         group u['username'] do
           gid u['gid']
         end
+      else
+        group u['username']
       end
 
       # Create user object.
@@ -139,6 +141,7 @@ action :create do
   group new_resource.group_name do
     gid new_resource.group_id
     members security_group
+    append true
   end
   new_resource.updated_by_last_action(true)
 end

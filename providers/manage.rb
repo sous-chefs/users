@@ -28,24 +28,22 @@ def initialize(*args)
 end
 
 action :remove do
-  if Chef::Config[:solo]
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-  else
+  if respond_to?(:search)
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
       user rm_user['username'] ||= rm_user['id'] do
         action :remove
       end
     end
     new_resource.updated_by_last_action(true)
+  else
+    Chef::Log.warn("This recipe uses search. You need chef-solo-search (https://github.com/edelight/chef-solo-search) in order to search data bags using chef-solo.")
   end
 end
 
 action :create do
   security_group = Array.new
 
-  if Chef::Config[:solo]
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-  else
+  if respond_to?(:search)
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       u['username'] ||= u['id']
       security_group << u['username']
@@ -134,6 +132,8 @@ action :create do
         end
       end
     end
+  else
+    Chef::Log.warn("This recipe uses search. You need chef-solo-search (https://github.com/edelight/chef-solo-search) in order to search data bags using chef-solo.")
   end
 
   group new_resource.group_name do

@@ -79,9 +79,10 @@ action :create do
       # Do NOT try to manage null home directories.
       user u['username'] do
         uid u['uid']
-        if u['gid']
-          gid u['gid']
-        end
+        # if u['gid']
+        #   gid u['gid']
+        # end
+        gid u['gid'] || u['username']
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']

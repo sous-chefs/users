@@ -107,6 +107,12 @@ action :create do
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
           end
+          
+          execute "Change SELinux type permissions" do
+            action :run
+            only_if 'sestatus | grep -P "status:\s+enabled" -q'
+            command "chcon -t user_home_t #{home_dir}/.ssh/authorized_keys"
+          end              
         end
 
         if u['ssh_private_key']

@@ -52,7 +52,7 @@ action :create do
 
       if node['apache'] and node['apache']['allowed_openids']
         Array(u['openid']).compact.each do |oid|
-          node['apache']['allowed_openids'] << oid unless node['apache']['allowed_openids'].include?(oid)
+          node.default['apache']['allowed_openids'] << oid unless node['apache']['allowed_openids'].include?(oid)
         end
       end
 

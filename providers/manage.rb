@@ -27,9 +27,16 @@ def initialize(*args)
   @action = :create
 end
 
+def chef_solo_search_installed?
+  klass = ::Search::const_get('Helper')
+  return klass.is_a?(Class)
+rescue NameError
+  return false
+end
+
 action :remove do
-  if Chef::Config[:solo]
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+  if Chef::Config[:solo] and not chef_solo_search_installed?
+    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
       user rm_user['username'] ||= rm_user['id'] do
@@ -43,8 +50,8 @@ end
 action :create do
   security_group = Array.new
 
-  if Chef::Config[:solo]
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+  if Chef::Config[:solo] and not chef_solo_search_installed?
+    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       u['username'] ||= u['id']

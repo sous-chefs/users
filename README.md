@@ -143,13 +143,23 @@ The Apache cookbook can set up authentication using OpenIDs, which is
 set up using the openid key here. See the Opscode 'apache2' cookbook
 for more information about this.
 
+Chef Solo
+---------
+
+As of version 1.4.0, this cookbook might work with Chef Solo when
+using
+[chef-solo-search by edelight](https://github.com/edelight/chef-solo-search).
+That cookbook is not a dependency of this one as Chef solo doesn't
+support dependency resolution using cookbook metadata - all cookbooks
+must be provided to the node manually when using Chef Solo.
+
 License and Author
 ==================
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 Author:: Seth Chisamore (<schisamo@opscode.com>)
 
-Copyright:: 2009-2012, Opscode, Inc
+Copyright:: 2009-2013, Opscode, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

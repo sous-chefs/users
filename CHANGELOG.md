@@ -1,3 +1,9 @@
+## v1.4.0:
+
+* [COOK-2479] - Permit users cookbook to work with chef-solo if
+  edelight/chef-solo-search is installed
+* [COOK-2486] - specify precedence when setting node attribute
+
 ## v1.3.0:
 
 * [COOK-1842] - allow specifying private SSH keys

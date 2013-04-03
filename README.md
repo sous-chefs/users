@@ -1,5 +1,5 @@
 Description
-===========
+============
 
 Creates users from a databag search.
 

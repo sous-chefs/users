@@ -1,6 +1,6 @@
 ## v1.5.0:
 
-* [COOK-2427] - unable to install users cookbook in chef 11
+* [COOK-2427] - Mistakenly released instead of sudo :-).
 
 ## v1.4.0:
 

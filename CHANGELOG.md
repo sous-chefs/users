@@ -1,3 +1,7 @@
+## v1.5.0:
+
+* [COOK-2427] - unable to install users cookbook in chef 11
+
 ## v1.4.0:
 
 * [COOK-2479] - Permit users cookbook to work with chef-solo if

@@ -21,14 +21,14 @@
 # Places returned users in Unix group "admin" with GID 2300.
 
 begin
-  admin = Etc.getgrnam('admin')
+  admin = Etc.getgrnam('admins')
 rescue ArgumentError
   admin = nil
 end
 
 gid = admin.nil? ? 110 : admin['gid']
 
-users_manage "admin" do
+users_manage "admins" do
   group_id gid
   action [ :remove, :create ]
 end

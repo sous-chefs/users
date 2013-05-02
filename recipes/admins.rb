@@ -17,18 +17,10 @@
 # limitations under the License.
 #
 
-# Searches data bag "users" for groups attribute "admin".
-# Places returned users in Unix group "admin" with GID 2300.
-
-begin
-  admin = Etc.getgrnam('admins')
-rescue ArgumentError
-  admin = nil
-end
-
-gid = admin.nil? ? 110 : admin['gid']
+# Searches data bag "users" for groups attribute "admins".
+# Places returned users in Unix group "admin" with GID 2302.
 
 users_manage "admins" do
-  group_id gid
+  group_id 2302
   action [ :remove, :create ]
 end

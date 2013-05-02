@@ -18,8 +18,8 @@
 # limitations under the License.
 #
 
-# Searches data bag "users" for groups attribute "sysadmin".
-# Places returned users in Unix group "sysadmin" with GID 2300.
+# Searches data bag "users" for groups attribute "engineers".
+# Places returned users in Unix group "engineers" with GID 2300.
 users_manage "engineers" do
   group_id 2301
   action [ :remove, :create ]

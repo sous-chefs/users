@@ -1,0 +1,3 @@
+knife test: bundle exec knife cookbook test $COOKBOOK
+chefspec: bundle exec rspec $SANDBOX/$COOKBOOK
+foodcritic: bundle exec foodcritic $SANDBOX/$COOKBOOK

@@ -53,7 +53,7 @@ action :create do
   if Chef::Config[:solo] and not chef_solo_search_installed?
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+    search(new_resource.data_bag, "groups:#{new_resource.search_group} NOT action:remove") do |u|
       u['username'] ||= u['id']
       security_group << u['username']
 

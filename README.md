@@ -23,9 +23,11 @@ To include just the LWRPs in your cookbook, use:
 
     include_recipe "users"
 
-Otherwise, this cookbook is specific for setting up `sysadmin` group and users with the sysadmins recipe for now.
+Otherwise, this cookbook is specific for setting up `sysadmin` group and users
+with the sysadmins recipe for now.
 
     include_recipe "users::sysadmins"
+
 
 Use knife to create a data bag for users.
 
@@ -152,6 +154,105 @@ using
 That cookbook is not a dependency of this one as Chef solo doesn't
 support dependency resolution using cookbook metadata - all cookbooks
 must be provided to the node manually when using Chef Solo.
+
+Customizing User Environments
+-----------------------------
+It is sometimes desirable to allow for the customization of the shell
+environment on a per-user basis.  Things like .vimrc or .my.cnf can
+make life easier for shell users.
+
+The philosophy here is that all files that customize a user environment will
+appear in the users home directory.  The owner and group
+of a file will always be the set to the user and their group, but file
+permissions are exposed for control to simplify requirements such as those for
+the `~/.ssh/authorized_keys` file.
+
+If you want to provide customization for users on a per-user basis, wrap this
+cookbook and call the LWRP.  A snippet of a wrapping cookbooks default recipe
+might look something like this:
+
+  # Include this recipe so the LWRP is active
+  include_recipe 'users::default'
+
+  # Chef creates a standard sudo group akin to the Redhat `wheel` or the Debian
+  # `sudo`.
+  users_manage 'sysadmin' do
+    action [ :remove, :create ]
+    custom_env true
+    group_id 2300
+    wrapper_cookbook 'cook_users'
+  end
+
+Note that the `custom_env` attribute must be set to `true` and that the
+`wrapper_cookbook` attribute must be set to the name of the cookbook
+wrapping the call to the LWRP.  This is necessary so Chef can find the
+files associated with the user.
+
+In addition to the JSON example above the `custom_env` key is present at the
+top level with a structure as follows:
+
+    {
+      "id": "bofh",
+      "password": "$1$d...HgH0",
+      "ssh_keys": [
+        "ssh-rsa AAA123...xyz== foo",
+        "ssh-rsa AAA456...uvw== bar"
+      ],
+      "groups": [ "sysadmin", "dba", "devops" ],
+      "uid": 2001,
+      "shell": "\/bin\/bash",
+      "comment": "BOFH",
+      "nagios": {
+        "pager": "8005551212@txt.att.net",
+        "email": "bofh@example.com"
+      },
+      "openid": "bofh.myopenid.com",
+      "custom_env": {
+        "files": {
+          "_inputrc": {
+            "mode": "00600",
+            "path": ".inputrc"
+          },
+          "ssh_config": {
+            "mode": "00600",
+            "path": ".ssh/ssh_config"
+          }
+        },
+        "templates": {
+          "_my_cnf.erb": {
+            "mode": "00600",
+            "path": ".my.cnf"
+          }
+        }
+      }
+    }
+
+Note that it is the combination (logical and) of the `custom_env` attribute of
+the LWRP and the existence of the `custom_env` key in the JSON that will cause
+Chef to look for files.  Thus if some users do not have customizations specified
+in the JSON, the Chef run will _not_ fail.
+
+Files specified in the JSON under `custom_env.files` will be looked for
+in the wrapper cookbook in the path `files/default/USERNAME` (where
+USERNAME is really the id of the bag item).  Similarly templates specified
+in the JSON under `custom_env.templates` will be looked for in the wrapper
+cookbook path `templates/default/USERNAME`.  So the cookbook file structure
+supporting the above JSON would look like this:
+
+    files
+    └── default
+        └── USERNAME
+            ├── _inputrc
+            └── ssh_config
+    templates
+    └── default
+        └── USERNAME
+            └── _my_cnf.erb
+
+Note that if a file is specified in the JSON but does not exist in the cookbook
+an error will halt the Chef run.  Similary a file existing in the file system
+but not specified in the JSON will not be laid down by Chef.
+
 
 License and Author
 ==================

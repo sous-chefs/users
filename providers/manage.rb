@@ -139,6 +139,37 @@ action :create do
             variables :public_key => u['ssh_public_key']
           end
         end
+
+        # If the data bag contains a custom_env and the custom_env input is true
+        # layout files as specified.
+        if new_resource.custom_env and u['custom_env']
+          # if there are files specified in the data bag then place them
+          # per the value associated with the filename.
+          if u['custom_env']['files']
+            u['custom_env']['files'].each do |file,info|
+              cookbook_file "#{home_dir}/#{info['path']}" do
+                cookbook new_resource.wrapper_cookbook
+                group u['username']
+                mode info['mode']
+                owner u['username']
+                source "#{u['username']}/#{file}"
+              end
+            end
+          end
+          # if there are templates specified in the data bag then place them
+          # per the value associated with the filename.
+          if u['custom_env']['templates']
+            u['custom_env']['templates'].each do |file,info|
+              template "#{home_dir}/#{info['path']}" do
+                cookbook new_resource.wrapper_cookbook
+                group u['username']
+                mode info['mode']
+                owner u['username']
+                source "#{u['username']}/#{file}"
+              end
+            end
+          end
+        end
       end
     end
   end

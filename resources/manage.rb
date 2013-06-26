@@ -25,11 +25,16 @@ actions :create, :remove
 # :group_name is the string name of the group to create, defaults to resource name
 # :group_id is the numeric id of the group to create
 # :cookbook is the name of the cookbook that the authorized_keys template should be found in
+# :custom_env is set to `true` when this user has customization to their local
+# :wrapper_cookbook is the name of the cookbook that contains the files and/or
+#   templates to be laid down for the user.
 attribute :data_bag, :kind_of => String, :default => "users"
 attribute :search_group, :kind_of => String, :name_attribute => true
 attribute :group_name, :kind_of => String, :name_attribute => true
 attribute :group_id, :kind_of => Integer, :required => true
 attribute :cookbook, :kind_of => String, :default => "users"
+attribute :custom_env, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :wrapper_cookbook, :kind_of => String
 
 def initialize(*args)
   super

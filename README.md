@@ -75,11 +75,11 @@ Remove a user, johndoe1.
       "id": "johndoe1",
       "groups": [ "sysadmin", "dba", "devops" ],
       "uid": 2002,
-      "action": "remove",
+      "remove": true,
       "comment": "User quit, retired, or fired."
     }
 
-* Note only user bags with the "action : remove" and a search-able
+* Note only user bags with the "remove: true" and a search-able
   "group" attribute will be purged by the :remove action.
 
 The sysadmins recipe makes use of the `users_manage` Lightweight

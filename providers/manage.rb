@@ -38,7 +38,7 @@ action :remove do
   if Chef::Config[:solo] and not chef_solo_search_installed?
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
+    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND remove:true") do |rm_user|
       user rm_user['username'] ||= rm_user['id'] do
         action :remove
       end
@@ -53,7 +53,7 @@ action :create do
   if Chef::Config[:solo] and not chef_solo_search_installed?
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT remove:true") do |u|
       u['username'] ||= u['id']
       security_group << u['username']
 

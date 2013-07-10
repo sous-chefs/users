@@ -140,9 +140,9 @@ action :create do
           end
         end
 
-        # If the data bag contains a custom_env and the custom_env input is true
+        # If the data bag contains a custom_files and the custom_files input is true
         # layout files as specified.
-        if new_resource.custom_env and u['custom_env']
+        if new_resource.custom_files and u['files']
 
           # We will likely need to create parent directories for things like
           # .byobu and .ssh so Pathname is handy
@@ -150,23 +150,24 @@ action :create do
 
           # if there are files specified in the data bag then place them
           # per the value associated with the filename.
-          if u['custom_env']['files']
-            u['custom_env']['files'].each do |file,info|
+            u['files'].each do |file,info|
 
-              parent_path = Pathname.new(info['path']).parent.to_s
+            parent_path = Pathname.new(info['path']).parent.to_s
 
-              # If the directory does not exist, create it in the users home
-              # directory
-              unless parent_path == '.'
-                directory "#{home_dir}/#{parent_path}" do
-                  group u['username']
-                  mode '00755'
-                  owner u['username']
-                  recursive true
-                end
+            # If the directory does not exist, create it in the users home
+            # directory
+            unless parent_path == '.'
+              directory "#{home_dir}/#{parent_path}" do
+                group u['username']
+                mode '00755'
+                owner u['username']
+                recursive true
               end
+            end
 
-              cookbook_file "#{home_dir}/#{info['path']}" do
+            # deal with it as a template
+            if info['type'] == 'template'
+              template "#{home_dir}/#{info['path']}" do
                 cookbook new_resource.wrapper_cookbook
                 group u['username']
                 mode info['mode']
@@ -174,27 +175,12 @@ action :create do
                 source "#{u['username']}/#{file}"
               end
             end
-          end
 
-          # if there are templates specified in the data bag then place them
-          # per the value associated with the filename.
-          if u['custom_env']['templates']
-            u['custom_env']['templates'].each do |file,info|
-
-              parent_path = Pathname.new(info['path']).parent.to_s
-
-              # If the directory does not exist, create it in the users home
-              # directory
-              unless parent_path == '.'
-                directory "#{home_dir}/#{parent_path}" do
-                  group u['username']
-                  mode '00755'
-                  owner u['username']
-                  recursive true
-                end
-              end
-
-              template "#{home_dir}/#{info['path']}" do
+            # If it is a file treat it as a cookbook file.  This presumes the
+            # actual existence of the file in the cookbook specified in the
+            # `wrapper_cookbook` attribute of the resource.
+            if info['type'] == 'file'
+              cookbook_file "#{home_dir}/#{info['path']}" do
                 cookbook new_resource.wrapper_cookbook
                 group u['username']
                 mode info['mode']

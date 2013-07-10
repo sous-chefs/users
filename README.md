@@ -178,17 +178,17 @@ might look something like this:
   # `sudo`.
   users_manage 'sysadmin' do
     action [ :remove, :create ]
-    custom_env true
+    custom_files true
     group_id 2300
     wrapper_cookbook 'cook_users'
   end
 
-Note that the `custom_env` attribute must be set to `true` and that the
+Note that the `custom_files` attribute must be set to `true` and that the
 `wrapper_cookbook` attribute must be set to the name of the cookbook
-wrapping the call to the LWRP.  This is necessary so Chef can find the
+wrapping the call to the LWRP. This is necessary so Chef can find the
 files associated with the user.
 
-In addition to the JSON example above the `custom_env` key is present at the
+In addition to the JSON example above, the `files` key is present at the
 top level with a structure as follows:
 
     {
@@ -207,37 +207,36 @@ top level with a structure as follows:
         "email": "bofh@example.com"
       },
       "openid": "bofh.myopenid.com",
-      "custom_env": {
-        "files": {
-          "_inputrc": {
-            "mode": "00600",
-            "path": ".inputrc"
-          },
-          "ssh_config": {
-            "mode": "00600",
-            "path": ".ssh/ssh_config"
-          }
+      "files": {
+        "_inputrc": {
+          "mode": "00600",
+          "path": ".inputrc",
+          "type": "file"
         },
-        "templates": {
-          "_my_cnf.erb": {
-            "mode": "00600",
-            "path": ".my.cnf"
-          }
+        "ssh_config": {
+          "mode": "00600",
+          "path": ".ssh/ssh_config",
+          "type": "file"
+        },
+        "_my_cnf.erb": {
+          "mode": "00600",
+          "path": ".my.cnf",
+          "type": "template"
         }
       }
     }
 
-Note that it is the combination (logical and) of the `custom_env` attribute of
-the LWRP and the existence of the `custom_env` key in the JSON that will cause
-Chef to look for files.  Thus if some users do not have customizations specified
-in the JSON, the Chef run will _not_ fail.
+Note that it is the combination (logical and) of the `custom_files` attribute of
+the LWRP and the existence of the `files` key in the JSON that will cause
+Chef to look for these configuration files.  Thus if some users do not
+have customizations specified in the JSON, the Chef run will _not_ fail.
 
-Files specified in the JSON under `custom_env.files` will be looked for
-in the wrapper cookbook in the path `files/default/USERNAME` (where
-USERNAME is really the id of the bag item).  Similarly templates specified
-in the JSON under `custom_env.templates` will be looked for in the wrapper
-cookbook path `templates/default/USERNAME`.  So the cookbook file structure
-supporting the above JSON would look like this:
+Files specified in the JSON under `files` with `type` set to "file" will be
+looked for in the wrapper cookbook in the path `files/default/USERNAME` (where
+USERNAME is really the id of the bag item).  Similarly templates should have
+`type` set to "tempalte" and will be looked for in the wrapper cookbook
+path `templates/default/USERNAME`.  So the cookbook file structure supporting
+the above JSON would look like this:
 
     files
     └── default

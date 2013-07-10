@@ -33,7 +33,7 @@ attribute :search_group, :kind_of => String, :name_attribute => true
 attribute :group_name, :kind_of => String, :name_attribute => true
 attribute :group_id, :kind_of => Integer, :required => true
 attribute :cookbook, :kind_of => String, :default => "users"
-attribute :custom_env, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :custom_files, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :wrapper_cookbook, :kind_of => String
 
 def initialize(*args)

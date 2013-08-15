@@ -1,7 +1,7 @@
 require 'chefspec'
 
-describe 'users::admin' do
-  let (:chef_run) { ChefSpec::ChefRunner.new.converge 'users::admin' }
+describe 'users::admins' do
+  let (:chef_run) { ChefSpec::ChefRunner.new.converge 'users::admins' }
   it 'return the admin data bag' do
     Chef::Recipe.any_instance.stub(:search).and_return(Array.new)
     Chef::Recipe.any_instance.stub(:data_bag_item).and_return(Hash.new)

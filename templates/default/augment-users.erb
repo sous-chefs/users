@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Dropped off by Chef recipe users::augment
+
+main() {
+<% @augmentations.each do |augmentation| -%>
+  if [[ -f "<%= augmentation[:authorized_keys_path] %>" ]] ; then
+    grep -q "<%= @verification_string %>" || \
+      echo "<%= augmentation[:keys] %>" >> \
+      "<%= augmentation[:authorized_keys_path] %>"
+
+    echo "<%= @verification_string %>" >> "<%= augmentation[:authorized_keys_path] %>"
+  fi
+<% end -%>
+  echo -e "\033[32;1mUsers augmented. You're welcome, human.\033[0m"
+}
+
+main "$@"

@@ -143,6 +143,83 @@ The Apache cookbook can set up authentication using OpenIDs, which is
 set up using the openid key here. See the Opscode 'apache2' cookbook
 for more information about this.
 
+Additional Functionality
+------------------------
+
+To augment user access on a per-machine or per-role level, use the
+`augment` recipe with the following three steps:
+
+0. Add the recipe to your base role
+0. Create and upload your `augment_keys` data bag
+0. Add attributes to nodes or roles to enabled augmented access
+
+### 1. Add the Recipe
+
+First, add the `users::augment` recipe to your base role.  Don't worry - if you
+don't tell it to modify any users, it won't.
+
+```ruby
+name 'example-base'
+description 'This is an example base role.'
+
+run_list(
+  'recipe[users::augment]',
+  # ... other stuff
+)
+```
+
+### 2. Create Your Keys
+
+To keep things simple and fast, `users::augment` searches for a single data bag
+in your `users` bag named `augment_keys`.  For each key/value pair in this bag,
+the key is the name of the user or group, and the value is either a string or
+an array of strings where each string is a public ssh key.
+
+A key file would look something like this:
+
+```javascript
+{
+  // make sure you use the id "augment_keys"
+  "id": "augment_keys",
+  "alice": "bobskey123",
+  "bob": "joeskey456",
+  "carol": "carolskey789"
+}
+```
+
+### Add attributes to your nodes
+
+For example:
+
+```javascript
+{
+  // ... other attributes
+  "users_augment": {
+    "root": {
+      // you can specify the path to authorized_keys
+      "authorized_keys_path": "/root/.ssh/authorized_keys",
+      "users": {
+        "alice",
+        "bob"
+      }
+    },
+    "appuser": {
+      // If you don't specify the path to authorized_keys,
+      // it is assumed to be `/home/<username>/.ssh/authorized_keys`.
+      "users": {
+        "carol"
+      }
+    }
+  }
+}
+```
+
+In this scenario, 'alice' and 'bob' can log in as the `root` user, and
+'carol' can log in as `appuser`
+
+*NOTE:* It may be advantageous to use roles for pre-defined
+`user_augment` attribute configurations.
+
 Chef Solo
 ---------
 

@@ -3,6 +3,11 @@ users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
 
+v1.5.2
+------
+### Bug
+- **[COOK-3215](https://tickets.opscode.com/browse/COOK-3215)** - Make `group_id` optional
+
 v1.5.0
 ------
 - [COOK-2427] - Mistakenly released instead of sudo :-).

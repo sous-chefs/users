@@ -96,6 +96,7 @@ action :create do
           supports :manage_home => true
         end
         home home_dir
+        action u['action'] if u['action']
       end
 
       if home_dir != "/dev/null"

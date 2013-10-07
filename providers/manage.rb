@@ -78,15 +78,18 @@ action :create do
         group u['username'] do
           gid u['gid']
         end
+      else
+        group u['username']
       end
 
       # Create user object.
       # Do NOT try to manage null home directories.
       user u['username'] do
         uid u['uid']
-        if u['gid']
-          gid u['gid']
-        end
+        # if u['gid']
+        #   gid u['gid']
+        # end
+        gid u['gid'] || u['username']
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
@@ -148,6 +151,7 @@ action :create do
       gid new_resource.group_id
     end
     members security_group
+    append true
   end
   new_resource.updated_by_last_action(true)
 end

@@ -73,6 +73,26 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
 }
 ```
 
+You can pass any action listed in the [user](http://docs.opscode.com/chef/resources.html#id237) resource for Chef via the "action" option. For Example:
+
+Lock a user, johndoe1.
+
+```bash
+$ knife data bag users johndoe1
+```
+
+And then change the action to "lock":
+
+```javascript
+{
+  "id": "johndoe1",
+  "groups": [ "sysadmin", "dba", "devops" ],
+  "uid": 2002,
+  "action": "lock", // <--
+  "comment": "User violated access policy"
+}
+```
+
 Remove a user, johndoe1.
 
 ```bash

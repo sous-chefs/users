@@ -78,7 +78,7 @@ You can pass any action listed in the [user](http://docs.opscode.com/chef/resour
 Lock a user, johndoe1.
 
 ```bash
-$ knife data bag users johndoe1
+$ knife data bag edit users johndoe1
 ```
 
 And then change the action to "lock":
@@ -96,7 +96,7 @@ And then change the action to "lock":
 Remove a user, johndoe1.
 
 ```bash
-$ knife data bag users johndoe1
+$ knife data bag edit users johndoe1
 ```
 
 And then change the action to "remove":

@@ -100,10 +100,12 @@ action :create do
       end
 
       if home_dir != "/dev/null"
-        directory "#{home_dir}/.ssh" do
-          owner u['username']
-          group u['gid'] || u['username']
-          mode "0700"
+        converge_by("would create #{home_dir}/.ssh") do
+	  directory "#{home_dir}/.ssh" do
+	    owner u['username']
+	    group u['gid'] || u['username']
+	    mode "0700"
+	  end
         end
 
         if u['ssh_keys']

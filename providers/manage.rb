@@ -35,19 +35,25 @@ rescue NameError
 end
 
 action :remove do
+  updated = false
+
   if Chef::Config[:solo] and not chef_solo_search_installed?
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
-      user rm_user['username'] ||= rm_user['id'] do
-        action :remove
+      resource = user rm_user['username'] ||= rm_user['id'] do
+        action :nothing
       end
+      resource.run_action(:remove)
+      updated ||= resource.updated_by_last_action?
     end
-    new_resource.updated_by_last_action(true)
   end
+
+  new_resource.updated_by_last_action(updated)
 end
 
 action :create do
+  updated = false
   security_group = Array.new
 
   if Chef::Config[:solo] and not chef_solo_search_installed?
@@ -82,7 +88,7 @@ action :create do
 
       # Create user object.
       # Do NOT try to manage null home directories.
-      user u['username'] do
+      resource = user u['username'] do
         uid u['uid']
         if u['gid']
           gid u['gid']
@@ -96,59 +102,77 @@ action :create do
           supports :manage_home => true
         end
         home home_dir
-        action u['action'] if u['action']
+        action :nothing
       end
+      resource.run_action(u['action'] || :create)
+      updated ||= resource.updated_by_last_action?
 
       if home_dir != "/dev/null"
-        directory "#{home_dir}/.ssh" do
+        resource = directory "#{home_dir}/.ssh" do
           owner u['username']
           group u['gid'] || u['username']
           mode "0700"
+          action :nothing
         end
+        resource.run_action(:create)
+        updated ||= resource.updated_by_last_action?
 
         if u['ssh_keys']
-          template "#{home_dir}/.ssh/authorized_keys" do
+          resource = template "#{home_dir}/.ssh/authorized_keys" do
             source "authorized_keys.erb"
             cookbook new_resource.cookbook
             owner u['username']
             group u['gid'] || u['username']
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
+            action :nothing
           end
+          resource.run_action(:create)
+          updated ||= resource.updated_by_last_action?
         end
 
         if u['ssh_private_key']
           key_type = u['ssh_private_key'].include?("BEGIN RSA PRIVATE KEY") ? "rsa" : "dsa"
-          template "#{home_dir}/.ssh/id_#{key_type}" do
+          resource = template "#{home_dir}/.ssh/id_#{key_type}" do
             source "private_key.erb"
             cookbook new_resource.cookbook
             owner u['id']
             group u['gid'] || u['id']
             mode "0400"
             variables :private_key => u['ssh_private_key']
+            action :nothing
           end
+          resource.run_action(:create)
+          updated ||= resource.updated_by_last_action?
         end
 
         if u['ssh_public_key']
           key_type = u['ssh_public_key'].include?("ssh-rsa") ? "rsa" : "dsa"
-          template "#{home_dir}/.ssh/id_#{key_type}.pub" do
+          resource = template "#{home_dir}/.ssh/id_#{key_type}.pub" do
             source "public_key.pub.erb"
             cookbook new_resource.cookbook
             owner u['id']
             group u['gid'] || u['id']
             mode "0400"
             variables :public_key => u['ssh_public_key']
+            action :nothing
           end
+          resource.run_action(:create)
+          updated ||= resource.updated_by_last_action?
         end
       end
     end
   end
 
-  group new_resource.group_name do
+  resource = group new_resource.group_name do
     if new_resource.group_id
       gid new_resource.group_id
     end
     members security_group
+    action :nothing
   end
-  new_resource.updated_by_last_action(true)
+  resource.run_action(:create)
+  updated ||= resource.updated_by_last_action?
+
+  new_resource.updated_by_last_action(updated)
 end

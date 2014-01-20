@@ -100,44 +100,62 @@ action :create do
       end
 
       if home_dir != "/dev/null"
-        directory "#{home_dir}/.ssh" do
-          owner u['username']
-          group u['gid'] || u['username']
-          mode "0700"
-        end
+        # These have to be done as dynamic resources because they
+        # depend on the user's actual login group. 
+        ruby_block "ssh setup" do
+          block do
+            run_context = Chef::RunContext.new(node, {}, @events)
+            
+            if platform_family?('windows') then
+              # If someone knows how to do this properly ...
+              actual_gid = u['gid'] || u['username']
+            else 
+              cmd = Mixlib::ShellOut.new("id -g #{u['username']}").run_command
+              if cmd.exitstatus != 0 then
+                raise "Cannot lookup the group id for user '#{u['username']}'"
+              end
+              actual_gid = cmd.stdout
+            end
 
-        if u['ssh_keys']
-          template "#{home_dir}/.ssh/authorized_keys" do
-            source "authorized_keys.erb"
-            cookbook new_resource.cookbook
-            owner u['username']
-            group u['gid'] || u['username']
-            mode "0600"
-            variables :ssh_keys => u['ssh_keys']
-          end
-        end
-
-        if u['ssh_private_key']
-          key_type = u['ssh_private_key'].include?("BEGIN RSA PRIVATE KEY") ? "rsa" : "dsa"
-          template "#{home_dir}/.ssh/id_#{key_type}" do
-            source "private_key.erb"
-            cookbook new_resource.cookbook
-            owner u['id']
-            group u['gid'] || u['id']
-            mode "0400"
-            variables :private_key => u['ssh_private_key']
-          end
-        end
-
-        if u['ssh_public_key']
-          key_type = u['ssh_public_key'].include?("ssh-rsa") ? "rsa" : "dsa"
-          template "#{home_dir}/.ssh/id_#{key_type}.pub" do
-            source "public_key.pub.erb"
-            cookbook new_resource.cookbook
-            owner u['id']
-            group u['gid'] || u['id']
-            mode "0400"
-            variables :public_key => u['ssh_public_key']
+            dir = Chef::Resource::Directory.new("#{home_dir}/.ssh", run_context)
+            dir.owner(u['username'])
+            dir.group(actual_gid)
+            dir.mode("0700")
+            
+            if u['ssh_keys']
+              t1 = Chef::Resource::Template.new("#{home_dir}/.ssh/authorized_keys",
+                                                run_context)
+              t1.source("authorized_keys.erb")
+              t1.cookbook(new_resource.cookbook)
+              t1.owner(u['username'])
+              t1.group(actual_gid)
+              t1.mode("0600")
+              t1.variables({:ssh_keys => u['ssh_keys']})
+            end
+            
+            if u['ssh_private_key']
+              key_type = u['ssh_private_key'].include?("BEGIN RSA PRIVATE KEY") ? "rsa" : "dsa"
+              t2 = Chef::Resource::Template.new("#{home_dir}/.ssh/id_#{key_type}",
+                                                run_context)
+              t2.source("private_key.erb")
+              t2.cookbook(new_resource.cookbook)
+              t2.owner(u['id'])
+              t2.group(actual_gid)
+              t2.mode("0400")
+              t2.variables({:private_key => u['ssh_private_key']})
+            end
+            
+            if u['ssh_public_key']
+              key_type = u['ssh_public_key'].include?("ssh-rsa") ? "rsa" : "dsa"
+              t3 = Chef::Resource::Template.new("#{home_dir}/.ssh/id_#{key_type}.pub",
+                                                run_context)
+              t3.source("public_key.pub.erb")
+              t3.cookbook(new_resource.cookbook)
+              t3.owner(u['id'])
+              t3.group(actual_gid)
+              t3.mode("0400")
+              t3.variables({:public_key => u['ssh_public_key']})
+            end
           end
         end
       end

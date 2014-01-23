@@ -101,12 +101,12 @@ action :create do
 
       if home_dir != "/dev/null"
         converge_by("would create #{home_dir}/.ssh") do
-	  directory "#{home_dir}/.ssh" do
-	    owner u['username']
-	    group u['gid'] || u['username']
-	    mode "0700"
-	  end
+          directory "#{home_dir}/.ssh" do
+            owner u['username']
+            group u['gid'] || u['username']
+            mode "0700"
         end
+      end
 
         if u['ssh_keys']
           template "#{home_dir}/.ssh/authorized_keys" do

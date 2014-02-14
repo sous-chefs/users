@@ -63,12 +63,20 @@ action :create do
         end
       end
 
+      # Set home_basedir based on platform_family
+      case node['platform_family']
+      when 'mac_os_x'
+          home_basedir = '/Users'
+      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
+          home_basedir = '/home' 
+      end
+
       # Set home to location in data bag,
-      # or a reasonable default (/home/$user).
+      # or a reasonable default ($home_basedir/$user).
       if u['home']
         home_dir = u['home']
       else
-        home_dir = "/home/#{u['username']}"
+        home_dir = "#{home_basedir}/#{u['username']}"
       end
 
       # The user block will fail if the group does not yet exist.

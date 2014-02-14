@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+use_inline_resources if defined?(use_inline_resources)
+
 def whyrun_supported?
   true
 end
@@ -43,7 +45,6 @@ action :remove do
         action :remove
       end
     end
-    new_resource.updated_by_last_action(true)
   end
 end
 
@@ -160,5 +161,4 @@ action :create do
     end
     members security_group
   end
-  new_resource.updated_by_last_action(true)
 end

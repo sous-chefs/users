@@ -108,7 +108,9 @@ action :create do
         action u['action'] if u['action']
       end
 
-      if home_dir != "/dev/null"
+      if manage_home_files?(home_dir, u['username'])
+        Chef::Log.debug("Managing home files for #{u['username']}")
+
         converge_by("would create #{home_dir}/.ssh") do
           directory "#{home_dir}/.ssh" do
             owner u['username']
@@ -151,6 +153,8 @@ action :create do
             variables :public_key => u['ssh_public_key']
           end
         end
+      else
+        Chef::Log.debug("Not managing home files for #{u['username']}")
       end
     end
   end
@@ -160,5 +164,23 @@ action :create do
       gid new_resource.group_id
     end
     members security_group
+  end
+end
+
+private
+
+def manage_home_files?(home_dir, user)
+  # Manage files in home dir:
+  # if it's exist and local
+  # or
+  # it's an NFS mount and manage_nfs_home_dirs == true
+  if home_dir == "/dev/null"
+    false
+  elsif fs_local?(home_dir)
+    true
+  elsif fs_remote?(home_dir) and new_resource.manage_nfs_home_dirs
+    true
+  else
+    false
   end
 end

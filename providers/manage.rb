@@ -67,9 +67,9 @@ action :create do
       # Set home_basedir based on platform_family
       case node['platform_family']
       when 'mac_os_x'
-          home_basedir = '/Users'
+        home_basedir = '/Users'
       when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
-          home_basedir = '/home' 
+        home_basedir = '/home'
       end
 
       # Set home to location in data bag,
@@ -108,14 +108,14 @@ action :create do
         action u['action'] if u['action']
       end
 
-	if home_dir != "/dev/null"
-	  converge_by("would create #{home_dir}/.ssh") do
-	    directory "#{home_dir}/.ssh" do
-	      owner u['username']
-	      group u['gid'] || u['username']
-	      mode "0700"
-	  end
-	end
+      if home_dir != "/dev/null"
+        converge_by("would create #{home_dir}/.ssh") do
+          directory "#{home_dir}/.ssh" do
+            owner u['username']
+            group u['gid'] || u['username']
+            mode "0700"
+          end
+        end
 
         if u['ssh_keys']
           template "#{home_dir}/.ssh/authorized_keys" do

@@ -11,7 +11,7 @@ module Users
         # Always set to local type
         type = 'ext2/ext3'
       else
-        type = `stat -f -L -c %T #{mount} 2>&1`.chomp
+        type = `( stat -f -L -c %T #{mount} 2>/dev/null || stat -f -L -c %T #{File.dirname(mount)} ) 2>&1`.chomp
       end
 
       if type =~ /No such file or directory/

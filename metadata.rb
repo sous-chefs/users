@@ -11,5 +11,3 @@ recipe           "users::sysadmins", "Create and manage sysadmin group"
 %w{ ubuntu debian redhat centos fedora freebsd mac_os_x }.each do |os|
   supports os
 end
-
-depends 'users_test'

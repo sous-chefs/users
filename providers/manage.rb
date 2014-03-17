@@ -172,7 +172,7 @@ def manage_home_files?(home_dir, user)
   # if it's exist and local
   # or
   # it's an NFS mount and manage_nfs_home_dirs == true
-  if home_dir == "/dev/null"
+  if home_dir == "/dev/null" or not fs_exists?(home_dir)
     false
   elsif fs_local?(home_dir)
     true

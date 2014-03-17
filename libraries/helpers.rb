@@ -21,6 +21,13 @@ module Users
       end
     end
 
+    # Determines if provided mount point exists.
+    #
+    # @return [Boolean]
+    def fs_exists?(mount)
+      fs_type(mount) != 'none' ? true : false
+    end
+
     # Determines if provided mount point is local.
     #
     # @return [Boolean]

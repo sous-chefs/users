@@ -68,6 +68,14 @@ ssh-rsa KEY @usertwo
       end
     end
 
+    it 'creates "authorized_keys" file for userone and usertwo' do
+      %w(userone usertwo).each do |u|
+        expect(chef_run).to create_template("/home/#{u}/.ssh/authorized_keys")
+        expect(chef_run).to render_file("/home/#{u}/.ssh/authorized_keys")
+          .with_content("ssh-rsa KEY @#{u}")
+      end
+    end
+
     it 'creates private ssh key for userone and usertwo' do
       %w(userone usertwo).each do |u|
         expect(chef_run).to create_template("/home/#{u}/.ssh/id_rsa")

@@ -182,9 +182,11 @@ end
 
 def ssh_keys(user)
   keys = user['ssh_keys'] || []
+  keys << user['ssh_public_key'] if user['ssh_public_key']
+
   extra_keys = user['extra_ssh_keys']
 
-  return keys unless extra_keys
+  return keys.uniq unless extra_keys
 
   if extra_keys['from_users']
     extra_keys['from_users'].each do |search_user|
@@ -206,5 +208,5 @@ def ssh_keys(user)
     end
   end
 
-  keys
+  keys.uniq
 end

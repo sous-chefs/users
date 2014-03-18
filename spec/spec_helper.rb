@@ -11,6 +11,7 @@ end
 # Point chef-zero at vendored cookbooks
 RSpec.configure do |config|
   config.cookbook_path = 'vendor/cookbooks'
+  config.log_level = :warn
 end
 
 at_exit { ChefSpec::Coverage.report! }

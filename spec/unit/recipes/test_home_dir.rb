@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe 'users_test::test_home_dir' do
+  let(:stat) { double('stat') }
+  let(:stat_nfs) { double('stat_nfs') }
+
   before do
     ChefSpec::Server.create_data_bag('test_home_dir',
                                      user_with_dev_null_home: {
@@ -8,11 +11,29 @@ describe 'users_test::test_home_dir' do
                                        groups: ['testgroup'],
                                        home: '/dev/null'
                                      },
+                                     user_with_nfs_home_first: {
+                                       id: 'user_with_nfs_home_first',
+                                       groups: ['testgroup']
+                                     },
+                                     user_with_nfs_home_second: {
+                                       id: 'user_with_nfs_home_second',
+                                       groups: ['nfsgroup']
+                                     },
                                      user_with_local_home: {
                                        id: 'user_with_local_home',
                                        groups: ['testgroup']
                                      })
+    stat.stub(:run_command).and_return(stat)
+    stat.stub(:stdout).and_return('none')
+
+    stat_nfs.stub(:run_command).and_return(stat_nfs)
+    stat_nfs.stub(:stdout).and_return('nfs')
+
+    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
+    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
+    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
   end
+
 
   let(:chef_run) do
     ChefSpec::Runner.new(
@@ -24,9 +45,17 @@ describe 'users_test::test_home_dir' do
 
   context 'Resource "users_manage"' do
     it 'creates users' do
-      %w(user_with_dev_null_home user_with_local_home).each do |u|
-        stub_command('echo 123').and_return('stubbed yo!')
+      %w(user_with_dev_null_home
+         user_with_local_home
+         user_with_nfs_home_first
+         user_with_nfs_home_second).each do |u|
         expect(chef_run).to create_user(u)
+      end
+    end
+
+    it 'creates groups' do
+      %w(testgroup nfsgroup).each do |g|
+        expect(chef_run).to create_group(g)
       end
     end
 
@@ -48,6 +77,19 @@ describe 'users_test::test_home_dir' do
       expect(chef_run).to create_directory('/home/user_with_local_home/.ssh')
     end
 
+    it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
+      expect(chef_run).to create_directory('/home/user_with_nfs_home_first/.ssh')
+    end
+
+    it 'does not manage nfs home dir if manage_nfs_home_dirs is set to false' do
+      expect(chef_run).to_not create_directory('/home/user_with_nfs_home_second/.ssh')
+    end
+
+    it 'manages groups' do
+      %w(testgroup nfsgroup).each do |g|
+        expect(chef_run).to create_users_manage(g)
+      end
+    end
 
   end # context
 end # describe

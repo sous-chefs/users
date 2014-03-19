@@ -117,14 +117,15 @@ action :create do
           mode "0700"
         end
 
-        if u['ssh_keys']
+        keys = ssh_keys(u)
+        unless keys.empty?
           template "#{home_dir}/.ssh/authorized_keys" do
             source "authorized_keys.erb"
             cookbook new_resource.cookbook
             owner u['username']
             group u['gid'] || u['username']
             mode "0600"
-            variables :ssh_keys => u['ssh_keys']
+            variables :ssh_keys => keys
           end
         end
 
@@ -177,4 +178,35 @@ def manage_home_files?(home_dir, user)
   else
     true
   end
+end
+
+def ssh_keys(user)
+  keys = user['ssh_keys'] || []
+  keys << user['ssh_public_key'] if user['ssh_public_key']
+
+  extra_keys = user['extra_ssh_keys']
+
+  return keys.uniq unless extra_keys
+
+  if extra_keys['from_users']
+    extra_keys['from_users'].each do |search_user|
+      key_user = search(new_resource.data_bag, "id:#{search_user} \
+                                                AND NOT action:remove").first
+      key = key_user['ssh_public_key']
+      keys << key if key and not key.empty?
+    end
+  end
+
+  if extra_keys['from_groups']
+    extra_keys['from_groups'].each do |search_group|
+      key_holders = search(new_resource.data_bag, "groups:#{search_group} \
+                                                   AND NOT action:remove")
+      key_holders.each do |key_user|
+        key = key_user['ssh_public_key']
+        keys << key if key and not key.empty?
+      end
+    end
+  end
+
+  keys.uniq
 end

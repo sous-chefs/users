@@ -73,6 +73,24 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
 }
 ```
 
+Instead of listing all required public keys in ```ssh_keys``` you can list users or even groups where public keys should be taken from. This can be done by adding ```extra_ssh_keys``` attribute:
+
+```javascript
+{
+  "id": "bofh",
+  "ssh_keys": [
+    "ssh-rsa AAA123...xyz== foo",
+    "ssh-rsa AAA456...uvw== bar"
+  ],
+  "extra_ssh_keys": {
+    "from_users": ["foo", "bar"],
+    "from_groups": ["sysadmin"]
+  }
+}
+```
+
+* Note it will search for ```ssh_public_key``` attributes in every user listed in ```from_users``` array and every user found in ```from_groups``` array. All founded keys will be merged with the keys from ```ssh_keys``` attribute. This it particular useful when you're creating a shared user and want to allow other users to use it for establishing ssh connection.
+
 You can pass any action listed in the [user](http://docs.opscode.com/chef/resources.html#id237) resource for Chef via the "action" option. For Example:
 
 Lock a user, johndoe1.

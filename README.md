@@ -73,7 +73,7 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
 }
 ```
 
-You can pass any action listed in the [user](http://docs.opscode.com/chef/resources.html#id237) resource for Chef via the "action" option. For Example:
+You can pass any action listed in the [user](http://docs.opscode.com/chef/resources.html#user) resource for Chef via the "action" option. For Example:
 
 Lock a user, johndoe1.
 

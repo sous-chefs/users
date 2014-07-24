@@ -124,7 +124,17 @@ action :create do
             owner u['username']
             group u['gid'] || u['username']
             mode "0600"
-            variables :ssh_keys => u['ssh_keys']
+            #If you want to define global in a wrapper cookbook instead of per user
+            if node['users'] and node['users']['from_allowed']
+              from_allowed = u['from_allowed'] || node['users']['from_allowed']
+            else
+              from_allowed = u['from_allowed']
+            end
+            variables(
+                      :ssh_keys => u['ssh_keys'],
+                      :from_allowed => from_allowed,
+                      :command_allowed => u['command_allowed']
+                      )
           end
         end
 

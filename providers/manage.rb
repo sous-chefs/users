@@ -118,11 +118,23 @@ action :create do
         end
 
         if u['ssh_keys']
+  		  #on suse, i had errors if group didn't exist with the ssh_keys template, so try creating first
+		  case node['platform_family']
+      	    when 'suse'
+			  group new_resource.group_name do
+    			gid new_resource.group_id
+    			action :create
+			  end
+      	  end
           template "#{home_dir}/.ssh/authorized_keys" do
             source "authorized_keys.erb"
             cookbook new_resource.cookbook
             owner u['username']
-            group u['gid'] || u['username']
+			if node['platform_family'] == 'suse' 
+			  group new_resource.group_name
+			else 
+              group u['gid'] || u['username']
+			end
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
           end

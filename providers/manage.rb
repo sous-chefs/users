@@ -133,8 +133,8 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}" do
             source "private_key.erb"
             cookbook new_resource.cookbook
-            owner u['id']
-            group u['gid'] || u['id']
+            owner u['username']
+            group u['gid'] || u['username']
             mode "0400"
             variables :private_key => u['ssh_private_key']
           end
@@ -145,8 +145,8 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}.pub" do
             source "public_key.pub.erb"
             cookbook new_resource.cookbook
-            owner u['id']
-            group u['gid'] || u['id']
+            owner u['username']
+            group u['gid'] || u['username']
             mode "0400"
             variables :public_key => u['ssh_public_key']
           end

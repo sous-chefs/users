@@ -126,6 +126,10 @@ action :create do
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
           end
+        else
+          if File.exist?("#{home_dir}/.ssh/authorized_keys") do
+            action :delete
+          end
         end
 
         if u['ssh_private_key']

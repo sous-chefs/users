@@ -80,6 +80,18 @@ action :create do
         home_dir = "#{home_basedir}/#{u['username']}"
       end
 
+      # Set manage_home to location in data bag
+      # or a reasonable default, excluding /dev/null or NFS mounted homedirs
+      if u['manage_home']
+        manage_home = u['manage_home']
+      elsif home_dir == "/dev/null"
+        manage_home = false
+      elsif fs_remote?(home_dir)
+        manage_home = false
+      else
+        manage_home = true
+      end
+
       # The user block will fail if the group does not yet exist.
       # See the -g option limitations in man 8 useradd for an explanation.
       # This should correct that without breaking functionality.
@@ -99,11 +111,7 @@ action :create do
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
-        if home_dir == "/dev/null"
-          supports :manage_home => false
-        else
-          supports :manage_home => true
-        end
+        supports :manage_home => manage_home
         home home_dir
         action u['action'] if u['action']
       end
@@ -166,15 +174,3 @@ action :create do
 end
 
 private
-
-def manage_home_files?(home_dir, user)
-  # Don't manage home dir if it's NFS mount
-  # and manage_nfs_home_dirs is disabled
-  if home_dir == "/dev/null"
-    false
-  elsif fs_remote?(home_dir)
-    new_resource.manage_nfs_home_dirs ? true : false
-  else
-    true
-  end
-end

@@ -36,7 +36,7 @@ attribute :search_group, :kind_of => String, :name_attribute => true
 attribute :group_name, :kind_of => String, :name_attribute => true
 attribute :group_id, :kind_of => Integer
 attribute :cookbook, :kind_of => String, :default => "users"
-attribute :manage_nfs_home_dirs, :kind_of => [TrueClass, FalseClass], :default => true
+attribute :manage_home_dir, :kind_of => [TrueClass, FalseClass], :default => true
 
 def initialize(*args)
   super

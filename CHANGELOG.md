@@ -3,6 +3,8 @@ users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
 
+[#81] - Change home_dir creation to available data bag attribute
+
 v1.7.0 (2014-02-14)
 -------------------
 [COOK-4139] - users_manage resource always notifies

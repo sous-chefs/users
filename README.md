@@ -46,6 +46,8 @@ $ openssl passwd -1 "plaintextpassword"
 
 Note: The ssh_keys attribute below can be either a String or an Array. However, we are recommending the use of an Array.
 
+Note: The manage_home attribute is enabled by default on non-NFS home directories, and should be overridden for system accounts.
+
 ```javascript
 {
   "id": "bofh",
@@ -57,6 +59,7 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
 {
   "id": "bofh",
   "password": "$1$d...HgH0",
+  "manage_home": true,
   "ssh_keys": [
     "ssh-rsa AAA123...xyz== foo",
     "ssh-rsa AAA456...uvw== bar"

@@ -8,5 +8,5 @@ users_manage 'nfsgroup' do
   group_id 2000
   action [:remove, :create]
   data_bag 'test_home_dir'
-  manage_nfs_home_dirs false
+  manage_home_dir false
 end

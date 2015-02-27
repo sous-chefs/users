@@ -36,7 +36,7 @@ $ knife data bag create users
 
 Create a user in the data_bag/users/ directory.
 
-When using an [Omnibus ruby](http://tickets.opscode.com/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
+When using an [Omnibus ruby](http://tickets.chef.io/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
 
 The hash can be generated with the following command.
 
@@ -76,7 +76,7 @@ Note: The manage_home attribute is enabled by default on non-NFS home directorie
 }
 ```
 
-You can pass any action listed in the [user](http://docs.opscode.com/chef/resources.html#user) resource for Chef via the "action" option. For Example:
+You can pass any action listed in the [user](http://docs.chef.io/chef/resources.html#user) resource for Chef via the "action" option. For Example:
 
 Lock a user, johndoe1.
 
@@ -160,11 +160,11 @@ $EDITOR data_bags/users/bofh.json
 
 Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. The default search, and Unix group is sysadmin.
 
-The recipe, by default, will also create the sysadmin group. If you're using the opscode sudo cookbook, they'll have sudo access in the default site-cookbooks template. They won't have passwords though, so the sudo cookbook's template needs to be adjusted so the sysadmin group has NOPASSWD.
+The recipe, by default, will also create the sysadmin group. If you're using the chef sudo cookbook, they'll have sudo access in the default site-cookbooks template. They won't have passwords though, so the sudo cookbook's template needs to be adjusted so the sysadmin group has NOPASSWD.
 
 The sysadmin group will be created with GID 2300. This may become an attribute at a later date.
 
-The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Opscode 'apache2' cookbook for more information about this.
+The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 
 
 Chef Solo
@@ -174,11 +174,11 @@ As of version 1.4.0, this cookbook might work with Chef Solo when using [chef-so
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman (<joshua@opscode.com>)
-- Author:: Seth Chisamore (<schisamo@opscode.com>)
+- Author:: Joshua Timberman (<joshua@chef.io>)
+- Author:: Seth Chisamore (<schisamo@chef.io>)
 
 ```text
-Copyright:: 2009-2013, Opscode, Inc
+Copyright:: 2009-2013, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

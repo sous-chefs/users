@@ -15,13 +15,13 @@ v1.7.0 (2014-02-14)
 v1.6.0
 ------
 ### Bug
-- **[COOK-3744](https://tickets.opscode.com/browse/COOK-3744)** - Allow passing an action option via the `data_bag` to the user resource
+- **[COOK-3744](https://tickets.chef.io/browse/COOK-3744)** - Allow passing an action option via the `data_bag` to the user resource
 
 
 v1.5.2
 ------
 ### Bug
-- **[COOK-3215](https://tickets.opscode.com/browse/COOK-3215)** - Make `group_id` optional
+- **[COOK-3215](https://tickets.chef.io/browse/COOK-3215)** - Make `group_id` optional
 
 v1.5.0
 ------

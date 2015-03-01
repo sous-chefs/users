@@ -5,26 +5,6 @@ describe 'users_test::test_home_dir' do
   let(:stat_nfs) { double('stat_nfs') }
 
   before do
-    ChefSpec::Server.create_data_bag('test_home_dir', {
-      user_with_dev_null_home: {
-        id: 'user_with_dev_null_home',
-        groups: ['testgroup'],
-        home: '/dev/null',
-      },
-      user_with_nfs_home_first: {
-        id: 'user_with_nfs_home_first',
-        groups: ['testgroup'],
-      },
-      user_with_nfs_home_second: {
-        id: 'user_with_nfs_home_second',
-        groups: ['nfsgroup'],
-      },
-      user_with_local_home: {
-        id: 'user_with_local_home',
-        groups: ['testgroup'],
-      },
-    })
-
     stat.stub(:run_command).and_return(stat)
     stat.stub(:stdout).and_return('none')
 
@@ -36,13 +16,32 @@ describe 'users_test::test_home_dir' do
     Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
   end
 
-
   cached(:chef_run) do
-    ChefSpec::Runner.new(
+    ChefSpec::ServerRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
       version: '12.04'
-    ).converge(described_recipe)
+    ) do |node, server|
+      server.create_data_bag('test_home_dir', {
+        user_with_dev_null_home: {
+          id: 'user_with_dev_null_home',
+          groups: ['testgroup'],
+          home: '/dev/null',
+        },
+        user_with_nfs_home_first: {
+          id: 'user_with_nfs_home_first',
+          groups: ['testgroup'],
+        },
+        user_with_nfs_home_second: {
+          id: 'user_with_nfs_home_second',
+          groups: ['nfsgroup'],
+        },
+        user_with_local_home: {
+          id: 'user_with_local_home',
+          groups: ['testgroup'],
+        },
+      })
+    end.converge(described_recipe)
   end
 
   context 'Resource "users_manage"' do

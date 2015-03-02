@@ -5,15 +5,15 @@ describe 'users_test::test_home_dir' do
   let(:stat_nfs) { double('stat_nfs') }
 
   before do
-    stat.stub(:run_command).and_return(stat)
-    stat.stub(:stdout).and_return('none')
+    allow(stat).to receive(:run_command).and_return(stat)
+    allow(stat).to receive(:stdout).and_return('none')
 
-    stat_nfs.stub(:run_command).and_return(stat_nfs)
-    stat_nfs.stub(:stdout).and_return('nfs')
+    allow(stat_nfs).to receive(:run_command).and_return(stat_nfs)
+    allow(stat_nfs).to receive(:stdout).and_return('nfs')
 
-    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
-    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
-    Mixlib::ShellOut.stub(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
   end
 
   cached(:chef_run) do

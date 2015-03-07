@@ -1,5 +1,7 @@
 users Cookbook
 ==============
+![Build Status](https://travis-ci.org/opscode-cookbooks/users.svg?branch=master)
+
 Creates users from a databag search.
 
 

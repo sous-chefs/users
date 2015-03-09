@@ -2,6 +2,9 @@ users Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the users cookbook.
 
+UNRELEASED (v1.8.1)
+-------------------
+
 v1.8.0 (2015-03-09)
 -------------------
 - Expose LWRP state attributes

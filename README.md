@@ -38,7 +38,7 @@ $ knife data bag create users
 
 Create a user in the data_bag/users/ directory.
 
-When using an [Omnibus ruby](http://tickets.chef.io/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
+When using an [Omnibus ruby](http://tickets.opscode.com/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
 
 The hash can be generated with the following command.
 

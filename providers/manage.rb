@@ -108,6 +108,9 @@ action :create do
         action u['action'] if u['action']
       end
 
+      # Ensure default group object is created unless gid is specified
+      group u['username'] unless u['gid']
+
       if manage_home_files?(home_dir, u['username'])
         Chef::Log.debug("Managing home files for #{u['username']}")
 

@@ -2,6 +2,9 @@ users Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the users cookbook.
 
+UNRELEASED (v1.8.3)
+-------------------
+
 v1.8.2 (2015-03-18)
 -------------------
 - No changes, just republishing 1.8.1

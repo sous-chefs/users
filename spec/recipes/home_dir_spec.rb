@@ -28,12 +28,12 @@ describe 'users_test::test_home_dir' do
           groups: ['testgroup'],
           home: '/dev/null',
         },
-        user_with_nfs_home_first: {
-          id: 'user_with_nfs_home_first',
+        user_with_home_first: {
+          id: 'user_with_home_first',
           groups: ['testgroup'],
         },
-        user_with_nfs_home_second: {
-          id: 'user_with_nfs_home_second',
+        user_with_home_second: {
+          id: 'user_with_home_second',
           groups: ['nfsgroup'],
         },
         user_with_local_home: {
@@ -48,8 +48,8 @@ describe 'users_test::test_home_dir' do
     it 'creates users' do
       expect(chef_run).to create_user('user_with_dev_null_home')
       expect(chef_run).to create_user('user_with_local_home')
-      expect(chef_run).to create_user('user_with_nfs_home_first')
-      expect(chef_run).to create_user('user_with_nfs_home_second')
+      expect(chef_run).to create_user('user_with_home_first')
+      expect(chef_run).to create_user('user_with_home_second')
     end
 
     it 'creates groups' do
@@ -75,12 +75,12 @@ describe 'users_test::test_home_dir' do
       expect(chef_run).to create_directory('/home/user_with_local_home/.ssh')
     end
 
-    it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
-      expect(chef_run).to create_directory('/home/user_with_nfs_home_first/.ssh')
+    it 'manages nfs home dir if manage_home_dirs is set to true' do
+      expect(chef_run).to create_directory('/home/user_with_home_first/.ssh')
     end
 
-    it 'does not manage nfs home dir if manage_nfs_home_dirs is set to false' do
-      expect(chef_run).to_not create_directory('/home/user_with_nfs_home_second/.ssh')
+    it 'does not manage nfs home dir if manage_home_dirs is set to false' do
+      expect(chef_run).to_not create_directory('/home/user_with_home_second/.ssh')
     end
 
     it 'manages groups' do

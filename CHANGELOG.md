@@ -2,26 +2,51 @@ users Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the users cookbook.
 
+UNRELEASED (v1.8.3)
+-------------------
+
+v1.8.2 (2015-03-18)
+-------------------
+- No changes, just republishing 1.8.1
+
+v1.8.1 (2015-03-12)
+-------------------
+- Add `source_url` and `issues_url` to the metadata.rb so Supermarket can display 
+appropriate links
+
+v1.8.0 (2015-03-09)
+-------------------
+- Expose LWRP state attributes
+- [COOK-4401] - Add unit tests with ChefSpec
+- [COOK-4404] - Determine file system and add manage_nfs_home_dirs attribute to disable 
+managing NFS mounted home directories
+- Remove `converge_by` when creating home directory, the directory resource 
+already handles this
+- Do not manage home directory if the path does not exist
+- Add integration with TravisCI
+- "Opscode" to "Chef" replacements
+- Retire unsupported Ruby 1.9.3 and add Ruby 2.2 to the Travis integration tests
+- Updates for RSpec 3
 
 [#81] - Change home_dir creation to available data bag attribute
 
 v1.7.0 (2014-02-14)
 -------------------
-[COOK-4139] - users_manage resource always notifies
-[COOK-4078] - users cookbook fails in why-run mode for .ssh directory
-[COOK-3959] - Add support for Mac OS X to users cookbook
+- [COOK-4139] - users_manage resource always notifies
+- [COOK-4078] - users cookbook fails in why-run mode for .ssh directory
+- [COOK-3959] - Add support for Mac OS X to users cookbook
 
 
 v1.6.0
 ------
 ### Bug
-- **[COOK-3744](https://tickets.chef.io/browse/COOK-3744)** - Allow passing an action option via the `data_bag` to the user resource
+- **[COOK-3744](https://tickets.opscode.com/browse/COOK-3744)** - Allow passing an action option via the `data_bag` to the user resource
 
 
 v1.5.2
 ------
 ### Bug
-- **[COOK-3215](https://tickets.chef.io/browse/COOK-3215)** - Make `group_id` optional
+- **[COOK-3215](https://tickets.opscode.com/browse/COOK-3215)** - Make `group_id` optional
 
 v1.5.0
 ------

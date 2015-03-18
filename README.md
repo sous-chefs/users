@@ -1,5 +1,7 @@
 users Cookbook
 ==============
+![Build Status](https://travis-ci.org/opscode-cookbooks/users.svg?branch=master)
+
 Creates users from a databag search.
 
 
@@ -36,7 +38,7 @@ $ knife data bag create users
 
 Create a user in the data_bag/users/ directory.
 
-When using an [Omnibus ruby](http://tickets.chef.io/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
+When using an [Omnibus ruby](http://tickets.opscode.com/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
 
 The hash can be generated with the following command.
 
@@ -178,7 +180,7 @@ License & Authors
 - Author:: Seth Chisamore (<schisamo@chef.io>)
 
 ```text
-Copyright:: 2009-2013, Chef Software, Inc
+Copyright:: 2009-2015, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,26 +1,23 @@
-# Contributing to Opscode Cookbooks
+# Contributing to Chef Software Cookbooks
 
-We are glad you want to contribute to Opscode Cookbooks! The first
+We are glad you want to contribute to Chef Software Cookbooks! The first
 step is the desire to improve the project.
 
-You can find the answers to additional frequently asked questions
-[on the wiki](http://wiki.opscode.com/display/chef/How+to+Contribute).
-
 You can find additional information about
-[contributing to cookbooks](http://wiki.opscode.com/display/chef/How+to+Contribute+to+Opscode+Cookbooks)
-on the wiki as well.
+[contributing to cookbooks](https://docs.chef.io/community_contributions.html)
+on the Chef Docs site.
 
 ## Quick-contribute
 
-* Create an account on our [bug tracker](http://tickets.opscode.com)
-* Sign our contributor agreement (CLA)
-[ online](https://secure.echosign.com/public/hostedForm?formid=PJIF5694K6L)
-(keep reading if you're contributing on behalf of your employer)
-* Create a ticket for your change on the
-  [bug tracker](http://tickets.opscode.com)
+* Create an account on [GitHub](http://github.com).
+* Create an account on the [Chef Supermarket](https://supermarket.chef.io/).
+* [Become a contributor](https://supermarket.chef.io/become-a-contributor) by 
+signing our Contributor License Agreement (CLA).
+* Create an [issue for your change on 
+GitHub](https://github.com/opscode-cookbooks/erlang/issues).
 * Link to your patch as a rebased git branch or pull request from the
   ticket
-* Resolve the ticket as fixed
+* Label your ticket as "Needs Review"
 
 We regularly review contributions and will get back to you if we have
 any suggestions or concerns.
@@ -39,7 +36,7 @@ understands what rights they are licensing and agrees to them.
 Sometimes the copyright holder isn't the contributor, most often when
 the contributor is doing work for a company.
 
-To make a good faith effort to ensure these criteria are met, Opscode
+To make a good faith effort to ensure these criteria are met, Chef
 requires a Contributor License Agreement (CLA) or a Corporate
 Contributor License Agreement (CCLA) for all contributions. This is
 without exception due to some matters not being related to copyright
@@ -49,18 +46,18 @@ patches.
 It only takes a few minutes to complete a CLA, and you retain the
 copyright to your contribution.
 
-You can complete our contributor agreement (CLA)
-[ online](https://secure.echosign.com/public/hostedForm?formid=PJIF5694K6L).
+You can complete our contributor license agreement (CLA)
+[ online at the Chef Supermarket](https://supermarket.chef.io).
 If you're contributing on behalf of your employer, have your employer
 fill out our
-[Corporate CLA](https://secure.echosign.com/public/hostedForm?formid=PIE6C7AX856)
-instead.
+[Corporate Contributor License Agreement 
+(CCLA)](https://supermarket.chef.io/ccla-signatures/new) instead.
 
-## Ticket Tracker (JIRA)
+## Ticket Tracker (GitHub Issues)
 
-The [ticket tracker](http://tickets.opscode.com) is the most important
-documentation for the code base. It provides significant historical
-information, such as:
+The [ticket tracker](https://github.com/opscode-cookbooks/users/issues) is 
+the most important documentation for the code base. It provides significant 
+historical information, such as:
 
 * Which release a bug fix is included in
 * Discussion regarding the design and merits of features
@@ -85,7 +82,7 @@ as the cookbook, we suggest you suffix the repository with -cookbook.
 ### Branches and Commits
 
 You should submit your patch as a git branch named after the ticket,
-such as COOK-1337. This is called a _topic branch_ and allows users to
+such as ISSUE-22. This is called a _topic branch_ and allows users to
 associate a branch of code with the ticket.
 
 It is a best practice to have your commit message have a _summary
@@ -93,12 +90,12 @@ line_ that includes the ticket number, followed by an empty line and
 then a brief description of the commit. This also helps other
 contributors understand the purpose of changes to the code.
 
-    [COOK-1757] - platform_family and style
+    [ISSUE-22] - platform_family and style
 
     * use platform_family for platform checking
     * update notifies syntax to "resource_type[resource_name]" instead of
       resources() lookup
-    * COOK-692 - delete config files dropped off by packages in conf.d
+    * ISSUE-692 - delete config files dropped off by packages in conf.d
     * dropped debian 4 support because all other platforms have the same
       values, and it is older than "old stable" debian release
 
@@ -109,36 +106,26 @@ to them.
 
 ### Github and Pull Requests
 
-All of Opscode's open source cookbook projects are available on
-[Github](http://www.github.com/opscode-cookbooks).
-
-We don't require you to use Github, and we will even take patch diffs
-attached to tickets on the tracker. However Github has a lot of
-convenient features, such as being able to see a diff of changes
-between a pull request and the main repository quickly without
-downloading the branch.
-
-If you do choose to use a pull request, please provide a link to the
-pull request from the ticket __and__ a link to the ticket from the
-pull request. Because pull requests only have two states, open and
-closed, we can't easily filter pull requests that are waiting for a
-reply from the author for various reasons.
+All of Chef's open source cookbook projects are available on
+Github at either
+[http://www.github.com/chef-cookbooks](http://www.github.com/chef-cookbooks)or 
+[http://www.github.com/opscode-cookbooks](http://www.github.com/opscode-cookbooks).
 
 ### More information
 
-Additional help with git is available on the
-[Working with Git](http://wiki.opscode.com/display/chef/Working+with+Git)
-wiki page.
+Additional help with git is available on the [Community 
+Contributions](https://docs.chef.io/community_contributions.html#use-git) 
+page on the Chef Docs site.
 
 ## Functional and Unit Tests
 
 This cookbook is set up to run tests under
-[Opscode's test-kitchen](https://github.com/opscode/test-kitchen). It
+[Test Kitchen](https://github.com/test-kitchen). It
 uses minitest-chef to run integration tests after the node has been
 converged to verify that the state of the node.
 
 Test kitchen should run completely without exception using the default
-[baseboxes provided by Opscode](https://github.com/opscode/bento).
+[baseboxes provided by Chef](https://github.com/chef/bento).
 Because Test Kitchen creates VirtualBox machines and runs through
 every configuration in the Kitchenfile, it may take some time for
 these tests to complete.
@@ -168,7 +155,7 @@ mailing list, or the #chef-hacking IRC channel.
 
 ## Code Review
 
-Opscode regularly reviews code contributions and provides suggestions
+Chef Software regularly reviews code contributions and provides suggestions
 for improvement in the code itself or the implementation.
 
 We find contributions by searching the ticket tracker for _resolved_
@@ -183,7 +170,7 @@ or two, depending on the current release cycle.
 
 ## Release Cycle
 
-The versioning for Opscode Cookbook projects is X.Y.Z.
+The versioning for Chef Software Cookbook projects is X.Y.Z.
 
 * X is a major release, which may not be fully compatible with prior
   major releases
@@ -196,31 +183,31 @@ cookbook begins, the "Z" patch number is incremented to the next odd
 number, however the next release of the cookbook may be a major or
 minor incrementing version.
 
-Releases of Opscode's cookbooks are usually announced on the Chef user
+Releases of Chef's cookbooks are usually announced on the Chef user
 mailing list. Releases of several cookbooks may be batched together
-and announced on the [Opscode Blog](http://www.opscode.com/blog).
+and announced on the [Chef Software Blog](http://www.chef.io/blog).
 
 ## Working with the community
 
 These resources will help you learn more about Chef and connect to
 other members of the Chef community:
 
-* [chef](http://lists.opscode.com/sympa/info/chef) and
-  [chef-dev](http://lists.opscode.com/sympa/info/chef-dev) mailing
+* [chef](http://lists.chef.io/sympa/info/chef) and
+  [chef-dev](http://lists.chef.io/sympa/info/chef-dev) mailing
   lists
 * #chef and #chef-hacking IRC channels on irc.freenode.net
-* [Community Cookbook site](http://community.opscode.com)
-* [Chef wiki](http://wiki.opscode.com/display/chef)
-* Opscode Chef [product page](http://www.opscode.com/chef)
+* [Supermarket site](http://supermarket.chef.io)
+* [Chef Docs](http://docs.chef.io)
+* Chef Software Chef [product page](http://www.chef.io/chef)
 
 
 ## Cookbook Contribution Do's and Don't's
 
 Please do include tests for your contribution. If you need help, ask
 on the
-[chef-dev mailing list](http://lists.opscode.com/sympa/info/chef-dev)
+[chef-dev mailing list](http://lists.chef.io/sympa/info/chef-dev)
 or the
-[#chef-hacking IRC channel](http://community.opscode.com/chat/chef-hacking).
+[#chef-hacking IRC channel](http://community.chef.io/chat/chef-hacking).
 Not all platforms that a cookbook supports may be supported by Test
 Kitchen. Please provide evidence of testing your contribution if it
 isn't trivial so we don't have to duplicate effort in testing. Chef
@@ -231,10 +218,10 @@ commit message, and update the relevant ticket.
 
 If a contribution adds new platforms or platform versions, indicate
 such in the body of the commit message(s), and update the relevant
-COOK ticket. When writing commit messages, it is helpful for others if
-you indicate the COOK ticket. For example:
+issues. When writing commit messages, it is helpful for others if
+you indicate the issue. For example:
 
-    git commit -m '[COOK-1041] - Updated pool resource to correctly
+    git commit -m '[ISSUE-1041] - Updated pool resource to correctly
     delete.'
 
 Please do use [foodcritic](http://acrmp.github.com/foodcritic) to
@@ -247,11 +234,11 @@ Please do ensure that your changes do not break or modify behavior for
 other platforms supported by the cookbook. For example if your changes
 are for Debian, make sure that they do not break on CentOS.
 
-Please do not modify the version number in the metadata.rb, Opscode
+Please do not modify the version number in the metadata.rb, Chef
 will select the appropriate version based on the release cycle
 information above.
 
 Please do not update the CHANGELOG.md for a new version. Not all
 changes to a cookbook may be merged and released in the same versions.
-Opscode will update the CHANGELOG.md when releasing a new version of
+Chef Software will update the CHANGELOG.md when releasing a new version of
 the cookbook.

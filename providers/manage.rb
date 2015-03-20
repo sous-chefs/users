@@ -117,7 +117,7 @@ action :create do
           mode "0700"
         end
 
-        if u['ssh_keys']
+        if u['ssh_keys'] and u['ssh_keys'].length > 0
           template "#{home_dir}/.ssh/authorized_keys" do
             source "authorized_keys.erb"
             cookbook new_resource.cookbook
@@ -126,6 +126,14 @@ action :create do
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
           end
+        else
+          file "#{home_dir}/.ssh/authorized_keys" do
+            action :delete
+          end
+        end
+        # Ensure there are no authorized_keys2 files laying around, conformity.
+        file "#{home_dir}/.ssh/authorized_keys2" do
+          action :delete
         end
 
         if u['ssh_private_key']

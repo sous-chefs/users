@@ -1,8 +1,27 @@
+require 'chef-vault'
 require 'spec_helper'
 
 describe 'users_test::test_home_dir' do
   let(:stat) { double('stat') }
   let(:stat_nfs) { double('stat_nfs') }
+  let(:user_with_dev_null_home) { { 'id' => 'user_with_dev_null_home', 'groups' => ['testgroup'], 'home' => '/dev/null' } }
+  let(:user_with_nfs_home_first) { { 'id' => 'user_with_nfs_home_first', 'groups' => ['testgroup'] } }
+  let(:user_with_nfs_home_second) { { 'id' => 'user_with_nfs_home_second', 'groups' => ['nfsgroup'] } }
+  let(:user_with_local_home) { { 'id' => 'user_with_local_home', 'groups' => ['testgroup'] } }
+
+  let(:user_with_dev_null_home_item) { 'user_with_dev_null_home' }
+  let(:user_with_nfs_home_first_item) { 'user_with_nfs_home_first' }
+  let(:user_with_nfs_home_second_item) { 'user_with_nfs_home_second' }
+  let(:user_with_local_home_item) { 'user_with_local_home' }
+
+  let(:data_bag_items) {
+    [
+      user_with_dev_null_home_item,
+      user_with_nfs_home_first_item,
+      user_with_nfs_home_second_item,
+      user_with_local_home_item
+    ]
+  }
 
   before do
     allow(stat).to receive(:run_command).and_return(stat)
@@ -14,34 +33,20 @@ describe 'users_test::test_home_dir' do
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
+
+    stub_data_bag('test_home_dir').and_return(data_bag_items)
+    allow(ChefVault::Item).to receive(:load).with('test_home_dir', user_with_dev_null_home_item).and_return(user_with_dev_null_home)
+    allow(ChefVault::Item).to receive(:load).with('test_home_dir', user_with_nfs_home_first_item).and_return(user_with_nfs_home_first)
+    allow(ChefVault::Item).to receive(:load).with('test_home_dir', user_with_nfs_home_second_item).and_return(user_with_nfs_home_second)
+    allow(ChefVault::Item).to receive(:load).with('test_home_dir', user_with_local_home_item).and_return(user_with_local_home)
   end
 
   cached(:chef_run) do
-    ChefSpec::ServerRunner.new(
+    ChefSpec::SoloRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
       version: '12.04'
-    ) do |node, server|
-      server.create_data_bag('test_home_dir', {
-        user_with_dev_null_home: {
-          id: 'user_with_dev_null_home',
-          groups: ['testgroup'],
-          home: '/dev/null',
-        },
-        user_with_nfs_home_first: {
-          id: 'user_with_nfs_home_first',
-          groups: ['testgroup'],
-        },
-        user_with_nfs_home_second: {
-          id: 'user_with_nfs_home_second',
-          groups: ['nfsgroup'],
-        },
-        user_with_local_home: {
-          id: 'user_with_local_home',
-          groups: ['testgroup'],
-        },
-      })
-    end.converge(described_recipe)
+    ).converge(described_recipe)
   end
 
   context 'Resource "users_manage"' do

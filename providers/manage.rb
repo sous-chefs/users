@@ -37,11 +37,11 @@ rescue NameError
 end
 
 action :remove do
-  if Chef::Config[:solo] and not chef_solo_search_installed?
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
-  else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
-      user rm_user['username'] ||= rm_user['id'] do
+  run_context.include_recipe 'chef-vault'
+
+  users_list(new_resource.data_bag).each do |rm_user|
+    if rm_user['groups'].first == "#{new_resource.search_group}" and rm_user['action'] == "remove"
+      user "#{rm_user['id']}" do
         action :remove
       end
     end
@@ -49,13 +49,15 @@ action :remove do
 end
 
 action :create do
+  run_context.include_recipe 'chef-vault'
+
   security_group = Array.new
 
-  if Chef::Config[:solo] and not chef_solo_search_installed?
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
-  else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+  users_list(new_resource.data_bag).each do |u|
+    if u['groups'].first == "#{new_resource.search_group}" and not u['action'] == "remove"
+
       u['username'] ||= u['id']
+
       security_group << u['username']
 
       if node['apache'] and node['apache']['allowed_openids']
@@ -176,5 +178,20 @@ def manage_home_files?(home_dir, user)
     new_resource.manage_nfs_home_dirs ? true : false
   else
     true
+  end
+end
+
+# This is a workaround to include recipe 'chef-vault' in LWRP.
+def chef_vault_item(bag, item)
+  begin
+    require 'chef-vault'
+  rescue LoadError
+    Chef::Log.warn("Missing gem 'chef-vault', use recipe[chef-vault] to install it first.")
+  end
+
+  begin
+    ChefVault::Item.load(bag, item)
+  rescue ChefVault::Exceptions::KeysNotFound, ChefVault::Exceptions::SecretDecryption
+    Chef::DataBagItem.load(bag, item)
   end
 end

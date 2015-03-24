@@ -6,3 +6,4 @@ group :testing do
 end
 
 gem 'rake'
+gem 'chef-vault'

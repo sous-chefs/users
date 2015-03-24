@@ -11,3 +11,4 @@ version          '1.7.1'
 end
 
 depends 'users'
+depends 'chef-vault', '~> 1.0'

@@ -1,41 +1,37 @@
+require 'chef-vault'
 require 'spec_helper'
 
 describe 'users::sysadmins' do
 
   cached(:chef_run) do
-    ChefSpec::ServerRunner.new(
+    ChefSpec::SoloRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
       version: '12.04'
-    ) do |node, server|
-     server.create_data_bag('users', {
-      createme: {
-        id: 'createme',
-        groups: ['sysadmin'],
-        uid: 1234,
-        gid: 4321,
-      },
-      removeme: {
-        id: 'removeme',
-        groups: ['sysadmin'],
-        action: :remove,
-      },
-      createdevnull: {
-        id: 'createdevnull',
-        groups: ['sysadmin'],
-        home: '/dev/null',
-      },
-      lockme: {
-        id: 'lockme',
-        groups: ['sysadmin'],
-        action: :lock,
-      },
-      skipme: {
-        id: 'skipme',
-        groups: ['nonadmin'],
-      },
-    })
-    end.converge(described_recipe)
+    ).converge(described_recipe)
+  end
+
+  let(:createme) { { 'id' => 'createme', 'groups' => ['sysadmin'], 'uid' => 1234, 'gid' => 4321 } }
+  let(:removeme) { { 'id' => 'removeme', 'groups' => ['sysadmin'], 'action' => 'remove' } }
+  let(:createdevnull) { { 'id' => 'createdevnull', 'groups' => ['sysadmin'], 'home' => '/dev/null' } }
+  let(:lockme) { { 'id' => 'lockme', 'groups' => ['sysadmin'], 'action' => 'lock'} }
+  let(:skipme) { { 'id' => 'skipme', 'groups' => ['nonadmin'] } }
+
+  let(:createme_item) { 'createme' }
+  let(:removeme_item) { 'removeme' }
+  let(:createdevnull_item) { 'createdevnull' }
+  let(:lockme_item) { 'lockme' }
+  let(:skipme_item) { 'skipme' }
+
+  let(:data_bag_items) { [createme_item, removeme_item, createdevnull_item, lockme_item, skipme_item] }
+
+  before do
+     stub_data_bag('users').and_return(data_bag_items)
+     allow(ChefVault::Item).to receive(:load).with('users', createme_item).and_return(createme)
+     allow(ChefVault::Item).to receive(:load).with('users', removeme_item).and_return(removeme)
+     allow(ChefVault::Item).to receive(:load).with('users', createdevnull_item).and_return(createdevnull)
+     allow(ChefVault::Item).to receive(:load).with('users', lockme_item).and_return(lockme)
+     allow(ChefVault::Item).to receive(:load).with('users', skipme_item).and_return(skipme)
   end
 
   context 'Resource "users_manage"' do

@@ -35,7 +35,7 @@ module Users
         user_items << chef_vault_item("#{data_bag_name}", "#{user}")
       end
 
-      return user_items
+      user_items
     end
   end
 end

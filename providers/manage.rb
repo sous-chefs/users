@@ -40,8 +40,8 @@ action :remove do
   run_context.include_recipe 'chef-vault'
 
   users_list(new_resource.data_bag).each do |rm_user|
-    if rm_user['groups'].first == "#{new_resource.search_group}" and rm_user['action'] == "remove"
-      user "#{rm_user['id']}" do
+    if rm_user['groups'].first == new_resource.search_group and rm_user['action'] == 'remove'
+      user rm_user['id'] do
         action :remove
       end
     end
@@ -54,7 +54,7 @@ action :create do
   security_group = Array.new
 
   users_list(new_resource.data_bag).each do |u|
-    if u['groups'].first == "#{new_resource.search_group}" and not u['action'] == "remove"
+    if u['groups'].first == new_resource.search_group and not u['action'] == 'remove'
 
       u['username'] ||= u['id']
 

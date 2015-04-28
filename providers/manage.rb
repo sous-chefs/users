@@ -49,6 +49,7 @@ action :remove do
 end
 
 action :create do
+
   security_group = Array.new
 
   if Chef::Config[:solo] && !chef_solo_search_installed?
@@ -56,7 +57,6 @@ action :create do
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       u['username'] ||= u['id']
-      security_group << u['username']
 
       if node['apache'] && node['apache']['allowed_openids']
         Array(u['openid']).compact.each do |oid|
@@ -80,47 +80,58 @@ action :create do
         home_dir = "#{home_basedir}/#{u['username']}"
       end
 
-      maingroup = Array.new
+      maingroup = Hash.new
       othergroups = Hash.new
 
       # Look for main group
       u['groups'].each do |groupname, values|
         if values['main']
-          maingroup << groupname
-          maingroup << values['gid'] if values['gid'] && values['gid'].is_a?(Integer)
+          values['gid'] && values['gid'].is_a?(Integer) ? maingroup[groupname] = values['gid'] : maingroup[groupname] = nil
         else
-          othergroups = values['gid'] && values['gid'].is_a?(Integer) ? { groupname => values['gid'] } : { groupname => nil }
+          values['gid'] && values['gid'].is_a?(Integer) ? othergroups[groupname] = values['gid'] : othergroups[groupname] = nil
         end
-      end
-      if maingroup.nil?
-        Chef::Log.debug("No main group defined for #{u['username']}, skipping")
-        next
-      else
-        group maingroup[0] do
-          gid maingroup[1] if maingroup[1]
-          action :create
-        end
-      end
-      # If gid wasn't specifically defined we need to find it out now
-      if maingroup[1].nil? || !maingroup[1].is_a?(Integer)
-        require 'etc'
-        maingroup << Etc.getgrnam(maingroup[0])['gid']
       end
 
-      unless othergroups.nil?
+      # If there's no main group defined and there's one group only we assume it's in fact main
+      maingroup = othergroups if maingroup.empty? && othergroups.keys.size == 1
+
+      # Skip to next user if groups are not properly set
+      if maingroup.empty?
+        Chef::Log.warn("Main group not set and yet many groups defined for #{u['username']}, skipping")
+        next
+      elsif maingroup.keys.size > 1
+        Chef::Log.warn("Main group defined more than once for #{u['username']}, skipping")
+        next
+      end
+
+      group "#{u['username']}_#{maingroup.keys[0]}" do
+        gid maingroup.keys.first if maingroup.keys.first
+        group_name maingroup.keys[0]
+      end
+
+      # If gid wasn't specifically defined we need to find it out now
+      if maingroup.keys.first.nil?
+        require 'etc'
+        maingroup[maingroup.keys[0]] = Etc.getgrnam(maingroup.keys[0])['gid']
+      end
+
+      unless othergroups.empty?
         othergroups.each do |groupname, gid|
-          group "avoid_clone_#{groupname}" do
+          group "#{u['username']}_#{groupname}" do
             gid gid if gid
             group_name groupname
           end
         end
       end
 
+      # Add users to security_group only if their groups passed OK
+      security_group << u['username']
+
       # Create user object.
       # Do NOT try to manage null home directories.
       user u['username'] do
         uid u['uid']
-        gid maingroup[1]
+        gid maingroup.keys[1]
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
@@ -134,7 +145,7 @@ action :create do
       end
 
       if manage_home_files?(home_dir)
-        Chef::Log.debug("Managing home files for #{u['username']}")
+        Chef::Log.warn("Managing home files for #{u['username']}")
 
         directory "#{home_dir}/.ssh" do
           owner u['username']
@@ -176,7 +187,7 @@ action :create do
           end
         end
       else
-        Chef::Log.debug("Not managing home files for #{u['username']}")
+        Chef::Log.warn("Not managing home files for #{u['username']}")
       end
     end
   end

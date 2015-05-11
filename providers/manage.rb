@@ -126,11 +126,13 @@ action :create do
             source "authorized_keys.erb"
             cookbook new_resource.cookbook
             owner u['username']
-            group if platform_family?('suse')
-              new_resource.group_name
-            else
-              u['gid'] || u['username']
-			end
+            group do 
+				if platform_family?('suse')
+            		new_resource.group_name
+            	else 
+            		u['gid'] || u['username']
+				end
+			end 
             mode "0600"
             variables :ssh_keys => u['ssh_keys']
           end

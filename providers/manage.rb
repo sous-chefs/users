@@ -43,6 +43,7 @@ action :remove do
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
       user rm_user['username'] ||= rm_user['id'] do
         action :remove
+        force rm_user['force'] ||= false
       end
     end
   end

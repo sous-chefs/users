@@ -51,7 +51,7 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
 ```javascript
 {
   "id": "bofh",
-  "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh",
+  "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh"
 }
 ```
 

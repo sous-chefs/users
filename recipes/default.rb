@@ -17,4 +17,8 @@
 # limitations under the License.
 #
 
-# Empty default recipe for including LWRPs.
+Chef::Recipe.send :include, ::Users::Helpers
+
+node[:users][:create_list].each do |u|
+  create_user JSON.parse(u.to_json)
+end

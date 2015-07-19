@@ -64,12 +64,25 @@ action :create do
         end
       end
 
-      # Set home_basedir based on platform_family
-      case node['platform_family']
-      when 'mac_os_x'
-        home_basedir = '/Users'
-      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
-        home_basedir = '/home'
+      if node['users']['home_basedir']
+        home_basedir = node['users']['home_basedir']
+        # Assume the directory in a platform standard location is
+        # already create with the platform's preferred permissions.
+        directory home_basedir do
+          owner 'root'
+          group 'root'
+          mode 00755
+          recursive true
+          action :create
+        end
+      else
+        # Set home_basedir based on platform_family
+        case node['platform_family']
+        when 'mac_os_x'
+          home_basedir = '/Users'
+        when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
+          home_basedir = '/home'
+        end
       end
 
       # Set home to location in data bag,

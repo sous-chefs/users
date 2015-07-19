@@ -111,10 +111,12 @@ action :create do
       if manage_home_files?(home_dir, u['username'])
         Chef::Log.debug("Managing home files for #{u['username']}")
 
-        directory "#{home_dir}/.ssh" do
-          owner u['username']
-          group u['gid'] || u['username']
-          mode "0700"
+        if u['ssh_keys'] || u['ssh_private_key'] || u['ssh_public_key']
+          directory "#{home_dir}/.ssh" do
+            owner u['username']
+            group u['gid'] || u['username']
+            mode "0700"
+          end
         end
 
         if u['ssh_keys']

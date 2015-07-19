@@ -36,10 +36,17 @@ rescue NameError
   return false
 end
 
-action :remove do
-  if Chef::Config[:solo] and not chef_solo_search_installed?
+def chef_solo_installed?
+  if Chef::Config[:solo] and not ( Chef::Config[:local_mode] or chef_solo_search_installed? )
     Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
+    return true
   else
+    return false
+  end
+end
+
+action :remove do
+  if not chef_solo_installed?
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
       user rm_user['username'] ||= rm_user['id'] do
         action :remove
@@ -51,9 +58,7 @@ end
 action :create do
   security_group = Array.new
 
-  if Chef::Config[:solo] and not chef_solo_search_installed?
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
-  else
+  if not chef_solo_installed?
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       u['username'] ||= u['id']
       security_group << u['username']

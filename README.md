@@ -48,14 +48,14 @@ $ openssl passwd -1 "plaintextpassword"
 
 Note: The ssh_keys attribute below can be either a String or an Array. However, we are recommending the use of an Array.
 
-```javascript
+```json
 {
   "id": "bofh",
   "ssh_keys": "ssh-rsa AAAAB3Nz...yhCw== bofh"
 }
 ```
 
-```javascript
+```json
 {
   "id": "bofh",
   "password": "$1$d...HgH0",
@@ -63,7 +63,15 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
     "ssh-rsa AAA123...xyz== foo",
     "ssh-rsa AAA456...uvw== bar"
   ],
-  "groups": [ "sysadmin", "dba", "devops" ],
+  "groups": {
+    "sysadmin": {},
+    "dba": {
+      "main": true
+    },
+    "devops": {
+      "gid": 9999
+    }
+  },
   "uid": 2001,
   "shell": "\/bin\/bash",
   "comment": "BOFH",
@@ -88,7 +96,15 @@ And then change the action to "lock":
 ```javascript
 {
   "id": "johndoe1",
-  "groups": ["sysadmin", "dba", "devops"],
+  "groups": {
+    "sysadmin": {},
+    "dba": {
+      "main": true
+    },
+    "devops": {
+      "gid": 9999
+    }
+  },
   "uid": 2002,
   "action": "lock", // <--
   "comment": "User violated access policy"
@@ -106,7 +122,15 @@ And then change the action to "remove":
 ```javascript
 {
   "id": "johndoe1",
-  "groups": [ "sysadmin", "dba", "devops" ],
+  "groups": {
+    "sysadmin": {},
+    "dba": {
+      "main": true
+    },
+    "devops": {
+      "gid": 9999
+    }
+  },
   "uid": 2002,
   "action": "remove", // <--
   "comment": "User quit, retired, or fired."
@@ -119,12 +143,11 @@ The sysadmins recipe makes use of the `users_manage` Lightweight Resource Provid
 
 ```ruby
 users_manage "sysadmin" do
-  group_id 2300
   action [ :remove, :create ]
 end
 ```
 
-Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`. The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique. The default action for the LWRP is `:create` only.
+Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`. The only required attribute is, which represents the numeric Unix gid and *must* be unique. The default action for the LWRP is `:create` only.
 
 If you have different requirements, for example:
 
@@ -146,7 +169,6 @@ Putting these requirements together our recipe might look like this:
 users_manage "postmaster" do
   data_bag "mail"
   group_name "wheel"
-  group_id 10
 end
 ```
 

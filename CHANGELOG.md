@@ -4,6 +4,7 @@ This file is used to list changes made in each version of the users cookbook.
 
 UNRELEASED (v1.8.3)
 -------------------
+- More fine grained control over groups and theirs ids
 
 v1.8.2 (2015-03-18)
 -------------------
@@ -11,16 +12,16 @@ v1.8.2 (2015-03-18)
 
 v1.8.1 (2015-03-12)
 -------------------
-- Add `source_url` and `issues_url` to the metadata.rb so Supermarket can display 
+- Add `source_url` and `issues_url` to the metadata.rb so Supermarket can display
 appropriate links
 
 v1.8.0 (2015-03-09)
 -------------------
 - Expose LWRP state attributes
 - [COOK-4401] - Add unit tests with ChefSpec
-- [COOK-4404] - Determine file system and add manage_nfs_home_dirs attribute to disable 
+- [COOK-4404] - Determine file system and add manage_nfs_home_dirs attribute to disable
 managing NFS mounted home directories
-- Remove `converge_by` when creating home directory, the directory resource 
+- Remove `converge_by` when creating home directory, the directory resource
 already handles this
 - Do not manage home directory if the path does not exist
 - Add integration with TravisCI

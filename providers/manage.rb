@@ -64,12 +64,16 @@ action :create do
         end
       end
 
-      # Set home_basedir based on platform_family
-      case node['platform_family']
-      when 'mac_os_x'
-        home_basedir = '/Users'
-      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
-        home_basedir = '/home'
+      if new_resource.home_basedir
+        home_basedir = new_resource.home_basedir
+      else
+        # Set home_basedir based on platform_family
+        case node['platform_family']
+        when 'mac_os_x'
+          home_basedir = '/Users'
+        when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
+          home_basedir = '/home'
+        end
       end
 
       # Set home to location in data bag,

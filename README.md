@@ -74,6 +74,30 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
   "openid": "bofh.myopenid.com"
 }
 ```
+It supports `from_allowed` and `command_allowed` so you can restrict  the sources for ssh login and commands to be executed, in authorized_keys files.
+You can also define `node['user']['from_allowed']` on your wrapper cookbook, to apply to all users authorized_keys files.
+
+```javascript
+{
+  "id": "bofh",
+  "password": "$1$d...HgH0",
+  "ssh_keys": [
+    "ssh-rsa AAA123...xyz== foo",
+    "ssh-rsa AAA456...uvw== bar"
+  ],
+  "from_allowed": ["192.168.10.1", "123.12.23.1", "123.23.21.1"],
+  "command_allowed": ["/bin/echo", "/bin/ls"],
+  "groups": [ "sysadmin", "dba", "devops" ],
+  "uid": 2001,
+  "shell": "\/bin\/bash",
+  "comment": "BOFH",
+  "nagios": {
+    "pager": "8005551212@txt.att.net",
+    "email": "bofh@example.com"
+  },
+  "openid": "bofh.myopenid.com"
+}
+```
 
 You can pass any action listed in the [user](http://docs.chef.io/chef/resources.html#user) resource for Chef via the "action" option. For Example:
 

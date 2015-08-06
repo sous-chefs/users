@@ -117,6 +117,25 @@ action :create do
           mode "0700"
         end
 
+        # Check if it is a staff wwwh user
+        if u['home'] == "/home/.wwwh/#{u['username']}"
+          # Append new .bashrc_wwwh to existing users .bashrc
+          bash 'append_to_users_bashrc' do
+            code <<-EOF
+            echo "source #{u['home']}/.bashrc_wwwh" >> #{u['home']}/.bashrc
+            EOF
+            not_if "grep -q #{u['home']}/.bashrc_wwwh #{u['home']}/.bashrc"
+          end
+          # Template to add new .bashrc_wwwh handled by chef
+          template "#{home_dir}/.bashrc_wwwh" do
+            source "bashrc.erb"
+            cookbook new_resource.cookbook
+            owner u['username']
+            group u['gid'] || u['username']
+            mode "0600"
+          end
+        end
+
         if u['ssh_keys']
           template "#{home_dir}/.ssh/authorized_keys" do
             source "authorized_keys.erb"
@@ -124,7 +143,17 @@ action :create do
             owner u['username']
             group u['gid'] || u['username']
             mode "0600"
-            variables :ssh_keys => u['ssh_keys']
+            #If you want to define global in a wrapper cookbook instead of per user
+            if node['users'] and node['users']['from_allowed']
+              from_allowed = u['from_allowed'] || node['users']['from_allowed']
+            else
+              from_allowed = u['from_allowed']
+            end
+            variables(
+                      :ssh_keys => u['ssh_keys'],
+                      :from_allowed => from_allowed,
+                      :command_allowed => u['command_allowed']
+                      )
           end
         end
 

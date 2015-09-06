@@ -49,14 +49,18 @@ action :remove do
 end
 
 action :create do
-  security_group = []
+  users_groups = {}
+  users_groups[new_resource.group_name] = []
 
   if search_missing?
     Chef::Log.warn('This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.')
   else
     search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
       u['username'] ||= u['id']
-      security_group << u['username']
+      u['groups'].each do |g|
+        users_groups[g] = [] unless users_groups.key?(g)
+        users_groups[g] << u['username']
+      end
 
       if node['apache'] && node['apache']['allowed_openids']
         Array(u['openid']).compact.each do |oid|
@@ -152,11 +156,20 @@ action :create do
         Chef::Log.debug("Not managing home files for #{u['username']}")
       end
     end
+
+    # Populating users to appropriates groups
+    users_groups.each do |g, u|
+      group g do
+        members u
+        append true
+        action :manage # Do nothing if group doesn't exist
+      end unless g == new_resource.group_name # Dealing with managed group later
+    end
   end
 
   group new_resource.group_name do
     gid new_resource.group_id if new_resource.group_id
-    members security_group
+    members users_groups[new_resource.group_name]
   end
 end
 

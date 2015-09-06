@@ -19,6 +19,7 @@
 
 # Data bag user object needs an "action": "remove" tag to actually be removed by the action.
 actions :create, :remove
+default_action :create
 
 state_attrs :cookbook,
             :data_bag,
@@ -38,7 +39,3 @@ attribute :group_id, :kind_of => Integer
 attribute :cookbook, :kind_of => String, :default => "users"
 attribute :manage_nfs_home_dirs, :kind_of => [TrueClass, FalseClass], :default => true
 
-def initialize(*args)
-  super
-  @action = :create
-end

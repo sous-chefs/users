@@ -24,11 +24,6 @@ def whyrun_supported?
   true
 end
 
-def initialize(*args)
-  super
-  @action = :create
-end
-
 def chef_solo_search_installed?
   klass = ::Search::const_get('Helper')
   return klass.is_a?(Class)

@@ -1,6 +1,7 @@
 users Cookbook
 ==============
-![Build Status](https://travis-ci.org/opscode-cookbooks/users.svg?branch=master)
+[![Build Status](https://travis-ci.org/opscode-cookbooks/users.svg?branch=master)](http://travis-ci.org/opscode-cookbooks/users)
+[![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
 Creates users from a databag search.
 
@@ -8,9 +9,11 @@ Creates users from a databag search.
 Requirements
 ------------
 ### Platforms
-- Debian, Ubuntu
-- CentOS, Red Hat, Fedora
+- Debian / Ubuntu and derivatives
+- RHEL and derivatives
+- Fedora
 - FreeBSD
+- Mac OS X
 
 A data bag populated with user objects must exist. The default data
 bag in this recipe is `users`. See USAGE.

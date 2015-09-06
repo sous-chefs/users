@@ -12,7 +12,10 @@ Requirements
 - Debian / Ubuntu and derivatives
 - RHEL and derivatives
 - Fedora
-- FreeBSD
+- Arch
+- Gentoo
+- Slackware
+- FreeBSD / OpenBSD
 - Mac OS X
 
 A data bag populated with user objects must exist. The default data

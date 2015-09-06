@@ -63,7 +63,7 @@ action :create do
       case node['platform_family']
       when 'mac_os_x'
         home_basedir = '/Users'
-      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd'
+      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd', 'openbsd', 'slackware', 'gentoo'
         home_basedir = '/home'
       end
 

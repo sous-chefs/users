@@ -156,7 +156,7 @@ action :create do
     if new_resource.group_id
       gid new_resource.group_id
     end
-    members security_group
+    members security_group.sort
   end
 end
 

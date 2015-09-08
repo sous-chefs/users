@@ -7,13 +7,11 @@ module Users
     #
     # @return [String]
     def fs_type(mount)
-      begin
-        # Doesn't support macosx
-        stat = Mixlib::ShellOut.new("stat -f -L -c %T #{mount} 2>&1").run_command
-        stat.stdout.chomp
-      rescue
-        'none'
-      end
+      # Doesn't support macosx
+      stat = Mixlib::ShellOut.new("stat -f -L -c %T #{mount} 2>&1").run_command
+      stat.stdout.chomp
+    rescue
+      'none'
     end
 
     # Determines if provided mount point is remote.

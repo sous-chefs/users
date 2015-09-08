@@ -21,26 +21,24 @@ describe 'users_test::test_home_dir' do
       step_into: ['users_manage'],
       platform: 'ubuntu',
       version: '12.04'
-    ) do |node, server|
-      server.create_data_bag('test_home_dir', {
-        user_with_dev_null_home: {
-          id: 'user_with_dev_null_home',
-          groups: ['testgroup'],
-          home: '/dev/null',
-        },
-        user_with_nfs_home_first: {
-          id: 'user_with_nfs_home_first',
-          groups: ['testgroup'],
-        },
-        user_with_nfs_home_second: {
-          id: 'user_with_nfs_home_second',
-          groups: ['nfsgroup'],
-        },
-        user_with_local_home: {
-          id: 'user_with_local_home',
-          groups: ['testgroup'],
-        },
-      })
+    ) do |_node, server|
+      server.create_data_bag('test_home_dir',         user_with_dev_null_home: {
+                               id: 'user_with_dev_null_home',
+                               groups: ['testgroup'],
+                               home: '/dev/null'
+                             },
+                                                      user_with_nfs_home_first: {
+                                                        id: 'user_with_nfs_home_first',
+                                                        groups: ['testgroup']
+                                                      },
+                                                      user_with_nfs_home_second: {
+                                                        id: 'user_with_nfs_home_second',
+                                                        groups: ['nfsgroup']
+                                                      },
+                                                      user_with_local_home: {
+                                                        id: 'user_with_local_home',
+                                                        groups: ['testgroup']
+                                                      })
     end.converge(described_recipe)
   end
 
@@ -57,12 +55,12 @@ describe 'users_test::test_home_dir' do
       expect(chef_run).to create_group('nfsgroup')
     end
 
-    it "not supports managing /dev/null home dir" do
+    it 'not supports managing /dev/null home dir' do
       expect(chef_run).to create_user('user_with_dev_null_home')
         .with_supports(manage_home: false)
     end
 
-    it "supports managing local home dir" do
+    it 'supports managing local home dir' do
       expect(chef_run).to create_user('user_with_local_home')
         .with_supports(manage_home: true)
     end

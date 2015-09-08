@@ -13,3 +13,6 @@ recipe           "users::sysadmins", "Create and manage sysadmin group"
 %w{ ubuntu debian redhat centos fedora freebsd mac_os_x }.each do |os|
   supports os
 end
+
+source_url 'https://github.com/chef-cookbooks/users' if respond_to?(:source_url)
+issues_url 'https://github.com/chef-cookbooks/users/issues' if respond_to?(:issues_url)

@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include ChefVaultItem
 
 use_inline_resources if defined?(use_inline_resources)
 
@@ -32,11 +33,9 @@ rescue NameError
 end
 
 action :remove do
-  if Chef::Config[:solo] and not chef_solo_search_installed?
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
-  else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
-      user rm_user['username'] ||= rm_user['id'] do
+  users_list(new_resource.data_bag).each do |rm_user|
+    if rm_user['groups'].first == new_resource.search_group and rm_user['action'] == 'remove'
+      user rm_user['id'] do
         action :remove
       end
     end
@@ -46,11 +45,11 @@ end
 action :create do
   security_group = Array.new
 
-  if Chef::Config[:solo] and not chef_solo_search_installed?
-    Chef::Log.warn("This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.")
-  else
-    search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+  users_list(new_resource.data_bag).each do |u|
+    if u['groups'].first == new_resource.search_group and not u['action'] == 'remove'
+
       u['username'] ||= u['id']
+
       security_group << u['username']
 
       if node['apache'] and node['apache']['allowed_openids']
@@ -173,3 +172,5 @@ def manage_home_files?(home_dir, user)
     true
   end
 end
+
+

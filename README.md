@@ -1,6 +1,6 @@
 users Cookbook
 ==============
-[![Build Status](https://travis-ci.org/opscode-cookbooks/users.svg?branch=master)](http://travis-ci.org/opscode-cookbooks/users)
+[![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users)
 [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
 Creates users from a databag search.

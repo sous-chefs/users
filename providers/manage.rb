@@ -31,6 +31,16 @@ rescue NameError
   return false
 end
 
+def data_bag_exists?(databag)
+  begin
+    data_bag(databag)
+    return true
+  rescue Net::HTTPServerException
+    Chef::Log.warn("Data bag \"#{new_resource.data_bag}\" doesn't exist")
+  end
+  false
+end
+
 action :remove do
   if Chef::Config[:solo] && !chef_solo_search_installed?
     Chef::Log.warn('This recipe uses search. Chef Solo does not support search unless you install the chef-solo-search cookbook.')
@@ -39,7 +49,7 @@ action :remove do
       user rm_user['username'] ||= rm_user['id'] do
         action :remove
       end
-    end
+    end if data_bag_exists?(new_resource.data_bag)
   end
 end
 
@@ -147,7 +157,7 @@ action :create do
       else
         Chef::Log.debug("Not managing home files for #{u['username']}")
       end
-    end
+    end if data_bag_exists?(new_resource.data_bag)
   end
 
   group new_resource.group_name do

@@ -21,3 +21,6 @@ suites:
   - name: default
     run_list:
       - recipe[users::default]
+  - name: sysadmins
+    run_list:
+      - recipe[users::sysadmins]

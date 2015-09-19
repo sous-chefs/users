@@ -18,9 +18,16 @@
 # limitations under the License.
 #
 
+# Update users information in OHAI
+ohai 'reload_passwd' do
+  plugin 'etc'
+  action :nothing
+end
+
 # Searches data bag "users" for groups attribute "sysadmin".
 # Places returned users in Unix group "sysadmin" with GID 2300.
 users_manage 'sysadmin' do
   group_id 2300
   action [:remove, :create]
+  notifies :reload, 'ohai[reload_passwd]', :immediately
 end

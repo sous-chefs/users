@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-use_inline_resources if defined?(use_inline_resources)
+use_inline_resources
 
 def whyrun_supported?
   true

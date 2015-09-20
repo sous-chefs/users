@@ -8,7 +8,7 @@ Creates users from a databag search.
 
 Requirements
 ------------
-### Platforms
+#### Platforms
 - Debian / Ubuntu and derivatives
 - RHEL and derivatives
 - Fedora
@@ -17,6 +17,13 @@ Requirements
 - Slackware
 - FreeBSD / OpenBSD
 - Mac OS X
+
+#### Chef
+- Chef 11+
+
+#### Cookbooks
+- none
+
 
 A data bag populated with user objects must exist. The default data
 bag in this recipe is `users`. See USAGE.
@@ -179,12 +186,11 @@ As of version 1.4.0, this cookbook might work with Chef Solo when using [chef-so
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman (<joshua@chef.io>)
-- Author:: Seth Chisamore (<schisamo@chef.io>)
 
-```text
-Copyright:: 2009-2015, Chef Software, Inc
+**Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
 
+**Copyright:** 2009-2015, Chef Software, Inc.
+```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

@@ -13,3 +13,5 @@ MethodLength:
   Max: 30
 SingleSpaceBeforeFirstArg:
   Enabled: false
+Metrics/BlockNesting:
+  Enabled: false

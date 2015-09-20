@@ -8,7 +8,7 @@ version          '1.8.3'
 recipe           'users', 'Empty recipe for including LWRPs'
 recipe           'users::sysadmins', 'Create and manage sysadmin group'
 
-%w( ubuntu debian redhat centos fedora freebsd mac_os_x ).each do |os|
+%w( ubuntu debian redhat centos fedora freebsd mac_os_x scientific oracle amazon ).each do |os|
   supports os
 end
 

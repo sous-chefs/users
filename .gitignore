@@ -14,4 +14,3 @@ bin
 .kitchen.local.yml
 .coverage
 vendor
-recipes/test.rb

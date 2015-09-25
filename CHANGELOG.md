@@ -2,6 +2,10 @@ users Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the users cookbook.
 
+UNRELEASED (v1.8.4)
+-------------------
+- Just a version bump
+
 UNRELEASED (v1.8.3)
 -------------------
 - More fine grained control over groups and theirs ids

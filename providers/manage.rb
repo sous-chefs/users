@@ -49,7 +49,6 @@ action :remove do
 end
 
 action :create do
-
   security_group = Array.new
 
   if Chef::Config[:solo] && !chef_solo_search_installed?

@@ -2,6 +2,10 @@ users Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the users cookbook.
 
+UNRELEASED (v1.8.6)
+-------------------
+- Fix getting gid bug, again...
+
 UNRELEASED (v1.8.5)
 -------------------
 - Fix getting gid bug

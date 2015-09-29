@@ -130,7 +130,7 @@ action :create do
       # Do NOT try to manage null home directories.
       user u['username'] do
         uid u['uid']
-        gid maingroup.keys[1]
+        gid maingroup.values[0]
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']

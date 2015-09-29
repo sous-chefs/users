@@ -104,7 +104,7 @@ action :create do
       end
 
       group "#{u['username']}_#{maingroup.keys[0]}" do
-        gid maingroup.keys.first if maingroup.keys.first
+        gid maingroup.values[0] if maingroup.values[0]
         group_name maingroup.keys[0]
       end
 

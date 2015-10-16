@@ -64,11 +64,18 @@ action :create do
       end
 
       # Set home_basedir based on platform_family
+      home_basedir = '/home'
+
       case node['platform_family']
       when 'mac_os_x'
         home_basedir = '/Users'
-      when 'debian', 'rhel', 'fedora', 'arch', 'suse', 'freebsd', 'openbsd', 'slackware', 'gentoo'
-        home_basedir = '/home'
+      when 'freebsd'
+        # Check if we need to prepend shell with /usr/local/?
+        if !File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}")
+          u['shell'] = "/usr/local#{u['shell']}"
+        else
+          u['shell'] = '/bin/sh'
+        end
       end
 
       # Set home to location in data bag,

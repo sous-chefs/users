@@ -67,7 +67,7 @@ action :create do
         home_basedir = '/Users'
       when 'freebsd'
         # Check if we need to prepend shell with /usr/local/?
-        if not File.exist?(u['shell']) and File.exist?("/usr/local#{u['shell']}")
+        if !File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}")
           u['shell'] = "/usr/local#{u['shell']}"
         else
           u['shell'] = '/bin/sh'

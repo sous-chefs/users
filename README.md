@@ -1,5 +1,6 @@
 users Cookbook
 ==============
+
 [![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users)
 [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
@@ -190,6 +191,7 @@ License & Authors
 **Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
 
 **Copyright:** 2009-2015, Chef Software, Inc.
+
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

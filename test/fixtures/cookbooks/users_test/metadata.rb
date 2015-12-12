@@ -2,12 +2,7 @@ name             'users_test'
 maintainer       'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license          'Apache 2.0'
-description      'Creates users from a databag search'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+description      'Tests the users cookbook'
 version          '1.7.1'
-
-%w( ubuntu debian redhat centos fedora freebsd mac_os_x ).each do |os|
-  supports os
-end
 
 depends 'users'

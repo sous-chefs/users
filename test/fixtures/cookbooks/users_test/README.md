@@ -1,1 +1,1 @@
-This is a test cookbook for users for use by chefspec
+This is a test cookbook for users for use by test kitchen and chefspec

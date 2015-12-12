@@ -6,6 +6,9 @@ driver:
   # privileged is required otherwise the container doesn't boot right
   privileged: true
 
+provisioner:
+  name: chef_zero
+
 platforms:
 - name: centos-6
   driver:

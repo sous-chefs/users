@@ -43,4 +43,4 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[users::default]
+      - recipe[users_test::test_home_dir]

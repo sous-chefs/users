@@ -26,6 +26,7 @@ env:
   - INSTANCE=default-ubuntu-1404
   - INSTANCE=default-ubuntu-1504
   - INSTANCE=default-ubuntu-1510
+  - INSTANCE=default-opensuse-132
 
 # Don't `bundle install`
 install: echo "skip bundle install"

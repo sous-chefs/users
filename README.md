@@ -71,12 +71,7 @@ Note: The ssh_keys attribute below can be either a String or an Array. However, 
   "groups": [ "sysadmin", "dba", "devops" ],
   "uid": 2001,
   "shell": "\/bin\/bash",
-  "comment": "BOFH",
-  "nagios": {
-    "pager": "8005551212@txt.att.net",
-    "email": "bofh@example.com"
-  },
-  "openid": "bofh.myopenid.com"
+  "comment": "BOFH"
 }
 ```
 

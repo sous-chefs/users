@@ -1,15 +1,10 @@
-users Cookbook
-==============
+# users Cookbook
+[![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users) [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
-[![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users)
-[![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
+Creates OS users from databags.
 
-Creates users from a databag search.
-
-
-Requirements
-------------
-#### Platforms
+## Requirements
+### Platforms
 - Debian / Ubuntu and derivatives
 - RHEL and derivatives
 - Fedora
@@ -19,19 +14,15 @@ Requirements
 - FreeBSD / OpenBSD
 - Mac OS X
 
-#### Chef
+### Chef
 - Chef 11+
 
-#### Cookbooks
+### Cookbooks
 - none
 
+A data bag populated with user objects must exist. The default data bag in this recipe is `users`. See USAGE.
 
-A data bag populated with user objects must exist. The default data
-bag in this recipe is `users`. See USAGE.
-
-
-Usage
------
+## Usage
 To include just the LWRPs in your cookbook, use:
 
 ```ruby
@@ -52,7 +43,7 @@ $ knife data bag create users
 
 Create a user in the data_bag/users/ directory.
 
-When using an [Omnibus ruby](http://tickets.opscode.com/browse/CHEF-2848), one can specify an optional password hash. This will be used as the user's password.
+An optional password hash can be specified that will be used as the user's password.
 
 The hash can be generated with the following command.
 
@@ -127,7 +118,7 @@ And then change the action to "remove":
 }
 ```
 
-* Note only user bags with the "action : remove" and a search-able "group" attribute will be purged by the :remove action.
+- Note only user bags with the "action : remove" and a search-able "group" attribute will be purged by the :remove action.
 
 The sysadmins recipe makes use of the `users_manage` Lightweight Resource Provider (LWRP), and looks like this:
 
@@ -138,21 +129,22 @@ users_manage "sysadmin" do
 end
 ```
 
-Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`. The only required attribute is group_id, which represents the numeric Unix gid and *must* be unique. The default action for the LWRP is `:create` only.
+Note this LWRP searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`. The only required attribute is group_id, which represents the numeric Unix gid and _must_ be unique. The default action for the LWRP is `:create` only.
 
 If you have different requirements, for example:
+- You want to search a different data bag specific to a role such as
+- mail. You may change the data_bag searched.
+  - data_bag `mail`
 
- * You want to search a different data bag specific to a role such as
-   mail. You may change the data_bag searched.
-   - data_bag `mail`
- * You want to search for a different group attribute named
-   `postmaster`. You may change the search_group attribute. This
-   attribute defaults to the LWRP resource name.
-   - search_group `postmaster`
- * You want to add the users to a security group other than the
-   lightweight resource name. You may change the group_name attribute.
-   This attribute also defaults to the LWRP resource name.
-   - group_name `wheel`
+- You want to search for a different group attribute named
+- `postmaster`. You may change the search_group attribute. This
+- attribute defaults to the LWRP resource name.
+  - search_group `postmaster`
+
+- You want to add the users to a security group other than the
+- lightweight resource name. You may change the group_name attribute.
+- This attribute also defaults to the LWRP resource name.
+  - group_name `wheel`
 
 Putting these requirements together our recipe might look like this:
 
@@ -164,7 +156,7 @@ users_manage "postmaster" do
 end
 ```
 
-The latest version of knife supports reading data bags from a file and automatically looks in a directory called +data_bags+ in the current directory. The "bag" should be a directory with JSON files of each item. For the above:
+Knife supports reading data bags from a file and automatically looks in a directory called +data_bags+ in the current directory. The "bag" should be a directory with JSON files of each item. For the above:
 
 ```bash
 $ mkdir data_bags/users
@@ -179,16 +171,11 @@ The sysadmin group will be created with GID 2300. This may become an attribute a
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 
-
-Chef Solo
----------
+## Chef Solo
 As of version 1.4.0, this cookbook might work with Chef Solo when using [chef-solo-search by edelight](https://github.com/edelight/chef-solo-search). That cookbook is not a dependency of this one as Chef solo doesn't support dependency resolution using cookbook metadata - all cookbooks must be provided to the node manually when using Chef Solo.
 
-
-License & Authors
------------------
-
-**Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
+## License & Authors
+**Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
 
 **Copyright:** 2009-2015, Chef Software, Inc.
 

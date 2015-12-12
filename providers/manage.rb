@@ -115,7 +115,13 @@ action :create do
           owner u['username']
           group u['gid'] || u['username']
           mode '0600'
-          variables ssh_keys: u['ssh_keys']
+          variables(lazy do
+            {
+              ssh_keys: u['ssh_keys'],
+              fqdn: node['fqdn']
+            }
+          end
+                   )
           only_if { u['ssh_keys'] }
         end
 

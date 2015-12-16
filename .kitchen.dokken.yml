@@ -89,3 +89,4 @@ suites:
   attributes:
     users:
       data_bag: 'test_sysadmin'
+

@@ -1,6 +1,11 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## v2.0.1 (2016-1-8)
+- Fixed provider to work on Mac OS X
+- funzoneq - add correct default shell for FreeBSD if not provided 
+- Added kitchen.dokken to speed up platform testing 
+
 ## v2.0.0 (2015-12-11)
 - Removed Chef 10 compatibility code
 - Removed the nodes fqdn from the authorized_keys file

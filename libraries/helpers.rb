@@ -20,6 +20,15 @@ module Users
     def fs_remote?(mount)
       fs_type(mount) == 'nfs' ? true : false
     end
+
+    # Validates passed id.
+    #
+    # @return [Numeric, String]
+    # handles checking whether uid was specified as a string
+    
+    def validate_id(id)
+      id.to_i.to_s == id ? id.to_i : id
+    end
   end
 end
 

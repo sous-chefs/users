@@ -97,8 +97,8 @@ action :create do
       # Create user object.
       # Do NOT try to manage null home directories.
       user u['username'] do
-        uid u['uid']
-        gid u['gid'] if u['gid']
+        uid validate_id(u['uid'])
+        gid validate_id(u['gid']) if u['gid']
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
@@ -115,16 +115,16 @@ action :create do
         Chef::Log.debug("Managing home files for #{u['username']}")
 
         directory "#{home_dir}/.ssh" do
-          owner u['uid']
-          group u['gid'] if u['gid']
+          owner validate_id(u['uid'])
+          group validate_id(u['gid']) if u['gid']
           mode '0700'
         end
 
         template "#{home_dir}/.ssh/authorized_keys" do
           source 'authorized_keys.erb'
           cookbook new_resource.cookbook
-          owner u['uid']
-          group u['gid'] if u['gid']
+          owner validate_id(u['uid'])
+          group validate_id(u['gid']) if u['gid']
           mode '0600'
           variables ssh_keys: u['ssh_keys']
           only_if { u['ssh_keys'] }
@@ -135,8 +135,8 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}" do
             source 'private_key.erb'
             cookbook new_resource.cookbook
-            owner u['uid']
-            group u['gid'] if u['gid']
+            owner validate_id(u['uid'])
+            group validate_id(u['gid']) if u['gid']
             mode '0400'
             variables private_key: u['ssh_private_key']
           end
@@ -147,8 +147,8 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}.pub" do
             source 'public_key.pub.erb'
             cookbook new_resource.cookbook
-            owner u['uid']
-            group u['gid'] if u['gid']
+            owner validate_id(u['uid'])
+            group validate_id(u['gid']) if u['gid']
             mode '0400'
             variables public_key: u['ssh_public_key']
           end

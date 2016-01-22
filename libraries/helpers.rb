@@ -25,7 +25,6 @@ module Users
     #
     # @return [Numeric, String]
     # handles checking whether uid was specified as a string
-    
     def validate_id(id)
       id.to_i.to_s == id ? id.to_i : id
     end

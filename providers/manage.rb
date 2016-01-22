@@ -63,7 +63,9 @@ action :create do
         end
       end
 
-      # Set home_basedir based on platform_family
+      # Platform specific checks
+      #  Set home_basedir
+      #  Set shell on FreeBSD
       home_basedir = '/home'
 
       case node['platform_family']
@@ -71,26 +73,21 @@ action :create do
         home_basedir = '/Users'
       when 'freebsd'
         # Check if we need to prepend shell with /usr/local/?
-        if !File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}")
-          u['shell'] = "/usr/local#{u['shell']}"
-        else
-          u['shell'] = '/bin/sh'
-        end
+        !File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}") ? u['shell'] = "/usr/local#{u['shell']}" : u['shell'] = '/bin/sh'
       end
 
       # Set home to location in data bag,
       # or a reasonable default ($home_basedir/$user).
-      if u['home']
-        home_dir = u['home']
-      else
-        home_dir = "#{home_basedir}/#{u['username']}"
-      end
+      u['home'] ? home_dir = u['home'] : home_dir = "#{home_basedir}/#{u['username']}"
+
+      # check whether home dir is null
+      home_dir == '/dev/null' ? manage_home = false : manage_home = true
 
       # The user block will fail if the group does not yet exist.
       # See the -g option limitations in man 8 useradd for an explanation.
       # This should correct that without breaking functionality.
       group u['username'] do
-        gid u['gid']
+        gid validate_id(u['gid'])
         only_if { u['gid'] && u['gid'].is_a?(Numeric) }
       end
 
@@ -102,11 +99,7 @@ action :create do
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
-        if home_dir == '/dev/null'
-          supports manage_home: false
-        else
-          supports manage_home: true
-        end
+        supports manage_home: manage_home
         home home_dir
         action u['action'] if u['action']
       end
@@ -115,7 +108,7 @@ action :create do
         Chef::Log.debug("Managing home files for #{u['username']}")
 
         directory "#{home_dir}/.ssh" do
-          owner validate_id(u['uid']) if u['uid'] || u['username']
+          owner u['uid'] ? validate_id(u['uid']) : u['username']
           group validate_id(u['gid']) if u['gid']
           mode '0700'
         end
@@ -123,7 +116,7 @@ action :create do
         template "#{home_dir}/.ssh/authorized_keys" do
           source 'authorized_keys.erb'
           cookbook new_resource.cookbook
-          owner validate_id(u['uid']) if u['uid'] || u['username']
+          owner u['uid'] ? validate_id(u['uid']) : u['username']
           group validate_id(u['gid']) if u['gid']
           mode '0600'
           variables ssh_keys: u['ssh_keys']
@@ -135,7 +128,7 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}" do
             source 'private_key.erb'
             cookbook new_resource.cookbook
-            owner validate_id(u['uid']) if u['uid'] || u['username']
+            owner u['uid'] ? validate_id(u['uid']) : u['username']
             group validate_id(u['gid']) if u['gid']
             mode '0400'
             variables private_key: u['ssh_private_key']
@@ -147,7 +140,7 @@ action :create do
           template "#{home_dir}/.ssh/id_#{key_type}.pub" do
             source 'public_key.pub.erb'
             cookbook new_resource.cookbook
-            owner validate_id(u['uid']) if u['uid'] || u['username']
+            owner u['uid'] ? validate_id(u['uid']) : u['username']
             group validate_id(u['gid']) if u['gid']
             mode '0400'
             variables public_key: u['ssh_public_key']

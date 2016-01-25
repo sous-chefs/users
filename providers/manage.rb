@@ -78,10 +78,10 @@ action :create do
 
       # Set home to location in data bag,
       # or a reasonable default ($home_basedir/$user).
-      u['home'] ? home_dir = u['home'] : home_dir = "#{home_basedir}/#{u['username']}"
+      home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
 
       # check whether home dir is null
-      home_dir == '/dev/null' ? manage_home = false : manage_home = true
+      manage_home = (home_dir == '/dev/null' ? false : true)
 
       # The user block will fail if the group does not yet exist.
       # See the -g option limitations in man 8 useradd for an explanation.

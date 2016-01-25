@@ -84,20 +84,20 @@ A sample user object in a users databag would look like:
 
 ### Databag Key Definitions 
 
-`id`: *String* specifies the username, as well as the data bag object id.
-`password`: *String* specifies the user's password.
-`ssh_keys`: *Array* an array of authorized keys that will be managed by Chef to the user's home directory in .ssh/authorized_keys
-`groups`: *Array* an array of groups that the user will be added to
-`uid`: *Integer* a unique identifier for the user
-`shell`: *String* the user's shell
-`comment`:*String* the [GECOS field](https://en.wikipedia.org/wiki/Gecos_field), generally the User's full name.
+* `id`: *String* specifies the username, as well as the data bag object id.
+* `password`: *String* specifies the user's password.
+* `ssh_keys`: *Array* an array of authorized keys that will be managed by Chef to the user's home directory in .ssh/authorized_keys
+* `groups`: *Array* an array of groups that the user will be added to
+* `uid`: *Integer* a unique identifier for the user
+* `shell`: *String* the user's shell
+* `comment`:*String* the [GECOS field](https://en.wikipedia.org/wiki/Gecos_field), generally the User's full name.
 
 Other potential fields:
 
-`home`: *String* User's home directory. If not assigned, will be set based on platform and username.
-`action`: *String* Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
-`ssh_private_key`: *String* manages user's private key generally ~/.ssh/id_*
-`ssh_public_key`: *String* manages user's public key generally ~/.ssh/id_*.pub
+* `home`: *String* User's home directory. If not assigned, will be set based on platform and username.
+* `action`: *String* Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
+* `ssh_private_key`: *String* manages user's private key generally ~/.ssh/id_*
+* `ssh_public_key`: *String* manages user's public key generally ~/.ssh/id_*.pub
 
 
 ## Resources Overview

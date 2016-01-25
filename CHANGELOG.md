@@ -1,6 +1,11 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## v2.0.2 (2016-1-25)
+- @375gnu - validate uid/gid for strings versus numeric
+- fix rubocop errors based on https://github.com/bbatsov/rubocop/issues/2608
+- fix kitchen configurations for testing
+
 ## v2.0.1 (2016-1-8)
 - Fixed provider to work on Mac OS X
 - funzoneq - add correct default shell for FreeBSD if not provided 

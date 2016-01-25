@@ -73,7 +73,7 @@ action :create do
         home_basedir = '/Users'
       when 'freebsd'
         # Check if we need to prepend shell with /usr/local/?
-        !File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}") ? u['shell'] = "/usr/local#{u['shell']}" : u['shell'] = '/bin/sh'
+        u['shell'] = (!File.exist?(u['shell']) && File.exist?("/usr/local#{u['shell']}") ? "/usr/local#{u['shell']}" : '/bin/sh')
       end
 
       # Set home to location in data bag,

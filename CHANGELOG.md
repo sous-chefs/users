@@ -1,8 +1,11 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## v2.0.3
+- ([@nkadel-skyhook][]) - create .ssh directory only if keys are configured.
+
 ## v2.0.2 (2016-1-25)
-- @375gnu - validate uid/gid for strings versus numeric
+- ([@375gnu][]) - validate uid/gid for strings versus numeric
 - fix rubocop errors based on https://github.com/bbatsov/rubocop/issues/2608
 - fix kitchen configurations for testing
 

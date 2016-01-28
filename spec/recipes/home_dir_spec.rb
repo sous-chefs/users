@@ -22,26 +22,25 @@ describe 'users_test::test_home_dir' do
       platform: 'ubuntu',
       version: '12.04'
     ) do |_node, server|
-      server.create_data_bag('test_home_dir',         user_with_dev_null_home: {
-                               id: 'user_with_dev_null_home',
-                               groups: ['testgroup'],
-                               home: '/dev/null'
-                             },
-                                                      user_with_nfs_home_first: {
-                                                        id: 'user_with_nfs_home_first',
-                                                        groups: ['testgroup']
-                                                      },
-                                                      user_with_nfs_home_second: {
-                                                        id: 'user_with_nfs_home_second',
-                                                        groups: ['nfsgroup']
-                                                      },
-                                                      user_with_local_home: {
-                                                        id: 'user_with_local_home',                               
-                                                        ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
-
-
-                                                        groups: ['testgroup']
-                                                      })
+      server.create_data_bag('test_home_dir',
+        user_with_dev_null_home: {
+          id: 'user_with_dev_null_home',
+          groups: ['testgroup'],
+          home: '/dev/null'
+        },
+        user_with_nfs_home_first: {
+          id: 'user_with_nfs_home_first',
+          groups: ['testgroup']
+        },
+        user_with_nfs_home_second: {
+          id: 'user_with_nfs_home_second',
+          groups: ['nfsgroup']
+        },
+        user_with_local_home: {
+          id: 'user_with_local_home',
+          ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
+          groups: ['testgroup']
+        })
     end.converge(described_recipe)
   end
 

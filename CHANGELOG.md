@@ -1,6 +1,9 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## 
+- ([@signe][]) - allow force parameter to be specified for users configured to be removed. 
+
 ## v2.0.3
 - ([@nkadel-skyhook][]) - create .ssh directory only if keys are configured.
 

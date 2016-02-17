@@ -255,7 +255,8 @@ And then change the action to "remove":
 ```
 
 - Note only user bags with the "action : remove" and a search-able "group" attribute will be purged by the :remove action.
-- As of v2.0.4 you can use the force parameter within the user data bag object for users with action remove. As per [user docs](https://docs.chef.io/resource_user.html) this may leave the system in an inconsistent state. For example, a user account will be removed even if the user is logged in. A user’s home directory will be removed, even if that directory is shared by multiple users.
+- As of v2.0.3 you can use the force parameter within the user data bag object for users with action remove. As per [user docs](https://docs.chef.io/resource_user.html) this may leave the system in an inconsistent state. For example, a user account will be removed even if the user is logged in. A user’s home directory will be removed, even if that directory is shared by multiple users.
+
 If you have different requirements, for example:
 - You want to search a different data bag specific to a role such as
 - mail. You may change the data_bag searched.

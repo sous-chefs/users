@@ -1,11 +1,10 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
-## 
-- ([@signe][]) - allow force parameter to be specified for users configured to be removed. 
-
 ## v2.0.3
 - ([@nkadel-skyhook][]) - create .ssh directory only if keys are configured.
+- ([@signe][]) - allow force parameter to be specified for users configured to be removed. 
+- ([@FlorentFlament][]) - adding the ability to manage groups for existing users.
 
 ## v2.0.2 (2016-1-25)
 - ([@375gnu][]) - validate uid/gid for strings versus numeric

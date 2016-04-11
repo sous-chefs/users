@@ -104,6 +104,8 @@ action :create do
         shell u['shell']
         comment u['comment']
         password u['password'] if u['password']
+        salt u['salt'] if u['salt']
+        iterations u['iterations'] if u['iterations']
         supports manage_home: manage_home
         home home_dir
         action u['action'] if u['action']

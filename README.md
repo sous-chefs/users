@@ -46,7 +46,7 @@ Then in a recipe:
 ```ruby
 users_manage 'GROUPNAME' do
   group_id GROUPID
-  action [:remove, :create]
+  action [:create]
   data_bag 'DATABAG_NAME'
 end
 ```
@@ -56,7 +56,7 @@ Example:
 ```ruby
 users_manage 'testgroup' do
   group_id 3000
-  action [:remove, :create]
+  action [:create]
   data_bag 'test_home_dir'
 end
 ```
@@ -113,26 +113,26 @@ Creates the `sysadmin` group and users defined in the `users` databag.
 ```ruby
 users_manage 'sysadmin' do
   group_id 2300
-  action [:remove, :create]
+  action [:create]
 end
 ```
 
-Removes, then creates the `testgroup` group, and users defined in the `test_home_dir` databag.
+Creates the `testgroup` group, and users defined in the `test_home_dir` databag.
 
 ```ruby
 users_manage 'testgroup' do
   group_id 3000
-  action [:remove, :create]
+  action [:create]
   data_bag 'test_home_dir'
 end
 ```
 
-Removes, then creates the `nfsgroup` group, and users defined in the `test_home_dir` databag and does not manage nfs home directories.
+Creates the `nfsgroup` group, and users defined in the `test_home_dir` databag and does not manage nfs home directories.
 
 ```ruby
 users_manage 'nfsgroup' do
   group_id 4000
-  action [:remove, :create]
+  action [:create]
   data_bag 'test_home_dir'
   manage_nfs_home_dirs false
 end
@@ -164,7 +164,7 @@ The recipe is defined as follows:
 ```ruby
 users_manage "sysadmin" do
   group_id 2300
-  action [ :remove, :create ]
+  action [ :create ]
 end
 ```
 

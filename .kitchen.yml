@@ -29,3 +29,12 @@ suites:
     data_bags_path: "./test/fixtures/data_bags"
     run_list:
       - recipe[users::sysadmins]
+
+  - name: attribute-driven-users
+    data_bags_path: "./test/fixtures/data_bags"
+    run_list:
+      - recipe[users::sysadmins]
+    attributes:
+      users:
+        list:
+          - sysadmin_2

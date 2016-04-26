@@ -7,6 +7,23 @@ Manages OS users from databags.
 
 This cookbook is concerned with the management of OS users and groups from databags. It also manages the distribution of ssh keys to a user's home directory.
 
+## Attributes
+
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td><tt>['users']['list']</tt></td>
+    <td>Array</td>
+    <td> If not empty only users from list will be created </td>
+    <td><tt>[]</tt></td>
+  </tr>
+</table>
+
 ## Requirements
 
 A data bag populated with user objects must exist. The default data bag in this recipe is `users`. See USAGE.
@@ -20,8 +37,8 @@ A data bag populated with user objects must exist. The default data bag in this 
 The following platforms have been tested with Test Kitchen:
 
 - Debian / Ubuntu and derivatives
-- RHEL and derivatives 
-- Fedora 
+- RHEL and derivatives
+- Fedora
 - FreeBSD / OpenBSD
 - Mac OS X
 
@@ -63,6 +80,8 @@ end
 
 **Note**: If you do not specify the data_bag, the default will be to look for a databag called users.
 
+**Note**: If you want to install only part of your users that belong to the group you can specify them in the attribute  `node['users']['list']`
+
 ## Databag Definition
 
 A sample user object in a users databag would look like:
@@ -82,7 +101,7 @@ A sample user object in a users databag would look like:
 }
 ```
 
-### Databag Key Definitions 
+### Databag Key Definitions
 
 * `id`: *String* specifies the username, as well as the data bag object id.
 * `password`: *String* specifies the user's password.
@@ -172,7 +191,7 @@ This `users_manage` resource searches the `users` data bag for the `sysadmin` gr
 
 The recipe, by default, will also create the sysadmin group. The sysadmin group will be created with GID 2300. This may become an attribute at a later date.
 
-## Data bag Overview 
+## Data bag Overview
 
 **Reminder** Data bags generally should not be stored in cookbooks, but in a policy repo within your organization. Data bags are useful across cookbooks, not just for a single cookbook.
 
@@ -287,7 +306,7 @@ $ mkdir data_bags/users
 $EDITOR data_bags/users/bofh.json
 ```
 
-Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. 
+Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed.
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 

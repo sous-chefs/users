@@ -91,7 +91,7 @@ action :create do
       # The user block will fail if the group does not yet exist.
       # See the -g option limitations in man 8 useradd for an explanation.
       # This should correct that without breaking functionality.
-      group u['username'] do
+      group u['username'] do # ~FC022
         gid validate_id(u['gid'])
         only_if { u['gid'] && u['gid'].is_a?(Numeric) }
       end

@@ -15,17 +15,13 @@ env:
   - INSTANCE=default-centos-5
   - INSTANCE=default-centos-6
   - INSTANCE=default-centos-7
-  - INSTANCE=default-debian-6
   - INSTANCE=default-debian-7
   - INSTANCE=default-debian-8
-  - INSTANCE=default-fedora-21
   - INSTANCE=default-fedora-22
-  - INSTANCE=default-oraclelinux-6
-  - INSTANCE=default-oraclelinux-7
+  - INSTANCE=default-fedora-23
   - INSTANCE=default-ubuntu-1204
   - INSTANCE=default-ubuntu-1404
-  - INSTANCE=default-ubuntu-1504
-  - INSTANCE=default-ubuntu-1510
+  - INSTANCE=default-ubuntu-1604
 
 # Don't `bundle install`
 install: echo "skip bundle install"
@@ -35,12 +31,13 @@ before_script:
   # https://github.com/zuazo/kitchen-in-travis-native/issues/1#issuecomment-142230889
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
-  - /opt/chefdk/embedded/bin/chef gem install kitchen-docker
+  - /opt/chefdk/embedded/bin/chef gem install kitchen-dokken
+
 script:
   - /opt/chefdk/embedded/bin/chef --version
   - /opt/chefdk/embedded/bin/rubocop --version
   - /opt/chefdk/embedded/bin/rubocop
   - /opt/chefdk/embedded/bin/foodcritic --version
-  - /opt/chefdk/embedded/bin/foodcritic . --exclude spec
+  - /opt/chefdk/embedded/bin/foodcritic . --exclude spec -f any
   - /opt/chefdk/embedded/bin/rspec
   - KITCHEN_LOCAL_YAML=.kitchen.docker.yml /opt/chefdk/embedded/bin/kitchen verify ${INSTANCE}

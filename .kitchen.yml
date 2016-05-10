@@ -1,6 +1,5 @@
 driver:
   name: vagrant
-  chef_version: 12.5.1
 
 provisioner:
   name: chef_zero
@@ -13,12 +12,15 @@ platforms:
     run_list: apt::default
   - name: debian-8.4
     run_list: apt::default
-  - name: fedora-21
-  - name: fedora-22
+  - name: fedora-23
+    run_list: yum::dnf_yum_compat
   - name: ubuntu-12.04
     run_list: apt::default
   - name: ubuntu-14.04
     run_list: apt::default
+  - name: ubuntu-16.04
+    run_list: apt::default
+  - name: opensuse-13.2
 
 suites:
   - name: default

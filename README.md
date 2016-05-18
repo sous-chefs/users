@@ -19,7 +19,7 @@ This cookbook is concerned with the management of OS users and groups from datab
   <tr>
     <td><tt>['users']['list']</tt></td>
     <td>Array</td>
-    <td> If not empty only users from list will be created </td>
+    <td> If not empty only users from list will be acted on</td>
     <td><tt>[]</tt></td>
   </tr>
 </table>
@@ -80,7 +80,7 @@ end
 
 **Note**: If you do not specify the data_bag, the default will be to look for a databag called users.
 
-**Note**: If you want to install only part of your users that belong to the group you can specify them in the attribute  `node['users']['list']`
+**Note**: If you want to act on only part of your users that belong to the group you can specify them in the attribute  `node['users']['list']`
 
 ## Databag Definition
 

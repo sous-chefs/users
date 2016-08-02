@@ -293,9 +293,6 @@ Paste the user's public SSH key into the ssh_keys value. Also make sure the uid 
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 
-## Chef Solo
-As of version 1.4.0, this cookbook might work with Chef Solo when using [chef-solo-search by edelight](https://github.com/edelight/chef-solo-search). That cookbook is not a dependency of this one as Chef solo doesn't support dependency resolution using cookbook metadata - all cookbooks must be provided to the node manually when using Chef Solo.
-
 ## License & Authors
 **Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
 

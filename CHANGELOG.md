@@ -2,17 +2,18 @@
 This file is used to list changes made in each version of the users cookbook.
 
 ## v3.0.0
-- ([@onlyhavecans][]) - Fix FreeBSD support
-- ([@stem][]) - Fix user creation on Mac OS X on 10.7 and 10.8
+- @onlyhavecans - Fix FreeBSD support
+- @stem - Fix user creation on Mac OS X on 10.7 and 10.8
 - Remove old style chef solo code to clean up rubocop issues, move to using cookstyle
+- Adding zlinux support
 
 ## v2.0.3
-- ([@nkadel-skyhook][]) - create .ssh directory only if keys are configured.
-- ([@signe][]) - allow force parameter to be specified for users configured to be removed. 
-- ([@FlorentFlament][]) - adding the ability to manage groups for existing users.
+- @nkadel-skyhook - create .ssh directory only if keys are configured.
+- @signe - allow force parameter to be specified for users configured to be removed. 
+- @FlorentFlament - adding the ability to manage groups for existing users.
 
 ## v2.0.2 (2016-1-25)
-- ([@375gnu][]) - validate uid/gid for strings versus numeric
+- @375gnu- validate uid/gid for strings versus numeric
 - fix rubocop errors based on https://github.com/bbatsov/rubocop/issues/2608
 - fix kitchen configurations for testing
 

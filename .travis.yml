@@ -11,6 +11,10 @@ addons:
 
 services: docker
 
+branches:
+  only:
+  - master
+
 env:
   matrix:
   - INSTANCE=default-centos-5

@@ -21,6 +21,8 @@ platforms:
   - name: ubuntu-16.04
     run_list: apt::default
   - name: opensuse-13.2
+  - name: freebsd-9.3
+  - name: freebsd-10.2
 
 suites:
   - name: default

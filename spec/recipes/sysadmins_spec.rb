@@ -5,7 +5,7 @@ describe 'users::sysadmins' do
     ChefSpec::ServerRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
-      version: '12.04'
+      version: '16.04'
     ) do |_node, server|
       server.create_data_bag('users', createme: {
                                id: 'createme',

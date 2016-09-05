@@ -85,12 +85,15 @@ action :create do
     # check whether home dir is null
     manage_home = (home_dir == '/dev/null' ? false : true)
 
+    # Only create the group with the username if use_usergroups = true.
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
     # This should correct that without breaking functionality.
-    group u['username'] do # ~FC022
-      gid validate_id(u['gid'])
-      only_if { u['gid'] && u['gid'].is_a?(Numeric) }
+    if new_resource.use_usergroups
+      group u['username'] do # ~FC022
+        gid validate_id(u['gid'])
+        only_if { u['gid'] && u['gid'].is_a?(Numeric) }
+      end
     end
 
     # Create user object.

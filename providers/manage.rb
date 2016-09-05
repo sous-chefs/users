@@ -37,6 +37,14 @@ action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
 
+  # If group_id is specified, create group if it doesn't exist.
+  # Prevents user block from failing if the group does not yet exist
+  # when use_usergroups = false.
+  group new_resource.group_name do
+    gid new_resource.group_id
+    only_if { new_resource.group_id && !node['etc']['group'][new_resource.group_name] }
+  end
+
   search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
     u['username'] ||= u['id']
     u['groups'].each do |g|

@@ -13,7 +13,7 @@ A data bag populated with user objects must exist. The default data bag in this 
 
 ### Chef
 
-- Chef 12+
+- Chef 12.1+
 
 ### Platform Support
 

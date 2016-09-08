@@ -13,7 +13,7 @@ recipe           'users::sysadmins', 'Create and manage sysadmin group'
   supports os
 end
 
-source_url 'https://github.com/chef-cookbooks/users' if respond_to?(:source_url)
-issues_url 'https://github.com/chef-cookbooks/users/issues' if respond_to?(:issues_url)
+source_url 'https://github.com/chef-cookbooks/users'
+issues_url 'https://github.com/chef-cookbooks/users/issues'
 
-chef_version '>= 11.0' if respond_to?(:chef_version)
+chef_version '>= 12'

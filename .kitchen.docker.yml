@@ -87,6 +87,13 @@ platforms:
     intermediate_instructions:
       - RUN zypper refresh
 
+- name: opensuse-42.1
+  driver:
+    image: opensuse:42.1
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN zypper refresh
+
 suites:
   - name: default
     data_bags_path: "./test/fixtures/data_bags"

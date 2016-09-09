@@ -8,22 +8,30 @@ platforms:
   - name: centos-5.11
   - name: centos-6.8
   - name: centos-7.2
-  - name: debian-7.10
+  - name: debian-7.11
     run_list: apt::default
   - name: debian-8.5
     run_list: apt::default
-  - name: fedora-23
+  - name: fedora-24
     run_list: yum::dnf_yum_compat
+  - name: freebsd-9.3
+  - name: freebsd-10.3
+  - name: macosx-10.10
+    driver:
+      box: chef/macosx-10.10 # private box in Chef's Atlas account
+      provider: vmware_fusion
+  - name: macosx-10.11
+    driver:
+      box: chef/macosx-10.11 # private box in Chef's Atlas account
+      provider: vmware_fusion
+  - name: opensuse-13.2
+  - name: opensuse-leap-42.1
   - name: ubuntu-12.04
     run_list: apt::default
   - name: ubuntu-14.04
     run_list: apt::default
   - name: ubuntu-16.04
     run_list: apt::default
-  - name: opensuse-13.2
-  - name: freebsd-9.3
-  - name: freebsd-10.2
-
 suites:
   - name: default
     data_bags_path: "./test/fixtures/data_bags"

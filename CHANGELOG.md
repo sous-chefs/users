@@ -1,6 +1,9 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## 4.0.1 (2016-09-15)
+- Fix creation of user home directory
+
 ## 4.0.0 (2016-09-15)
 - Add chef_version to the metadata
 - Require Chef 12.1+

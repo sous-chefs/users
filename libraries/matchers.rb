@@ -1,6 +1,6 @@
-# Matchers for chefspec 3
-
 if defined?(ChefSpec)
+  ChefSpec.define_matcher :users_manage
+
   def create_users_manage(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:users_manage,
                                             :create,

@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-# Empty default recipe for including LWRPs.
+Chef::Log.warn('The default users recipe does nothing. See the readme for information on using the users resources')

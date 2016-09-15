@@ -9,11 +9,8 @@ platforms:
   - name: centos-6.8
   - name: centos-7.2
   - name: debian-7.11
-    run_list: apt::default
   - name: debian-8.5
-    run_list: apt::default
   - name: fedora-24
-    run_list: yum::dnf_yum_compat
   - name: freebsd-9.3
   - name: freebsd-10.3
   - name: macosx-10.10
@@ -27,11 +24,13 @@ platforms:
   - name: opensuse-13.2
   - name: opensuse-leap-42.1
   - name: ubuntu-12.04
-    run_list: apt::default
   - name: ubuntu-14.04
-    run_list: apt::default
   - name: ubuntu-16.04
-    run_list: apt::default
+  - name: ubuntu-16.04-chef-12.1
+    driver_config:
+      box: bento/ubuntu-16.04
+    provisioner:
+      require_chef_omnibus: 12.1.0
 suites:
   - name: default
     data_bags_path: "./test/fixtures/data_bags"

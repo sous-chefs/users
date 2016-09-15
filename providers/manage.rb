@@ -97,6 +97,7 @@ action :create do
       Chef::Log.debug("Managing home files for #{u['username']}")
 
       directory "#{home_dir}/.ssh" do
+        recursive true
         owner u['uid'] ? validate_id(u['uid']) : u['username']
         group validate_id(u['gid']) if u['gid']
         mode '0700'

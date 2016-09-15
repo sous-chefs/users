@@ -1,6 +1,14 @@
 # users Cookbook CHANGELOG
 This file is used to list changes made in each version of the users cookbook.
 
+## 4.0.0 (2016-09-15)
+- Add chef_version to the metadata
+- Require Chef 12.1+
+- Testing updates
+- Fixed compatibility with Chef 12.14
+- Properly define the Chefspec matcher
+- Add a warning if someone includes users::default since that does nothing
+
 ## v3.0.0
 - @onlyhavecans - Fix FreeBSD support
 - @stem - Fix user creation on Mac OS X on 10.7 and 10.8

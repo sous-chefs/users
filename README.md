@@ -20,8 +20,8 @@ A data bag populated with user objects must exist. The default data bag in this 
 The following platforms have been tested with Test Kitchen:
 
 - Debian / Ubuntu and derivatives
-- RHEL and derivatives 
-- Fedora 
+- RHEL and derivatives
+- Fedora
 - FreeBSD / OpenBSD
 - Mac OS X
 
@@ -82,7 +82,7 @@ A sample user object in a users databag would look like:
 }
 ```
 
-### Databag Key Definitions 
+### Databag Key Definitions
 
 * `id`: *String* specifies the username, as well as the data bag object id.
 * `password`: *String* specifies the user's password.
@@ -95,6 +95,7 @@ A sample user object in a users databag would look like:
 Other potential fields:
 
 * `home`: *String* User's home directory. If not assigned, will be set based on platform and username.
+* `gid`: *Integer* or *String* the primary group for the user
 * `action`: *String* Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 * `ssh_private_key`: *String* manages user's private key generally ~/.ssh/id_*
 * `ssh_public_key`: *String* manages user's public key generally ~/.ssh/id_*.pub
@@ -127,6 +128,17 @@ users_manage 'testgroup' do
 end
 ```
 
+Creates the `testgroup` group, and users defined in the `test_home_dir` databag and sets the primary group for each user to `testgroup` instead of creating separate groups with the name of each user.
+
+```ruby
+users_manage 'testgroup' do
+  data_bag 'test_home_dir'
+  group_id 3000
+  use_usergroups false
+  action [:create]
+end
+```
+
 Creates the `nfsgroup` group, and users defined in the `test_home_dir` databag and does not manage nfs home directories.
 
 ```ruby
@@ -145,6 +157,7 @@ end
 * `group_name` *String* name of the group to create, defaults to resource name
 * `group_id` *Integer* numeric id of the group to create, default is to allow the OS to pick next
 * `cookbook` *String* name of the cookbook that the authorized_keys template should be found in
+* `use_usergroups` *Boolean* whether to use usergroups and create a unique group for each user, default is *True*
 * `manage_nfs_home_dirs` *Boolean* whether to manage nfs home directories.
 
 Otherwise, this cookbook is specific for setting up `sysadmin` group and users with the sysadmins recipe for now.
@@ -172,7 +185,7 @@ This `users_manage` resource searches the `users` data bag for the `sysadmin` gr
 
 The recipe, by default, will also create the sysadmin group. The sysadmin group will be created with GID 2300. This may become an attribute at a later date.
 
-## Data bag Overview 
+## Data bag Overview
 
 **Reminder** Data bags generally should not be stored in cookbooks, but in a policy repo within your organization. Data bags are useful across cookbooks, not just for a single cookbook.
 
@@ -289,7 +302,7 @@ $ mkdir data_bags/users
 $EDITOR data_bags/users/bofh.json
 ```
 
-Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. 
+Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed.
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 

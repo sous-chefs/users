@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@chef.io'
 license          'Apache 2.0'
 description      'Creates users from a databag search'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '4.0.1'
+version          '4.0.2'
 
 recipe           'users::default', 'Empty recipe'
 recipe           'users::sysadmins', 'Deprecated recipe to create and manage sysadmin group.'
@@ -13,7 +13,6 @@ recipe           'users::sysadmins', 'Deprecated recipe to create and manage sys
   supports os
 end
 
-source_url 'https://github.com/chef-cookbooks/users'
-issues_url 'https://github.com/chef-cookbooks/users/issues'
-
+source_url   'https://github.com/chef-cookbooks/users'
+issues_url   'https://github.com/chef-cookbooks/users/issues'
 chef_version '>= 12.1'

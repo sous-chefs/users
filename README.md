@@ -1,4 +1,5 @@
 # users Cookbook
+
 [![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users) [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
 Manages OS users from databags.
@@ -20,15 +21,17 @@ A data bag populated with user objects must exist. The default data bag in this 
 The following platforms have been tested with Test Kitchen:
 
 - Debian / Ubuntu and derivatives
-- RHEL and derivatives 
-- Fedora 
+- RHEL and derivatives
+- Fedora
 - FreeBSD / OpenBSD
 - Mac OS X
 
 ### Cookbook Dependencies
+
 - none
 
 ## Usage
+
 To use the resource `users_manage`, make sure to add the dependency on the users cookbook by the following line to your wrapper cookbook's [metadata.rb](https://docs.chef.io/config_rb_metadata.html):
 
 ```
@@ -82,23 +85,22 @@ A sample user object in a users databag would look like:
 }
 ```
 
-### Databag Key Definitions 
+### Databag Key Definitions
 
-* `id`: *String* specifies the username, as well as the data bag object id.
-* `password`: *String* specifies the user's password.
-* `ssh_keys`: *Array* an array of authorized keys that will be managed by Chef to the user's home directory in .ssh/authorized_keys
-* `groups`: *Array* an array of groups that the user will be added to
-* `uid`: *Integer* a unique identifier for the user
-* `shell`: *String* the user's shell
-* `comment`:*String* the [GECOS field](https://en.wikipedia.org/wiki/Gecos_field), generally the User's full name.
+- `id`: _String_ specifies the username, as well as the data bag object id.
+- `password`: _String_ specifies the user's password.
+- `ssh_keys`: _Array_ an array of authorized keys that will be managed by Chef to the user's home directory in .ssh/authorized_keys
+- `groups`: _Array_ an array of groups that the user will be added to
+- `uid`: _Integer_ a unique identifier for the user
+- `shell`: _String_ the user's shell
+- `comment`:_String_ the [GECOS field](https://en.wikipedia.org/wiki/Gecos_field), generally the User's full name.
 
 Other potential fields:
 
-* `home`: *String* User's home directory. If not assigned, will be set based on platform and username.
-* `action`: *String* Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
-* `ssh_private_key`: *String* manages user's private key generally ~/.ssh/id_*
-* `ssh_public_key`: *String* manages user's public key generally ~/.ssh/id_*.pub
-
+- `home`: _String_ User's home directory. If not assigned, will be set based on platform and username.
+- `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
+- `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
+- `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub
 
 ## Resources Overview
 
@@ -140,16 +142,20 @@ end
 
 #### Parameters
 
-* `data_bag` *String* is the data bag to search
-* `search_group` *String* groups name to search for, defaults to resource name
-* `group_name` *String* name of the group to create, defaults to resource name
-* `group_id` *Integer* numeric id of the group to create, default is to allow the OS to pick next
-* `cookbook` *String* name of the cookbook that the authorized_keys template should be found in
-* `manage_nfs_home_dirs` *Boolean* whether to manage nfs home directories.
+- `data_bag` _String_ is the data bag to search
+- `search_group` _String_ groups name to search for, defaults to resource name
+- `group_name` _String_ name of the group to create, defaults to resource name
+- `group_id` _Integer_ numeric id of the group to create, default is to allow the OS to pick next
+- `cookbook` _String_ name of the cookbook that the authorized_keys template should be found in
+- `manage_nfs_home_dirs` _Boolean_ whether to manage nfs home directories.
 
 Otherwise, this cookbook is specific for setting up `sysadmin` group and users with the sysadmins recipe for now.
 
 ## Recipe Overview
+
+### Deprecation Notice
+
+This recipe has been deprecated and the resource will be removed from the recipe in a new major release of this cookbook in April 2017\. The functionality can easily be recreated and changed to suit your organization by copying the single resource below into your own cookbook.
 
 `sysadmins.rb`: recipe that manages the group sysadmins with group id 2300, and adds users to this group.
 
@@ -170,9 +176,9 @@ end
 
 This `users_manage` resource searches the `users` data bag for the `sysadmin` group attribute, and adds those users to a Unix security group `sysadmin`. The only required attribute is group_id, which represents the numeric Unix gid and _must_ be unique. The default action for the resource is `:create`.
 
-The recipe, by default, will also create the sysadmin group. The sysadmin group will be created with GID 2300. This may become an attribute at a later date.
+The recipe, by default, will also create the sysadmin group. The sysadmin group will be created with GID 2300.
 
-## Data bag Overview 
+## Data bag Overview
 
 **Reminder** Data bags generally should not be stored in cookbooks, but in a policy repo within your organization. Data bags are useful across cookbooks, not just for a single cookbook.
 
@@ -289,11 +295,12 @@ $ mkdir data_bags/users
 $EDITOR data_bags/users/bofh.json
 ```
 
-Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed. 
+Paste the user's public SSH key into the ssh_keys value. Also make sure the uid is unique, and if you're not using bash, that the shell is installed.
 
 The Apache cookbook can set up authentication using OpenIDs, which is set up using the openid key here. See the Chef Software 'apache2' cookbook for more information about this.
 
 ## License & Authors
+
 **Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
 
 **Copyright:** 2009-2016, Chef Software, Inc.

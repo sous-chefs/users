@@ -7,7 +7,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '4.0.1'
 
 recipe           'users::default', 'Empty recipe'
-recipe           'users::sysadmins', 'Create and manage sysadmin group'
+recipe           'users::sysadmins', 'Deprecated recipe to create and manage sysadmin group.'
 
 %w( ubuntu debian redhat centos fedora freebsd mac_os_x scientific oracle amazon zlinux ).each do |os|
   supports os

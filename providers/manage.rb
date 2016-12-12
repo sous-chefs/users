@@ -75,11 +75,11 @@ action :create do
     group u['username'] do # ~FC022
       case node['platform_family']
       when 'mac_os_x'
-        gid validate_id(u['gid']) unless gid_used?(validate_id(u['gid'])) || new_resource.group_name==u['username']
+        gid validate_id(u['gid']) unless gid_used?(validate_id(u['gid'])) || new_resource.group_name == u['username']
       else
         gid validate_id(u['gid'])
       end
-      only_if { u['gid'] && u['gid'].is_a?(Numeric)}
+      only_if { u['gid'] && u['gid'].is_a?(Numeric) }
     end
 
     # Create user object.
@@ -163,7 +163,6 @@ action :create do
     end
     members users_groups[new_resource.group_name]
   end
-
 end
 
 private

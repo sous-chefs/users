@@ -17,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 use_inline_resources
 
 def whyrun_supported?
@@ -74,8 +73,13 @@ action :create do
     # See the -g option limitations in man 8 useradd for an explanation.
     # This should correct that without breaking functionality.
     group u['username'] do # ~FC022
-      gid validate_id(u['gid'])
-      only_if { u['gid'] && u['gid'].is_a?(Numeric) }
+      case node['platform_family']
+      when 'mac_os_x'
+        gid validate_id(u['gid']) unless gid_used?(validate_id(u['gid'])) || new_resource.group_name==u['username']
+      else
+        gid validate_id(u['gid'])
+      end
+      only_if { u['gid'] && u['gid'].is_a?(Numeric)}
     end
 
     # Create user object.
@@ -141,7 +145,6 @@ action :create do
       Chef::Log.debug("Not managing home files for #{u['username']}")
     end
   end
-
   # Populating users to appropriates groups
   users_groups.each do |g, u|
     group g do
@@ -152,9 +155,15 @@ action :create do
   end
 
   group new_resource.group_name do
-    gid new_resource.group_id if new_resource.group_id
+    case node['platform_family']
+    when 'mac_os_x'
+      gid new_resource.group_id unless gid_used?(new_resource.group_id)
+    else
+      gid new_resource.group_id
+    end
     members users_groups[new_resource.group_name]
   end
+
 end
 
 private

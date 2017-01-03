@@ -1,4 +1,6 @@
 # rubocop todo
 #
-Metrics/BlockNesting:
-  Max: 4
+Style/DoubleNegation:
+  Exclude:
+    - 'libraries/osx_helper.rb'
+    - 'providers/manage.rb'

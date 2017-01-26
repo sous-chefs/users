@@ -20,15 +20,13 @@ services: docker
 
 env:
   matrix:
-  - INSTANCE=default-centos-5
   - INSTANCE=default-centos-6
   - INSTANCE=default-centos-7
   - INSTANCE=default-debian-7
   - INSTANCE=default-debian-8
   - INSTANCE=default-fedora-latest
-#  - INSTANCE=default-opensuse-132 # disabled until we get 12.14.X in travis
-  - INSTANCE=default-opensuse-421
-  - INSTANCE=default-ubuntu-1204
+  - INSTANCE=default-opensuse-132
+  - INSTANCE=default-opensuse-leap
   - INSTANCE=default-ubuntu-1404
   - INSTANCE=default-ubuntu-1604
 

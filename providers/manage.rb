@@ -175,6 +175,7 @@ action :create do
   old_user_groups.each do |g, u|
     # informative, also avoids pesky resource cloning warning
     group "removing users from group #{g}" do
+      group_name g
       excluded_members u
       append true
       action :manage # Do nothing if group doesn't exist

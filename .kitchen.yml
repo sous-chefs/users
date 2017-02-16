@@ -16,10 +16,6 @@ platforms:
   - name: fedora-25
   - name: freebsd-9.3
   - name: freebsd-10.3
-  - name: macosx-10.10
-    driver:
-      box: chef/macosx-10.10 # private box in Chef's Atlas account
-      provider: vmware_fusion
   - name: macosx-10.11
     driver:
       box: chef/macosx-10.11 # private box in Chef's Atlas account

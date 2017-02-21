@@ -55,11 +55,6 @@ platforms:
     image: ubuntu:16.04
     pid_one_command: /bin/systemd
 
-- name: opensuse-13.2
-  driver:
-    image: opensuse:13.2
-    pid_one_command: /bin/systemd
-
 - name: opensuse-leap
   driver:
     image: opensuse:leap

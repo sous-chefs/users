@@ -3,4 +3,4 @@
 Style/DoubleNegation:
   Exclude:
     - 'libraries/osx_helper.rb'
-    - 'providers/manage.rb'
+    - 'resources/manage.rb'

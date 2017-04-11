@@ -1,4 +1,4 @@
-# users Cookbook
+# users Cookbook - datapipe version
 
 [![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users) [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 

@@ -35,12 +35,20 @@ end
 action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
+  old_user_groups = {}
 
   search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
     u['username'] ||= u['id']
     u['groups'].each do |g|
       users_groups[g] = [] unless users_groups.key?(g)
       users_groups[g] << u['username']
+    end
+
+    if u['old_groups'] # old_groups is optional
+      u['old_groups'].each do |og|
+        old_user_groups[og] = [] unless old_user_groups.key?(og)
+        old_user_groups[og] << u['username']
+      end
     end
 
     if node['apache'] && node['apache']['allowed_openids']
@@ -162,6 +170,16 @@ action :create do
       gid new_resource.group_id
     end
     members users_groups[new_resource.group_name]
+  end
+
+  old_user_groups.each do |g, u|
+    # informative, also avoids pesky resource cloning warning
+    group "removing users from group #{g}" do
+      group_name g
+      excluded_members u
+      append true
+      action :manage # Do nothing if group doesn't exist
+    end
   end
 end
 

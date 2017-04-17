@@ -40,12 +40,6 @@ action :create do
       users_groups[g] << u['username']
     end
 
-    if node['apache'] && node['apache']['allowed_openids']
-      Array(u['openid']).compact.each do |oid|
-        node.default['apache']['allowed_openids'] << oid unless node['apache']['allowed_openids'].include?(oid)
-      end
-    end
-
     # Platform specific checks
     #  Set home_basedir
     #  Set shell on FreeBSD

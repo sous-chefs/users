@@ -172,12 +172,4 @@ action_class.class_eval do
       true
     end
   end
-
-  def home_basedir
-    if platform_family?('mac_os_x')
-      '/Users'
-    else
-      '/home'
-    end
-  end
 end

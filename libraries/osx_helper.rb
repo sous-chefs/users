@@ -27,6 +27,3 @@ module Users
     end
   end
 end
-
-Chef::Resource.send(:include, ::Users::OsxHelper)
-Chef::Provider.send(:include, ::Users::OsxHelper)

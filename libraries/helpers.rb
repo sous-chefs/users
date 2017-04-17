@@ -1,5 +1,3 @@
-require 'mixlib/shellout'
-
 module Users
   # Helpers for Users
   module Helpers
@@ -30,6 +28,3 @@ module Users
     end
   end
 end
-
-Chef::Resource.send(:include, ::Users::Helpers)
-Chef::Provider.send(:include, ::Users::Helpers)

@@ -166,6 +166,9 @@ action :remove do
 end
 
 action_class.class_eval do
+  include ::Users::Helpers
+  include ::Users::OsxHelper
+
   def manage_home_files?(home_dir, _user)
     # Don't manage home dir if it's NFS mount
     # and manage_nfs_home_dirs is disabled

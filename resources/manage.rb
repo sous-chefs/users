@@ -40,16 +40,8 @@ action :create do
       users_groups[g] << u['username']
     end
 
-    # Platform specific checks
-    #  Set home_basedir
-    #  Set shell on FreeBSD
-    home_basedir = '/home'
-
-    case node['platform_family']
-    when 'mac_os_x'
-      home_basedir = '/Users'
-    when 'freebsd'
-      # Check if we need to prepend shell with /usr/local/?
+    # Check if we need to prepend shell with /usr/local/?
+    if platform_family? 'freebsd'
       u['shell'] = (!::File.exist?(u['shell']) && ::File.exist?("/usr/local#{u['shell']}") ? "/usr/local#{u['shell']}" : '/bin/sh')
     end
 
@@ -178,6 +170,14 @@ action_class.class_eval do
       new_resource.manage_nfs_home_dirs ? true : false
     else
       true
+    end
+  end
+
+  def home_basedir
+    if platform_family?('mac_os_x')
+      '/Users'
+    else
+      '/home'
     end
   end
 end

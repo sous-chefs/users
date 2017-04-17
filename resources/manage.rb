@@ -17,20 +17,14 @@
 # limitations under the License.
 #
 
-state_attrs :cookbook,
-            :data_bag,
-            :group_id,
-            :group_name,
-            :search_group
-
 # :data_bag is the object to search
 # :search_group is the groups name to search for, defaults to resource name
 # :group_name is the string name of the group to create, defaults to resource name
 # :group_id is the numeric id of the group to create, default is to allow the OS to pick next
 # :cookbook is the name of the cookbook that the authorized_keys template should be found in
 property :data_bag, String, default: 'users'
-property :search_group, String, name_attribute: true
-property :group_name, String, name_attribute: true
+property :search_group, String, name_property: true
+property :group_name, String, name_property: true
 property :group_id, Integer
 property :cookbook, String, default: 'users'
 property :manage_nfs_home_dirs, [true, false], default: true

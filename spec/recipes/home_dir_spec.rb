@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'users_test::test_home_dir' do
+describe 'users_test::default' do
   let(:stat) { double('stat') }
   let(:stat_nfs) { double('stat_nfs') }
 

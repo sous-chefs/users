@@ -55,11 +55,6 @@ platforms:
     image: ubuntu:16.04
     pid_one_command: /bin/systemd
 
-- name: opensuse-13.2
-  driver:
-    image: opensuse:13.2
-    pid_one_command: /bin/systemd
-
 - name: opensuse-leap
   driver:
     image: opensuse:leap
@@ -69,7 +64,4 @@ suites:
   - name: default
     data_bags_path: "./test/fixtures/data_bags"
     run_list:
-      - recipe[users_test::test_home_dir]
-  - name: sysadmins
-    run_list:
-      - recipe[users::sysadmins]
+      - recipe[users_test::default]

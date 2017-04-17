@@ -18,11 +18,4 @@
 # limitations under the License.
 #
 
-Chef::Log.warn('The sysadmins recipe has been deprecated. We suggest using the users_manage resource in your own cookbook if you need similar functionality. The resource in this recipe will be removed with a major release of the cookbook in April 2017')
-
-# Searches data bag "users" for groups attribute "sysadmin".
-# Places returned users in Unix group "sysadmin" with GID 2300.
-users_manage 'sysadmin' do
-  group_id 2300
-  action [:remove, :create]
-end
+Chef::Log.warn('The sysadmins recipe has been deprecated. We suggest using the users_manage resource in your own cookbook if you need similar functionality.')

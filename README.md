@@ -12,21 +12,22 @@ This cookbook is concerned with the management of OS users and groups from datab
 
 A data bag populated with user objects must exist. The default data bag in this recipe is `users`. See USAGE.
 
-### Chef
-
-- Chef 12.1+
-
-### Platform Support
+### Platforms
 
 The following platforms have been tested with Test Kitchen:
 
-- Debian / Ubuntu and derivatives
+- Debian / Ubuntu derivatives
 - RHEL and derivatives
 - Fedora
+- openSUSE / SUSE Linux Enterprises
 - FreeBSD / OpenBSD
 - Mac OS X
 
-### Cookbook Dependencies
+### Chef
+
+- Chef 12.5+
+
+### Cookbooks
 
 - none
 
@@ -303,7 +304,7 @@ The Apache cookbook can set up authentication using OpenIDs, which is set up usi
 
 **Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
 
-**Copyright:** 2009-2016, Chef Software, Inc.
+**Copyright:** 2009-2017, Chef Software, Inc.
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");

@@ -15,7 +15,7 @@ module Users
     def safe_dscl(*args)
       result = dscl(*args)
       return '' if (args.first =~ /^delete/) && (result[1].exitstatus != 0)
-      raise(Chef::Exceptions::Group, "dscl error: #{result.inspect}") unless result[1].exitstatus.zero?
+      raise(Chef::Exceptions::Group, "dscl error: #{result.inspect}") unless result[1].exitstatus == 0
       raise(Chef::Exceptions::Group, "dscl error: #{result.inspect}") if result[2] =~ /No such key: /
       result[2]
     end
@@ -27,6 +27,3 @@ module Users
     end
   end
 end
-
-Chef::Resource.send(:include, ::Users::OsxHelper)
-Chef::Provider.send(:include, ::Users::OsxHelper)

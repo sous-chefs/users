@@ -1,5 +1,3 @@
-require 'mixlib/shellout'
-
 module Users
   # Helpers for Users
   module Helpers
@@ -28,8 +26,16 @@ module Users
     def validate_id(id)
       id.to_i.to_s == id ? id.to_i : id
     end
+
+    # Returns the appropriate base user home directory per platform
+    #
+    # @return [ String]
+    def home_basedir
+      if platform_family?('mac_os_x')
+        '/Users'
+      else
+        '/home'
+      end
+    end
   end
 end
-
-Chef::Resource.send(:include, ::Users::Helpers)
-Chef::Provider.send(:include, ::Users::Helpers)

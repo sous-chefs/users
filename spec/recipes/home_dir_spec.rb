@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'users_test::test_home_dir' do
+describe 'users_test::default' do
   let(:stat) { double('stat') }
   let(:stat_nfs) { double('stat_nfs') }
 
@@ -20,7 +20,7 @@ describe 'users_test::test_home_dir' do
     ChefSpec::ServerRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
-      version: '12.04'
+      version: '16.04'
     ) do |_node, server|
       server.create_data_bag('test_home_dir',
         user_with_dev_null_home: {

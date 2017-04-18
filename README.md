@@ -10,8 +10,6 @@ This cookbook is concerned with the management of OS users and groups from datab
 
 ## Requirements
 
-A data bag populated with user objects must exist. The default data bag in this recipe is `users`. See USAGE.
-
 ### Platforms
 
 The following platforms have been tested with Test Kitchen:
@@ -45,7 +43,7 @@ or to pin to a specific version of the users cookbook, in this case any version 
 depends 'users', '~> 2'
 ```
 
-Then in a recipe:
+Then in a recipe use the `user_manage` resource to add all users in the defined group to the system:
 
 ```ruby
 users_manage 'GROUPNAME' do
@@ -262,21 +260,29 @@ And then change the action to "remove":
 ```
 
 - Note only user bags with the "action : remove" and a search-able "group" attribute will be purged by the :remove action.
-- As of v2.0.3 you can use the force parameter within the user data bag object for users with action remove. As per [user docs](https://docs.chef.io/resource_user.html) this may leave the system in an inconsistent state. For example, a user account will be removed even if the user is logged in. A user’s home directory will be removed, even if that directory is shared by multiple users.
+- As of v2.0.3 you can use the force parameter within the user data bag object for users with action remove. As per [user docs](https://docs.chef.io/resource_user.html) this may leave the system in an inconsistent state. For example, a user account will be removed even if the user is logged in. A user's home directory will be removed, even if that directory is shared by multiple users.
 
 If you have different requirements, for example:
+
 - You want to search a different data bag specific to a role such as
 - mail. You may change the data_bag searched.
+
   - data_bag `mail`
 
 - You want to search for a different group attribute named
+
 - `postmaster`. You may change the search_group attribute. This
+
 - attribute defaults to the LWRP resource name.
+
   - search_group `postmaster`
 
 - You want to add the users to a security group other than the
+
 - lightweight resource name. You may change the group_name attribute.
+
 - This attribute also defaults to the LWRP resource name.
+
   - group_name `wheel`
 
 Putting these requirements together our recipe might look like this:

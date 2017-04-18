@@ -1,3 +1,7 @@
+user 'mwaddams' do
+  manage_home true
+end
+
 users_manage 'testgroup' do
   group_id 3000
   action [:remove, :create]

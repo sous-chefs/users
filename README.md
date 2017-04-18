@@ -84,6 +84,16 @@ A sample user object in a users databag would look like:
 }
 ```
 
+A sample user to remove from a system would like like:
+
+```json
+{
+  "id": "mwaddams",
+  "action": "remove",
+  "groups": [ "testgroup", "nfsgroup" ]
+}
+```
+
 ### Databag Key Definitions
 
 - `id`: _String_ specifies the username, as well as the data bag object id.

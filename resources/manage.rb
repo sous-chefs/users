@@ -49,8 +49,8 @@ action :create do
     # or a reasonable default ($home_basedir/$user).
     home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
 
-    # check whether home dir is null
-    manage_home = (home_dir == '/dev/null' ? false : true)
+    # set manage_home according to data bag or check whether home dir is null
+    manage_home = u['manage_home'] || manage_home = (home_dir == '/dev/null' ? false : true)
 
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
@@ -82,6 +82,25 @@ action :create do
 
     if manage_home_files?(home_dir, u['username'])
       Chef::Log.debug("Managing home files for #{u['username']}")
+
+      # this fails since the directory resource is evaluated before execution
+      # and that means no user have been created yet and that means there is 
+      # no gid to check up on
+      # ohai 'reload_passwd' do
+      #   action :nothing
+      #   plugin 'etc'
+      # end
+
+      directory "#{home_dir}" do
+        recursive true
+        owner u['uid'] ? validate_id(u['uid']) : u['username']
+        group ( u['gid'] ? validate_id(u['gid']) : new_resource.group_id )
+        mode '0755'
+        # read the comment on the ohai block.
+        # group node['etc']['passwd'][u['username']]['gid']
+        # notifies :reload, 'ohai[reload_passwd]', :before
+        only_if { u['manage_home'] == false }
+      end
 
       directory "#{home_dir}/.ssh" do
         recursive true

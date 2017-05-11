@@ -65,6 +65,14 @@ action :create do
       only_if { u['gid'] && u['gid'].is_a?(Numeric) }
     end
 
+    # this fails since the directory resource is evaluated before execution
+    # and that means no user have been created yet and that means there is 
+    # no gid to check up on
+    # ohai 'reload_passwd' do
+    #   action :nothing
+    #   plugin 'etc'
+    # end
+
     # Create user object.
     # Do NOT try to manage null home directories.
     user u['username'] do
@@ -78,18 +86,12 @@ action :create do
       manage_home manage_home
       home home_dir
       action u['action'] if u['action']
+      # read the comment on the ohai block.
+      # notifies :reload, 'ohai[reload_passwd]', :immediately
     end
 
     if manage_home_files?(home_dir, u['username'])
       Chef::Log.debug("Managing home files for #{u['username']}")
-
-      # this fails since the directory resource is evaluated before execution
-      # and that means no user have been created yet and that means there is 
-      # no gid to check up on
-      # ohai 'reload_passwd' do
-      #   action :nothing
-      #   plugin 'etc'
-      # end
 
       directory "#{home_dir}" do
         recursive true
@@ -98,7 +100,6 @@ action :create do
         mode '0755'
         # read the comment on the ohai block.
         # group node['etc']['passwd'][u['username']]['gid']
-        # notifies :reload, 'ohai[reload_passwd]', :before
         only_if { u['manage_home'] == false }
       end
 

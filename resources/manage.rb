@@ -94,7 +94,7 @@ action :create do
       # lazy evaluation since user doesn't exist until the execution phase.
       gid = lazy { node['etc']['passwd'][u['username']]['gid'] }
 
-      directory "#{home_dir}" do
+      directory home_dir do
         recursive true
         owner u['uid'] ? validate_id(u['uid']) : u['username']
         group gid

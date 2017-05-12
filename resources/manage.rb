@@ -50,7 +50,7 @@ action :create do
     home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
 
     # set manage_home according to data bag or check whether home dir is null
-    manage_home = u['manage_home'] || manage_home = (home_dir == '/dev/null' ? false : true)
+    manage_home = u['manage_home'] rescue manage_home = (home_dir == '/dev/null' ? false : true)
 
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
@@ -65,13 +65,12 @@ action :create do
       only_if { u['gid'] && u['gid'].is_a?(Numeric) }
     end
 
-    # this fails since the directory resource is evaluated before execution
-    # and that means no user have been created yet and that means there is 
-    # no gid to check up on
-    # ohai 'reload_passwd' do
-    #   action :nothing
-    #   plugin 'etc'
-    # end
+    # This updates the node['etc']['passwd']... facts,
+    # it is used to get the primary group of the users.
+    ohai 'reload_passwd' do
+      action :nothing
+      plugin 'etc'
+    end
 
     # Create user object.
     # Do NOT try to manage null home directories.
@@ -86,27 +85,27 @@ action :create do
       manage_home manage_home
       home home_dir
       action u['action'] if u['action']
-      # read the comment on the ohai block.
-      # notifies :reload, 'ohai[reload_passwd]', :immediately
+      notifies :reload, 'ohai[reload_passwd]', :immediately
     end
 
     if manage_home_files?(home_dir, u['username'])
       Chef::Log.debug("Managing home files for #{u['username']}")
 
+      # lazy evaluation since user doesn't exist until the execution phase.
+      gid = lazy { node['etc']['passwd'][u['username']]['gid'] }
+
       directory "#{home_dir}" do
         recursive true
         owner u['uid'] ? validate_id(u['uid']) : u['username']
-        group ( u['gid'] ? validate_id(u['gid']) : new_resource.group_id )
+        group gid
         mode '0755'
-        # read the comment on the ohai block.
-        # group node['etc']['passwd'][u['username']]['gid']
         only_if { u['manage_home'] == false }
       end
 
       directory "#{home_dir}/.ssh" do
         recursive true
         owner u['uid'] ? validate_id(u['uid']) : u['username']
-        group validate_id(u['gid']) if u['gid']
+        group gid
         mode '0700'
         only_if { !!(u['ssh_keys'] || u['ssh_private_key'] || u['ssh_public_key']) }
       end
@@ -115,7 +114,7 @@ action :create do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner u['uid'] ? validate_id(u['uid']) : u['username']
-        group validate_id(u['gid']) if u['gid']
+        group gid
         mode '0600'
         sensitive true
         variables ssh_keys: u['ssh_keys']
@@ -128,7 +127,7 @@ action :create do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner u['uid'] ? validate_id(u['uid']) : u['username']
-          group validate_id(u['gid']) if u['gid']
+          group gid
           mode '0400'
           variables private_key: u['ssh_private_key']
         end
@@ -140,7 +139,7 @@ action :create do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner u['uid'] ? validate_id(u['uid']) : u['username']
-          group validate_id(u['gid']) if u['gid']
+          group gid
           mode '0400'
           variables public_key: u['ssh_public_key']
         end

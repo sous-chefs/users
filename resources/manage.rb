@@ -49,12 +49,10 @@ action :create do
     # or a reasonable default ($home_basedir/$user).
     home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
 
-    # set manage_home according to data bag or check whether home dir is null
-    begin
-      manage_home = u['manage_home']
-    rescue TypeError
-      manage_home = (home_dir == '/dev/null' ? false : true)
-    end
+    # manage_home is true by default but false if home_dir is /dev/null
+    manage_home = (home_dir == '/dev/null' ? false : true)
+    # but we always allow the databag to override it
+    manage_home = u['manage_home'] if u.key?('manage_home')
 
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
@@ -103,7 +101,7 @@ action :create do
         owner u['uid'] ? validate_id(u['uid']) : u['username']
         group gid
         mode '0755'
-        only_if { u['manage_home'] == false }
+        only_if { manage_home == false }
       end
 
       directory "#{home_dir}/.ssh" do

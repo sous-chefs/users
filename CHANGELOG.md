@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.1.0 (2017-05-30)
+
+- Keep ssh keys out of the chef logs
+- Improve docs and examples
+- Remove class_eval and require Chef 12.7+ as class_eval causes issues with later Chef 12 releases
+
 ## 5.0.0 (2017-04-17)
 
 ### Breaking changes

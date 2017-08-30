@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: users
+# Cookbook:: users
 # Resources:: manage
 #
-# Copyright 2011, Eric G. Wolfe
+# Copyright:: 2011-2017, Eric G. Wolfe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,28 +17,160 @@
 # limitations under the License.
 #
 
-# Data bag user object needs an "action": "remove" tag to actually be removed by the action.
-actions :create, :remove
-
-state_attrs :cookbook,
-            :data_bag,
-            :group_id,
-            :group_name,
-            :search_group
-
 # :data_bag is the object to search
 # :search_group is the groups name to search for, defaults to resource name
 # :group_name is the string name of the group to create, defaults to resource name
 # :group_id is the numeric id of the group to create, default is to allow the OS to pick next
 # :cookbook is the name of the cookbook that the authorized_keys template should be found in
-attribute :data_bag, :kind_of => String, :default => "users"
-attribute :search_group, :kind_of => String, :name_attribute => true
-attribute :group_name, :kind_of => String, :name_attribute => true
-attribute :group_id, :kind_of => Integer
-attribute :cookbook, :kind_of => String, :default => "users"
-attribute :manage_home_dir, :kind_of => [TrueClass, FalseClass], :default => true
+property :data_bag, String, default: 'users'
+property :search_group, String, name_property: true
+property :group_name, String, name_property: true
+property :group_id, Integer
+property :cookbook, String, default: 'users'
+property :manage_nfs_home_dirs, [true, false], default: true
 
-def initialize(*args)
-  super
-  @action = :create
+action :create do
+  users_groups = {}
+  users_groups[new_resource.group_name] = []
+
+  search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+    u['username'] ||= u['id']
+    u['groups'].each do |g|
+      users_groups[g] = [] unless users_groups.key?(g)
+      users_groups[g] << u['username']
+    end
+
+    # Check if we need to prepend shell with /usr/local/?
+    if platform_family? 'freebsd'
+      u['shell'] = (!::File.exist?(u['shell']) && ::File.exist?("/usr/local#{u['shell']}") ? "/usr/local#{u['shell']}" : '/bin/sh')
+    end
+
+    # Set home to location in data bag,
+    # or a reasonable default ($home_basedir/$user).
+    home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
+
+    # check whether home dir is null
+    manage_home = (home_dir == '/dev/null' ? false : true)
+
+    # The user block will fail if the group does not yet exist.
+    # See the -g option limitations in man 8 useradd for an explanation.
+    # This should correct that without breaking functionality.
+    group u['username'] do # ~FC022
+      case node['platform_family']
+      when 'mac_os_x'
+        gid validate_id(u['gid']) unless gid_used?(validate_id(u['gid'])) || new_resource.group_name == u['username']
+      else
+        gid validate_id(u['gid'])
+      end
+      only_if { u['gid'] && u['gid'].is_a?(Numeric) }
+    end
+
+    # Create user object.
+    # Do NOT try to manage null home directories.
+    user u['username'] do
+      uid validate_id(u['uid'])
+      gid validate_id(u['gid']) if u['gid']
+      shell u['shell']
+      comment u['comment']
+      password u['password'] if u['password']
+      salt u['salt'] if u['salt']
+      iterations u['iterations'] if u['iterations']
+      manage_home manage_home
+      home home_dir
+      action u['action'] if u['action']
+    end
+
+    if manage_home_files?(home_dir, u['username'])
+      Chef::Log.debug("Managing home files for #{u['username']}")
+
+      directory "#{home_dir}/.ssh" do
+        recursive true
+        owner u['uid'] ? validate_id(u['uid']) : u['username']
+        group validate_id(u['gid']) if u['gid']
+        mode '0700'
+        only_if { !!(u['ssh_keys'] || u['ssh_private_key'] || u['ssh_public_key']) }
+      end
+
+      template "#{home_dir}/.ssh/authorized_keys" do
+        source 'authorized_keys.erb'
+        cookbook new_resource.cookbook
+        owner u['uid'] ? validate_id(u['uid']) : u['username']
+        group validate_id(u['gid']) if u['gid']
+        mode '0600'
+        sensitive true
+        variables ssh_keys: u['ssh_keys']
+        only_if { !!(u['ssh_keys']) }
+      end
+
+      if u['ssh_private_key']
+        key_type = u['ssh_private_key'].include?('BEGIN RSA PRIVATE KEY') ? 'rsa' : 'dsa'
+        template "#{home_dir}/.ssh/id_#{key_type}" do
+          source 'private_key.erb'
+          cookbook new_resource.cookbook
+          owner u['uid'] ? validate_id(u['uid']) : u['username']
+          group validate_id(u['gid']) if u['gid']
+          mode '0400'
+          variables private_key: u['ssh_private_key']
+        end
+      end
+
+      if u['ssh_public_key']
+        key_type = u['ssh_public_key'].include?('ssh-rsa') ? 'rsa' : 'dsa'
+        template "#{home_dir}/.ssh/id_#{key_type}.pub" do
+          source 'public_key.pub.erb'
+          cookbook new_resource.cookbook
+          owner u['uid'] ? validate_id(u['uid']) : u['username']
+          group validate_id(u['gid']) if u['gid']
+          mode '0400'
+          variables public_key: u['ssh_public_key']
+        end
+      end
+    else
+      Chef::Log.debug("Not managing home files for #{u['username']}")
+    end
+  end
+  # Populating users to appropriates groups
+  users_groups.each do |g, u|
+    group g do
+      members u
+      append true
+      action :manage # Do nothing if group doesn't exist
+    end unless g == new_resource.group_name # Dealing with managed group later
+  end
+
+  group new_resource.group_name do
+    case node['platform_family']
+    when 'mac_os_x'
+      gid new_resource.group_id unless gid_used?(new_resource.group_id)
+    else
+      gid new_resource.group_id
+    end
+    members users_groups[new_resource.group_name]
+  end
+end
+
+action :remove do
+  search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
+    user rm_user['username'] ||= rm_user['id'] do
+      action :remove
+      force rm_user['force'] ||= false
+    end
+  end
+end
+
+action_class do
+  include ::Users::Helpers
+  include ::Users::OsxHelper
+
+  def manage_home_files?(home_dir, _user)
+    # Don't manage home dir if it's NFS mount
+    # and manage_nfs_home_dirs is disabled
+    if home_dir == '/dev/null'
+      false
+    elsif fs_remote?(home_dir)
+      new_resource.manage_nfs_home_dirs ? true : false
+    else
+      true
+    end
+  end
 end

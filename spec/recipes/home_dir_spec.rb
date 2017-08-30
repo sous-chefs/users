@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'users_test::test_home_dir' do
+describe 'users_test::default' do
   let(:stat) { double('stat') }
   let(:stat_nfs) { double('stat_nfs') }
 
@@ -20,27 +20,27 @@ describe 'users_test::test_home_dir' do
     ChefSpec::ServerRunner.new(
       step_into: ['users_manage'],
       platform: 'ubuntu',
-      version: '12.04'
-    ) do |node, server|
-      server.create_data_bag('test_home_dir', {
+      version: '16.04'
+    ) do |_node, server|
+      server.create_data_bag('test_home_dir',
         user_with_dev_null_home: {
           id: 'user_with_dev_null_home',
           groups: ['testgroup'],
           home: '/dev/null',
         },
-        user_with_home_first: {
-          id: 'user_with_home_first',
+        user_with_nfs_home_first: {
+          id: 'user_with_nfs_home_first',
           groups: ['testgroup'],
         },
-        user_with_home_second: {
-          id: 'user_with_home_second',
+        user_with_nfs_home_second: {
+          id: 'user_with_nfs_home_second',
           groups: ['nfsgroup'],
         },
         user_with_local_home: {
           id: 'user_with_local_home',
+          ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
           groups: ['testgroup'],
-        },
-      })
+        })
     end.converge(described_recipe)
   end
 
@@ -48,8 +48,8 @@ describe 'users_test::test_home_dir' do
     it 'creates users' do
       expect(chef_run).to create_user('user_with_dev_null_home')
       expect(chef_run).to create_user('user_with_local_home')
-      expect(chef_run).to create_user('user_with_home_first')
-      expect(chef_run).to create_user('user_with_home_second')
+      expect(chef_run).to create_user('user_with_nfs_home_first')
+      expect(chef_run).to create_user('user_with_nfs_home_second')
     end
 
     it 'creates groups' do
@@ -57,12 +57,12 @@ describe 'users_test::test_home_dir' do
       expect(chef_run).to create_group('nfsgroup')
     end
 
-    it "not supports managing /dev/null home dir" do
+    it 'not supports managing /dev/null home dir' do
       expect(chef_run).to create_user('user_with_dev_null_home')
         .with_supports(manage_home: false)
     end
 
-    it "supports managing local home dir" do
+    it 'supports managing local home dir' do
       expect(chef_run).to create_user('user_with_local_home')
         .with_supports(manage_home: true)
     end
@@ -75,12 +75,12 @@ describe 'users_test::test_home_dir' do
       expect(chef_run).to create_directory('/home/user_with_local_home/.ssh')
     end
 
-    it 'manages nfs home dir if manage_home_dirs is set to true' do
-      expect(chef_run).to create_directory('/home/user_with_home_first/.ssh')
+    it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
+      expect(chef_run).to_not create_directory('/home/user_with_nfs_home_first/.ssh')
     end
 
-    it 'does not manage nfs home dir if manage_home_dirs is set to false' do
-      expect(chef_run).to_not create_directory('/home/user_with_home_second/.ssh')
+    it 'does not manage nfs home dir if manage_nfs_home_dirs is set to false' do
+      expect(chef_run).to_not create_directory('/home/user_with_nfs_home_second/.ssh')
     end
 
     it 'manages groups' do

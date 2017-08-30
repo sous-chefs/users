@@ -1,0 +1,5 @@
+{
+  "id": "bogus_user",
+  "action": "remove",
+  "groups": [ "testgroup", "nfsgroup" ]
+}

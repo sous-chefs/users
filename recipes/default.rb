@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: users
+# Cookbook:: users
 # Recipe:: default
 #
-# Copyright 2009-2012, Chef Software, Inc.
+# Copyright:: 2009-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-# Empty default recipe for including LWRPs.
+Chef::Log.warn('The default users recipe does nothing. See the readme for information on using the users resources')

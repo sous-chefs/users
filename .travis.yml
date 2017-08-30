@@ -1,12 +1,44 @@
-rvm:
-  - 2.0.0
-  - 2.1
-  - 2.2
+sudo: required
+dist: trusty
 
-bundler_args: --jobs 7
+addons:
+  apt:
+    sources:
+      - chef-current-trusty
+    packages:
+      - chefdk
+
+# Don't `bundle install` which takes about 1.5 mins
+install: echo "skip bundle install"
 
 branches:
   only:
     - master
 
-script: bundle exec rake travis:ci
+services: docker
+
+env:
+  matrix:
+  - INSTANCE=default-centos-6
+  - INSTANCE=default-centos-7
+  - INSTANCE=default-debian-7
+  - INSTANCE=default-debian-8
+  - INSTANCE=default-fedora-latest
+    #  - INSTANCE=default-opensuse-leap
+  - INSTANCE=default-ubuntu-1404
+  - INSTANCE=default-ubuntu-1604
+
+before_script:
+  - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+  - eval "$(chef shell-init bash)"
+  - chef --version
+  - cookstyle --version
+  - foodcritic --version
+
+script: KITCHEN_LOCAL_YAML=.kitchen.dokken.yml kitchen verify ${INSTANCE}
+
+matrix:
+  include:
+    - script:
+      - chef exec delivery local all
+      env: UNIT_AND_LINT=1

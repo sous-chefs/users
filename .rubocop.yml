@@ -1,0 +1,6 @@
+# rubocop todo
+#
+Style/DoubleNegation:
+  Exclude:
+    - 'libraries/osx_helper.rb'
+    - 'resources/manage.rb'

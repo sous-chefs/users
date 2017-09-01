@@ -23,7 +23,7 @@ The following platforms have been tested with Test Kitchen:
 
 ### Chef
 
-- Chef 12.5+
+- Chef 12.7+
 
 ### Cookbooks
 

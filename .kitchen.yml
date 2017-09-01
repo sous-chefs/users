@@ -12,7 +12,7 @@ platforms:
   - name: centos-6
   - name: centos-7
   - name: debian-7
-  - name: debian-8.9
+  - name: debian-8
   - name: fedora-26
   - name: freebsd-10
   - name: freebsd-11
@@ -20,7 +20,6 @@ platforms:
     driver:
       box: chef/macosx-10.11 # private box in Chef's Atlas account
       provider: vmware_fusion
-  - name: opensuse-13.2
   - name: opensuse-leap-42
   - name: ubuntu-14.04
   - name: ubuntu-16.04

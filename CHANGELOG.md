@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.2.1 (2017-10-31)
+
+- Make sure ssh_keys can be an array or a string by converting strings to an array if they're passed
+
 ## 5.2.0 (2017-10-31)
 
 - Require Chef 12.7+ as 12.5 and 12.6 had bugs in their custom resource implementation

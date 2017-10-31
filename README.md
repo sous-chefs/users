@@ -98,7 +98,7 @@ A sample user to remove from a system would like like:
 
 - `id`: _String_ specifies the username, as well as the data bag object id.
 - `password`: _String_ specifies the user's password.
-- `ssh_keys`: _Array_ an array of authorized keys that will be managed by Chef to the user's home directory in .ssh/authorized_keys
+- `ssh_keys`: _Array_ an array of authorized keys that will be managed by Chef to the user's home directory in `$HOME/.ssh/authorized_keys`. A key can include an `https` endpoint that returns a line seperated list of keys such as `https://github.com/$GITHUB_USERNAME.keys` this will retrieve all the keys and add it to the array and can be used with static keys as well as dynamic ones.
 - `groups`: _Array_ an array of groups that the user will be added to
 - `uid`: _Integer_ a unique identifier for the user
 - `shell`: _String_ the user's shell

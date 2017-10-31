@@ -19,6 +19,17 @@ module Users
       fs_type(mount) == 'nfs' ? true : false
     end
 
+    def keys_from_url(url)
+      host = url.split('/')[0..2].join('/')
+      path = url.split('/')[3..-1].join('/')
+      begin
+        response = Chef::HTTP.new(host).get(path)
+        response.split("\n")
+      rescue Net::HTTPServerException => e
+        p "request: #{host}#{path}, error: #{e}"
+      end
+    end
+
     # Validates passed id.
     #
     # @return [Numeric, String]

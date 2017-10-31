@@ -91,6 +91,19 @@ action :create do
         only_if { !!(u['ssh_keys'] || u['ssh_private_key'] || u['ssh_public_key']) }
       end
 
+      # loop over the keys and if we have a URL we should add each key
+      # from the url response and append it to the list of keys
+      ssh_keys = []
+      if u['ssh_keys']
+        u['ssh_keys'].each do |key|
+          if key.start_with?('https')
+            ssh_keys += keys_from_url(key)
+          else
+            ssh_keys << key
+          end
+        end
+      end
+
       template "#{home_dir}/.ssh/authorized_keys" do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
@@ -98,7 +111,9 @@ action :create do
         group validate_id(u['gid']) if u['gid']
         mode '0600'
         sensitive true
-        variables ssh_keys: u['ssh_keys']
+        # ssh_keys should be a combination of u['ssh_keys'] and any keys
+        # returned from a specified URL
+        variables ssh_keys: ssh_keys
         only_if { !!(u['ssh_keys']) }
       end
 

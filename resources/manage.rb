@@ -95,7 +95,7 @@ action :create do
       # from the url response and append it to the list of keys
       ssh_keys = []
       if u['ssh_keys']
-        u['ssh_keys'].each do |key|
+        Array(u['ssh_keys']).each do |key|
           if key.start_with?('https')
             ssh_keys += keys_from_url(key)
           else

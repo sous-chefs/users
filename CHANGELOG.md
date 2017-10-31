@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.2.0 (2017-10-31)
+
+- Require Chef 12.7+ as 12.5 and 12.6 had bugs in their custom resource implementation
+- Allow fetching one or more ssh_keys from a url
+
 ## 5.1.0 (2017-05-30)
 
 - Keep ssh keys out of the chef logs

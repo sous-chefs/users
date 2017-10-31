@@ -91,7 +91,7 @@ action :create do
         only_if { !!(u['ssh_keys'] || u['ssh_private_key'] || u['ssh_public_key']) }
       end
 
-      template "#{home_dir}/.ssh/authorized_keys" do
+      template "#{home_dir}/.ssh/#{node['users']['authorized_keys_file']}" do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner u['uid'] ? validate_id(u['uid']) : u['username']

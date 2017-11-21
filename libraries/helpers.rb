@@ -44,6 +44,8 @@ module Users
     def home_basedir
       if platform_family?('mac_os_x')
         '/Users'
+      elsif platform_family?('solaris2')
+        '/export/home'
       else
         '/home'
       end

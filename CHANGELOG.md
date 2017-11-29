@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.2.2 (2017-11-29)
+
+- Add home directory base for solaris
+
 ## 5.2.1 (2017-10-31)
 
 - Make sure ssh_keys can be an array or a string by converting strings to an array if they're passed

@@ -110,6 +110,7 @@ Other potential fields:
 - `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 - `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
 - `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub
+- `manage_home`: _Boolean_ can be set to false to disable manage_home when adding user, thus not creating user with a skel.
 
 ## Resources Overview
 

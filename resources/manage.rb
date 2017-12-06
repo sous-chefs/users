@@ -70,7 +70,7 @@ action :create do
     user u['username'] do
       uid validate_id(u['uid'])
       gid validate_id(u['gid']) if u['gid']
-      shell u['shell']
+      shell valid_shell(u['shell'])
       comment u['comment']
       password u['password'] if u['password']
       salt u['salt'] if u['salt']

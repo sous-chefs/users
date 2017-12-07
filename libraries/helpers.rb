@@ -34,33 +34,24 @@ module Users
     # returns the default of /bin/sh
     #
     # @return [String]
-    def valid_shell(shell)
-      shell_exists = File.exist?(shell)
-      # A check to see if the shell exists on the system
-      if !shell_exists
-        log "Shell #{shell} not found - defaulting to /bin/sh"
-        return '/bin/sh'
-      else
-        # Disabling some rules because it really doesn't help the readablility
-        # of this section
-        # rubocop:disable Style/GuardClause
-        # rubocop:disable Style/IfInsideElse
-        if platform_family?('aix')
-          # On AIX a shell may exist but not be one of the 'approved' shells.
-          # There is no cli based tool to determine this, so we go directly to the
-          # source and use this nasty regex to extract all possible 'allowed' shells
-          # and verify based on equality. (if it doesn't exist it will return nil
-          # and drop through)
-          shell_avail = Mixlib::ShellOut.new("cat /etc/security/login.cfg | grep #{shell}").run_command
-          if (shell_avail.stdout.scan %r{([\/\w-]*)}).uniq.flatten.any? { |entry| entry.eql? shell }
-            return shell
-          else
-            return '/bin/sh'
+    def shell_is_valid?(shell_path)
+      return false if shell_path.nil? || !File.exist?(shell_path)
+      # AIX is the only OS that has the concept of 'approved shells'
+      return true unless platform_family?('aix')
+
+      begin
+        File.open('/etc/security/login.cfg') do |f|
+          f.each_line do |l|
+            l.match(/^\s*shells\s*=\s*(.*)/) do |m|
+              return true if m[1].split(/\s*,\s*/).any? { |entry| entry.eql? shell_path }
+            end
           end
-        else
-          return shell
         end
+      rescue
+        return false
       end
+
+      false
     end
 
     # Validates passed id.

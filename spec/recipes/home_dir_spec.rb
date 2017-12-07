@@ -15,7 +15,7 @@ describe 'users_test::default' do
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
 
-    allow(File).to receive(:exist?).and_return(false, true)
+    allow(File).to receive(:exist?).with('/usr/bin/bash').and_return(false, true)
   end
 
   cached(:chef_run) do
@@ -28,6 +28,7 @@ describe 'users_test::default' do
         'user_with_dev_null_home' => {
           id: 'user_with_dev_null_home',
           groups: ['testgroup'],
+          shell: '/usr/bin/bash',
           home: '/dev/null',
         },
         'user_with_nfs_home_first' => {

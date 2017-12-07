@@ -14,29 +14,33 @@ describe 'users_test::default' do
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
+
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with('/usr/bin/bash').and_return(true)
   end
 
   cached(:chef_run) do
     ChefSpec::ServerRunner.new(
-      step_into: ['users_manage'],
+      step_into: %w(users_manage),
       platform: 'ubuntu',
       version: '16.04'
     ) do |_node, server|
       server.create_data_bag('test_home_dir',
-        user_with_dev_null_home: {
+        'user_with_dev_null_home' => {
           id: 'user_with_dev_null_home',
           groups: ['testgroup'],
+          shell: '/usr/bin/bash',
           home: '/dev/null',
         },
-        user_with_nfs_home_first: {
+        'user_with_nfs_home_first' => {
           id: 'user_with_nfs_home_first',
           groups: ['testgroup'],
         },
-        user_with_nfs_home_second: {
+        'user_with_nfs_home_second' => {
           id: 'user_with_nfs_home_second',
           groups: ['nfsgroup'],
         },
-        user_with_local_home: {
+        'user_with_local_home' => {
           id: 'user_with_local_home',
           ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
           groups: ['testgroup'],
@@ -59,12 +63,12 @@ describe 'users_test::default' do
 
     it 'not supports managing /dev/null home dir' do
       expect(chef_run).to create_user('user_with_dev_null_home')
-        .with_supports(manage_home: false)
+        .with(manage_home: false)
     end
 
     it 'supports managing local home dir' do
       expect(chef_run).to create_user('user_with_local_home')
-        .with_supports(manage_home: true)
+        .with(manage_home: true)
     end
 
     it 'not tries to manage .ssh dir for user "user_with_dev_null_home"' do

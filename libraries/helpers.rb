@@ -30,6 +30,30 @@ module Users
       end
     end
 
+    # Determines if the user's shell is valid on the machine, otherwise
+    # returns the default of /bin/sh
+    #
+    # @return [String]
+    def shell_is_valid?(shell_path)
+      return false if shell_path.nil? || !File.exist?(shell_path)
+      # AIX is the only OS that has the concept of 'approved shells'
+      return true unless platform_family?('aix')
+
+      begin
+        File.open('/etc/security/login.cfg') do |f|
+          f.each_line do |l|
+            l.match(/^\s*shells\s*=\s*(.*)/) do |m|
+              return true if m[1].split(/\s*,\s*/).any? { |entry| entry.eql? shell_path }
+            end
+          end
+        end
+      rescue
+        return false
+      end
+
+      false
+    end
+
     # Validates passed id.
     #
     # @return [Numeric, String]

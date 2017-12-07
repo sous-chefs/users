@@ -15,7 +15,8 @@ describe 'users_test::default' do
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
 
-    allow(File).to receive(:exist?).with('/usr/bin/bash').and_return(false, true)
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with('/usr/bin/bash').and_return(true)
   end
 
   cached(:chef_run) do
@@ -62,12 +63,12 @@ describe 'users_test::default' do
 
     it 'not supports managing /dev/null home dir' do
       expect(chef_run).to create_user('user_with_dev_null_home')
-        .with_supports(manage_home: false)
+        .with(manage_home: false)
     end
 
     it 'supports managing local home dir' do
       expect(chef_run).to create_user('user_with_local_home')
-        .with_supports(manage_home: true)
+        .with(manage_home: true)
     end
 
     it 'not tries to manage .ssh dir for user "user_with_dev_null_home"' do

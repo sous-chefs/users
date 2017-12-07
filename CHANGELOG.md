@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.3.0 (2017-12-07)
+
+- Add check if user shell exists
+- Verify the shell is allowed on AIX
+- Add AIX as a supported platform
+
 ## 5.2.2 (2017-11-29)
 
 - Add home directory base for solaris

@@ -20,6 +20,7 @@ The following platforms have been tested with Test Kitchen:
 - openSUSE / SUSE Linux Enterprises
 - FreeBSD / OpenBSD
 - Mac OS X
+- AIX
 
 ### Chef
 

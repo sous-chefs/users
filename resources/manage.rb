@@ -40,11 +40,6 @@ action :create do
       users_groups[g] << u['username']
     end
 
-    # Check if we need to prepend shell with /usr/local/?
-    if platform_family? 'freebsd'
-      u['shell'] = (!::File.exist?(u['shell']) && ::File.exist?("/usr/local#{u['shell']}") ? "/usr/local#{u['shell']}" : '/bin/sh')
-    end
-
     # Set home to location in data bag,
     # or a reasonable default ($home_basedir/$user).
     home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")

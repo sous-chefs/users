@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.3.1 (2017-12-15)
+
+- Remove special case for freebsd in favor of later shell validity check
+
 ## 5.3.0 (2017-12-07)
 
 - Add check if user shell exists

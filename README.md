@@ -116,7 +116,7 @@ Other potential fields:
 
 ### users_manage
 
-The `users_manage` resource manages users and groups based off of a data bag search and specified action.
+The `users_manage` resource manages users and groups based off of a data bag search and specified action.  By default, the `users_manage` resource will create a user private group (UPG) for each user.  To disable UPG, set the upg property to false.  Disabling UPG will allow finer grained control over group creation.  Each user's primary group will be set to the first existing group in the user's list of groups as defined in the data bag entry.
 
 #### Examples
 
@@ -150,11 +150,23 @@ users_manage 'nfsgroup' do
 end
 ```
 
+Creates the `usergroup` group, and users defined in the `test_home_dir` databag and sets the primary group for each user to `usergroup` instead of creating separate private groups for each user.
+
+```ruby
+users_manage 'usergroup' do
+  group_id 5000
+  upg false
+  action [:create]
+  data_bag 'test_home_dir'
+end
+```
+
 #### Parameters
 
 - `data_bag` _String_ is the data bag to search
 - `search_group` _String_ groups name to search for, defaults to resource name
 - `group_name` _String_ name of the group to create, defaults to resource name
+- `upg`: _Boolean_ whether to use user private groups (UPG) and create a unique group for each user, default is *True*
 - `group_id` _Integer_ numeric id of the group to create, default is to allow the OS to pick next
 - `cookbook` _String_ name of the cookbook that the authorized_keys template should be found in
 - `manage_nfs_home_dirs` _Boolean_ whether to manage nfs home directories.

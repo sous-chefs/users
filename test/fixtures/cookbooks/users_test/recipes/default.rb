@@ -2,6 +2,13 @@ user 'mwaddams' do
   manage_home true
 end
 
+users_manage 'usergroup' do
+  group_id 5000
+  action [:remove, :create]
+  data_bag 'test_home_dir'
+  upg false
+end
+
 users_manage 'testgroup' do
   group_id 3000
   action [:remove, :create]
@@ -14,3 +21,11 @@ users_manage 'nfsgroup' do
   data_bag 'test_home_dir'
   manage_nfs_home_dirs false
 end
+
+#users_manage 'usergroup' do
+#  group_id 5000
+#  action [:remove, :create]
+#  data_bag 'test_home_dir'
+#  upg false
+#end
+

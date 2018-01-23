@@ -20,11 +20,13 @@
 # :data_bag is the object to search
 # :search_group is the groups name to search for, defaults to resource name
 # :group_name is the string name of the group to create, defaults to resource name
+# :upg determines whether User Private Groups (UPG) will be used
 # :group_id is the numeric id of the group to create, default is to allow the OS to pick next
 # :cookbook is the name of the cookbook that the authorized_keys template should be found in
 property :data_bag, String, default: 'users'
 property :search_group, String, name_property: true
 property :group_name, String, name_property: true
+property :upg, [true, false], default: true
 property :group_id, Integer
 property :cookbook, String, default: 'users'
 property :manage_nfs_home_dirs, [true, false], default: true
@@ -33,8 +35,31 @@ action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
 
+  # If group_id is specified, create group if it doesn't exist.
+  # Prevents user block from failing if the group does not yet exist
+  # when upg = false.  The "unless" statement prevents resource
+  # conflicts to allow the group to be defined in other cookbooks in more detail.
+  unless node['etc']['group'][new_resource.group_name]
+    group new_resource.group_name do
+      gid new_resource.group_id
+      only_if { new_resource.group_id }
+      not_if { node['etc']['group'][new_resource.group_name] }
+    end
+  end
+
   search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
     u['username'] ||= u['id']
+
+    # if upg is false
+    unless new_resource.upg
+      # if gid is not defined, default to group_name if group_id was defined
+      u['gid'] ||= new_resource.group_name if new_resource.group_id
+      # override default with first group defined in data bag item if that group exists
+      u['groups'].each do |db_group|
+        u['gid'] = db_group if node['etc']['group'][db_group]
+      end
+    end
+
     u['groups'].each do |g|
       users_groups[g] = [] unless users_groups.key?(g)
       users_groups[g] << u['username']
@@ -58,6 +83,7 @@ action :create do
         gid validate_id(u['gid'])
       end
       only_if { u['gid'] && u['gid'].is_a?(Numeric) }
+      only_if { new_resource.upg }
     end
 
     # Create user object.

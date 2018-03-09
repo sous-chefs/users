@@ -100,7 +100,7 @@ action :create do
       end
 
       authorized_keys_dir = (u['authorized_keys_dir'] ? u['authorized_keys_dir'] : "#{home_dir}/.ssh")
-      authorized_keys_file = (u['authorized_keys_file'] ? u['authorized_keys_file'] : "authorized_keys")
+      authorized_keys_file = (u['authorized_keys_file'] ? u['authorized_keys_file'] : 'authorized_keys')
 
       directory authorized_keys_dir do
         recursive true

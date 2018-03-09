@@ -99,7 +99,18 @@ action :create do
         end
       end
 
-      template "#{home_dir}/.ssh/authorized_keys" do
+      authorized_keys_dir = (u['authorized_keys_dir'] ? u['authorized_keys_dir'] : "#{home_dir}/.ssh")
+      authorized_keys_file = (u['authorized_keys_file'] ? u['authorized_keys_file'] : "authorized_keys")
+
+      directory authorized_keys_dir do
+        recursive true
+        owner 'root'
+        group 'root'
+        mode '0755'
+        only_if { !!(u['authorized_keys_dir']) }
+      end
+
+      template "#{authorized_keys_dir}/#{authorized_keys_file}" do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner u['uid'] ? validate_id(u['uid']) : u['username']
@@ -114,7 +125,18 @@ action :create do
 
       if u['ssh_private_key']
         key_type = u['ssh_private_key'].include?('BEGIN RSA PRIVATE KEY') ? 'rsa' : 'dsa'
-        template "#{home_dir}/.ssh/id_#{key_type}" do
+        ssh_private_key_dir = (u['ssh_private_key_dir'] ? u['ssh_private_key_dir'] : "#{home_dir}/.ssh")
+        ssh_private_key_file = (u['ssh_private_key_file'] ? u['ssh_private_key_file'] : "id_#{key_type}")
+
+        directory ssh_private_key_dir do
+          recursive true
+          owner u['uid'] ? validate_id(u['uid']) : u['username']
+          group validate_id(u['gid']) if u['gid']
+          mode '0700'
+          only_if { !!(u['ssh_private_key_dir']) }
+        end
+
+        template "#{ssh_private_key_dir}/#{ssh_private_key_file}" do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner u['uid'] ? validate_id(u['uid']) : u['username']
@@ -126,7 +148,18 @@ action :create do
 
       if u['ssh_public_key']
         key_type = u['ssh_public_key'].include?('ssh-rsa') ? 'rsa' : 'dsa'
-        template "#{home_dir}/.ssh/id_#{key_type}.pub" do
+        ssh_public_key_dir = (u['ssh_public_key_dir'] ? u['ssh_public_key_dir'] : "#{home_dir}/.ssh")
+        ssh_public_key_file = (u['ssh_public_key_file'] ? u['ssh_public_key_file'] : "id_#{key_type}.pub")
+
+        directory ssh_public_key_dir do
+          recursive true
+          owner 'root'
+          group 'root'
+          mode '0755'
+          only_if { !!(u['ssh_public_key_dir']) }
+        end
+
+        template "#{ssh_public_key_dir}/#{ssh_public_key_file}" do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner u['uid'] ? validate_id(u['uid']) : u['username']

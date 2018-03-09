@@ -1,0 +1,11 @@
+{
+  "id": "test_user_custom_paths",
+  "password": "$1$5cE1rI/9$4p0fomh9U4kAI23qUlZVv/",
+  "ssh_public_key_dir": "/etc/ssh/ssh.keys",
+  "ssh_public_key_file": "test_user_custom_paths.pub",
+  "ssh_public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSUGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3Pbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XAt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/EnmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbxNrRFi9wrf+M7Q== chefuser@mylaptop.local",
+  "groups": [ "testgroup", "nfsgroup" ],
+  "uid": 9003,
+  "shell": "\/bin\/bash",
+  "comment": "Test User"
+}

@@ -102,7 +102,7 @@ action :create do
       authorized_keys_dir = (u['authorized_keys_dir'] ? u['authorized_keys_dir'] : "#{home_dir}/.ssh")
       authorized_keys_file = (u['authorized_keys_file'] ? u['authorized_keys_file'] : 'authorized_keys')
 
-      directory authorized_keys_dir do
+      directory "dir #{authorized_keys_dir}" do
         recursive true
         owner 'root'
         group 'root'
@@ -128,7 +128,8 @@ action :create do
         ssh_private_key_dir = (u['ssh_private_key_dir'] ? u['ssh_private_key_dir'] : "#{home_dir}/.ssh")
         ssh_private_key_file = (u['ssh_private_key_file'] ? u['ssh_private_key_file'] : "id_#{key_type}")
 
-        directory ssh_private_key_dir do
+        directory "dir #{ssh_private_key_dir}" do
+          path ssh_private_key_dir
           recursive true
           owner u['uid'] ? validate_id(u['uid']) : u['username']
           group validate_id(u['gid']) if u['gid']
@@ -151,7 +152,8 @@ action :create do
         ssh_public_key_dir = (u['ssh_public_key_dir'] ? u['ssh_public_key_dir'] : "#{home_dir}/.ssh")
         ssh_public_key_file = (u['ssh_public_key_file'] ? u['ssh_public_key_file'] : "id_#{key_type}.pub")
 
-        directory ssh_public_key_dir do
+        directory "dir #{ssh_public_key_dir}" do
+          path ssh_public_key_dir
           recursive true
           owner 'root'
           group 'root'

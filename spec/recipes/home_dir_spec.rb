@@ -12,6 +12,9 @@ describe 'users_test::default' do
     allow(stat_nfs).to receive(:stdout).and_return('nfs')
 
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_local_home 2>&1').and_return(stat)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_local_home/.ssh 2>&1').and_return(stat)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_authorized_keys2 2>&1').and_return(stat)
+    allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_authorized_keys2/.ssh 2>&1').and_return(stat)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_first 2>&1').and_return(stat_nfs)
     allow(Mixlib::ShellOut).to receive(:new).with('stat -f -L -c %T /home/user_with_nfs_home_second 2>&1').and_return(stat_nfs)
 
@@ -44,6 +47,11 @@ describe 'users_test::default' do
           id: 'user_with_local_home',
           ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
           groups: ['testgroup'],
+        },
+        'user_with_authorized_keys2' => {
+          id: 'user_with_authorized_keys2',
+          ssh_keys: ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAklOUpkDHrfHY17SbrmTIpNLTGK9Tjom/BWDSU\nGPl+nafzlHDTYW7hdI4yZ5ew18JH4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSwg0cda3\nPbv7kOdJ/MTyBlWXFCR+HAo3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7XA\nt3FaoJoAsncM1Q9x5+3V0Ww68/eIFmb1zuUFljQJKprrX88XypNDvjYNby6vw/Pb0rwert/En\nmZ+AW4OZPnTPI89ZPmVMLuayrD2cE86Z/il8b+gw3r3+1nKatmIkjn2so1d01QraTlMqVSsbx\nNrRFi9wrf+M7Q== chefuser@mylaptop.local"],
+          groups: ['authkeys2'],
         })
     end.converge(described_recipe)
   end
@@ -54,11 +62,13 @@ describe 'users_test::default' do
       expect(chef_run).to create_user('user_with_local_home')
       expect(chef_run).to create_user('user_with_nfs_home_first')
       expect(chef_run).to create_user('user_with_nfs_home_second')
+      expect(chef_run).to create_user('user_with_authorized_keys2')
     end
 
     it 'creates groups' do
       expect(chef_run).to create_group('testgroup')
       expect(chef_run).to create_group('nfsgroup')
+      expect(chef_run).to create_group('authkeys2')
     end
 
     it 'not supports managing /dev/null home dir' do
@@ -77,6 +87,13 @@ describe 'users_test::default' do
 
     it 'manages .ssh dir for local user' do
       expect(chef_run).to create_directory('/home/user_with_local_home/.ssh')
+      expect(chef_run).to create_template('/home/user_with_local_home/.ssh/authorized_keys')
+    end
+
+    it 'manages .ssh dir and creates authorized_keys2 file for local user' do
+      expect(chef_run).to create_directory('/home/user_with_authorized_keys2/.ssh')
+      expect(chef_run).to_not create_template('/home/user_with_authorized_keys2/.ssh/authorized_keys')
+      expect(chef_run).to create_template('/home/user_with_authorized_keys2/.ssh/authorized_keys2')
     end
 
     it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
@@ -90,6 +107,7 @@ describe 'users_test::default' do
     it 'manages groups' do
       expect(chef_run).to create_users_manage('testgroup')
       expect(chef_run).to create_users_manage('nfsgroup')
+      expect(chef_run).to create_users_manage('authkeys2')
     end
   end
 end

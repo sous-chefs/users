@@ -1,7 +1,24 @@
+if os.suse?
+  test_user_groups = %w( users testgroup nfsgroup )
+  test_user_authkeys2_groups = %w( users authkeys2 )
+  test_user_keys_from_url_groups = %w( users testgroup nfsgroup )
+else
+  test_user_groups = %w( test_user testgroup nfsgroup )
+  test_user_authkeys2_groups = %w( test_user_authkeys2 authkeys2 )
+  test_user_keys_from_url_groups = %w( test_user_keys_from_url testgroup nfsgroup )
+end
+
 describe user('test_user') do
   it { should exist }
   its('uid') { should eq 9001 }
-  its('groups') { should eq %w( test_user testgroup nfsgroup ) }
+  its('groups') { should eq test_user_groups }
+  its('shell') { should eq '/bin/bash' }
+end
+
+describe user('test_user_authkeys2') do
+  it { should exist }
+  its('uid') { should eq 10001 }
+  its('groups') { should eq test_user_authkeys2_groups }
   its('shell') { should eq '/bin/bash' }
 end
 
@@ -15,10 +32,15 @@ describe group('nfsgroup') do
   its('gid') { should eq 4000 }
 end
 
+describe group('authkeys2') do
+  it { should exist }
+  its('gid') { should eq 5000 }
+end
+
 describe user('test_user_keys_from_url') do
   it { should exist }
   its('uid') { should eq 9002 }
-  its('groups') { should eq %w( test_user_keys_from_url testgroup nfsgroup ) }
+  its('groups') { should eq test_user_keys_from_url_groups }
   its('shell') { should eq '/bin/bash' }
 end
 
@@ -33,4 +55,15 @@ describe file('/home/test_user_keys_from_url/.ssh/authorized_keys') do
   ssh_keys.each do |key|
     its('content') { should include(key) }
   end
+end
+
+describe file('/home/test_user_authkeys2/.ssh/authorized_keys') do
+  it { should_not exist }
+end
+
+describe file('/home/test_user_authkeys2/.ssh/authorized_keys2') do
+  it { should exist }
+  it { should be_file }
+  its('mode') { should cmp '0600' }
+  its('owner') { should eq 'test_user_authkeys2' }
 end

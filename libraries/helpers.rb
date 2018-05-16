@@ -16,7 +16,7 @@ module Users
     #
     # @return [Boolean]
     def fs_remote?(mount)
-      fs_type(mount) == 'nfs' ? true : false
+      fs_type(mount) == 'nfs'
     end
 
     def keys_from_url(url)

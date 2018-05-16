@@ -45,7 +45,7 @@ action :create do
     home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
 
     # check whether home dir is null
-    manage_home = (home_dir == '/dev/null' ? false : true)
+    manage_home = !(home_dir == '/dev/null')
 
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.

@@ -64,6 +64,17 @@ users_manage 'testgroup' do
 end
 ```
 
+Or in the case of GCE managing ~/.ssh/authorized_keys:
+
+```ruby
+users_manage 'testgroup' do
+  group_id 3000
+  action [:create]
+  data_bag 'test_home_dir'
+  auth_keys 'authorized_keys2'
+end
+```
+
 **Note**: If you do not specify the data_bag, the default will be to look for a databag called users.
 
 ## Databag Definition

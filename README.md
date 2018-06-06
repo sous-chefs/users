@@ -111,6 +111,12 @@ Other potential fields:
 - `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 - `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
 - `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub
+- `authorized_keys_dir`: _String_ directory where authorized_keys file will be located. Defaults to `~/.ssh`.
+- `authorized_keys_file: ` _String_ name of the authorized_keys file. Defaults to `authorized_keys`.
+- `ssh_private_key_dir`: _String_ directory where private keys will be located. Defaults to `~/.ssh`.
+- `ssh_private_key_file`: _String_ name of the private key. Defaults to `id_#{key_type}`.
+- `ssh_public_key_dir`: _String_ directory where public keys will be located. Defaults to `~/.ssh`.
+- `ssh_public_key_file`:  _String_ name of the public key. Defaults to `id_#{key_type}.pub`.
 
 ## Resources Overview
 

@@ -99,7 +99,10 @@ action :create do
         end
       end
 
-      template "#{home_dir}/.ssh/authorized_keys" do
+      # use the keyfile defined in the databag or fallback to the standard file in the home dir
+      key_file = u['authorized_keys_file'] || "#{home_dir}/.ssh/authorized_keys"
+
+      template key_file do # ~FC022
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner u['uid'] ? validate_id(u['uid']) : u['username']

@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## 5.4.0 (2018-07-18)
+
+- Remove ChefSpec matchers which are now auto-generatedb y ChefSpec
+- Add a new databag entry for the keyfile location
+
 ## 5.3.1 (2017-12-15)
 
 - Remove special case for freebsd in favor of later shell validity check

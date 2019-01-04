@@ -276,26 +276,21 @@ And then change the action to "remove":
 
 If you have different requirements, for example:
 
-- You want to search a different data bag specific to a role such as
-- mail. You may change the data_bag searched.
+- You want to search a different data bag specific to a role such as mail. You may change the `data_bag` searched.
+  ```ruby
+  data_bag `mail`
+  ```
 
-  - data_bag `mail`
+- You want to search for a different group attribute named `postmaster`. You may change the `search_group` attribute. This
+attribute defaults to the LWRP resource name.  
+  ```ruby
+  search_group `postmaster`
+  ```
 
-- You want to search for a different group attribute named
-
-- `postmaster`. You may change the search_group attribute. This
-
-- attribute defaults to the LWRP resource name.
-
-  - search_group `postmaster`
-
-- You want to add the users to a security group other than the
-
-- lightweight resource name. You may change the group_name attribute.
-
-- This attribute also defaults to the LWRP resource name.
-
-  - group_name `wheel`
+- You want to add the users to a security group other than the lightweight resource name. You may change the `group_name` attribute. This attribute also defaults to the LWRP resource name.
+  ```ruby
+  group_name `wheel`
+  ```
 
 Putting these requirements together our recipe might look like this:
 

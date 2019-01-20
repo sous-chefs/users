@@ -42,7 +42,7 @@ action :create do
 
     # Set home to location in data bag,
     # or a reasonable default ($home_basedir/$user).
-    home_dir = (u['home'] ? u['home'] : "#{home_basedir}/#{u['username']}")
+    home_dir = (u['home'] || "#{home_basedir}/#{u['username']}")
 
     # check whether home dir is null
     manage_home = !(home_dir == '/dev/null')

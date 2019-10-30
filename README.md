@@ -19,7 +19,7 @@ The following platforms have been tested with Test Kitchen:
 - Fedora
 - openSUSE / SUSE Linux Enterprises
 - FreeBSD / OpenBSD
-- Mac OS X
+- macOS
 - AIX
 
 ### Chef

@@ -50,9 +50,8 @@ action :create do
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
     # This should correct that without breaking functionality.
-    group u['username'] do # ~FC022
-      case node['platform_family']
-      when 'mac_os_x'
+    group u['username'] do
+      if platform_family?('mac_os_x')
         gid validate_id(u['gid']) unless gid_used?(validate_id(u['gid'])) || new_resource.group_name == u['username']
       else
         gid validate_id(u['gid'])
@@ -102,7 +101,7 @@ action :create do
       # use the keyfile defined in the databag or fallback to the standard file in the home dir
       key_file = u['authorized_keys_file'] || "#{home_dir}/.ssh/authorized_keys"
 
-      template key_file do # ~FC022
+      template key_file do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner u['uid'] ? validate_id(u['uid']) : u['username']
@@ -152,8 +151,7 @@ action :create do
   end
 
   group new_resource.group_name do
-    case node['platform_family']
-    when 'mac_os_x'
+    if platform_family?('mac_os_x')
       gid new_resource.group_id unless gid_used?(new_resource.group_id)
     else
       gid new_resource.group_id

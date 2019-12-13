@@ -20,16 +20,16 @@ platforms:
     image: dokken/amazonlinux
     pid_one_command: /sbin/init
 
-- name: debian-8
+- name: debian-9
   driver:
-    image: dokken/debian-8
+    image: dokken/debian-9
     pid_one_command: /bin/systemd
     intermediate_instructions:
       - RUN /usr/bin/apt-get update
 
-- name: debian-9
+- name: debian-10
   driver:
-    image: dokken/debian-9
+    image: dokken/debian-10
     pid_one_command: /bin/systemd
     intermediate_instructions:
       - RUN /usr/bin/apt-get update

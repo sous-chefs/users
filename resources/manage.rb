@@ -27,7 +27,7 @@ property :search_group, String, name_property: true
 property :group_name, String, name_property: true
 property :group_id, Integer
 property :cookbook, String, default: 'users'
-property :manage_nfs_home_dirs, [TrueClass, FalseClass], default: true
+property :manage_nfs_home_dirs, [true, false], default: true
 
 action :create do
   users_groups = {}

@@ -1,6 +1,7 @@
 # users Cookbook
 
-[![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users) [![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
+[![Build Status](https://travis-ci.org/chef-cookbooks/users.svg?branch=master)](http://travis-ci.org/chef-cookbooks/users)
+[![Cookbook Version](https://img.shields.io/cookbook/v/users.svg)](https://supermarket.chef.io/cookbooks/users)
 
 Manages OS users from databags.
 
@@ -196,7 +197,7 @@ The recipe, by default, will also create the sysadmin group. The sysadmin group 
 Use knife to create a data bag for users.
 
 ```bash
-$ knife data bag create users
+knife data bag create users
 ```
 
 Create a user in the data_bag/users/ directory.
@@ -206,7 +207,7 @@ An optional password hash can be specified that will be used as the user's passw
 The hash can be generated with the following command.
 
 ```bash
-$ openssl passwd -1 "plaintextpassword"
+openssl passwd -1 "plaintextpassword"
 ```
 
 Note: The ssh_keys attribute below can be either a String or an Array. However, we are recommending the use of an Array.
@@ -238,7 +239,7 @@ You can pass any action listed in the [user](http://docs.chef.io/chef/resources.
 Lock a user, johndoe1.
 
 ```bash
-$ knife data bag edit users johndoe1
+knife data bag edit users johndoe1
 ```
 
 And then change the action to "lock":
@@ -256,7 +257,7 @@ And then change the action to "lock":
 Remove a user, johndoe1.
 
 ```bash
-$ knife data bag edit users johndoe1
+knife data bag edit users johndoe1
 ```
 
 And then change the action to "remove":
@@ -277,17 +278,19 @@ And then change the action to "remove":
 If you have different requirements, for example:
 
 - You want to search a different data bag specific to a role such as mail. You may change the `data_bag` searched.
+
   ```ruby
   data_bag `mail`
   ```
 
-- You want to search for a different group attribute named `postmaster`. You may change the `search_group` attribute. This
-attribute defaults to the LWRP resource name.  
+- You want to search for a different group attribute named `postmaster`. You may change the `search_group` attribute. This attribute defaults to the LWRP resource name.
+
   ```ruby
   search_group `postmaster`
   ```
 
 - You want to add the users to a security group other than the lightweight resource name. You may change the `group_name` attribute. This attribute also defaults to the LWRP resource name.
+
   ```ruby
   group_name `wheel`
   ```

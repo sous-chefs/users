@@ -40,13 +40,17 @@ jobs:
     strategy:
       matrix:
         os:
-          - 'centos-6'
+          - 'amazonlinux'
+          - 'amazonlinux-2'
           - 'centos-6'
           - 'centos-7'
+          - 'centos-8'
           - 'debian-9'
           - 'debian-10'
           - 'ubuntu-1604'
           - 'ubuntu-1804'
+          - 'ubuntu-2004'
+          - 'opensuse-leap-15'
         suite:
           - 'default'
       fail-fast: false

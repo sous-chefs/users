@@ -1,7 +1,13 @@
+os_family = os.family
+
 describe user('test_user') do
   it { should exist }
   its('uid') { should eq 9001 }
-  its('groups') { should eq %w( test_user testgroup nfsgroup ) }
+  if os_family == 'suse'
+    its('groups') { should eq %w( users testgroup nfsgroup ) }
+  else
+    its('groups') { should eq %w( test_user testgroup nfsgroup ) }
+  end
   its('shell') { should eq '/bin/bash' }
 end
 
@@ -18,7 +24,11 @@ end
 describe user('test_user_keys_from_url') do
   it { should exist }
   its('uid') { should eq 9002 }
-  its('groups') { should eq %w( test_user_keys_from_url testgroup nfsgroup ) }
+  if os_family == 'suse'
+    its('groups') { should eq %w( users testgroup nfsgroup ) }
+  else
+    its('groups') { should eq %w( test_user_keys_from_url testgroup nfsgroup ) }
+  end
   its('shell') { should eq '/bin/bash' }
 end
 

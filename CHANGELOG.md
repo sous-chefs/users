@@ -2,6 +2,41 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Unreleased
+
+### Added
+
+- Add code owners file
+- Use the org wide GitHub templates
+- Replace TravisCI with Github Actions
+- Add Ubuntu 20.04 and include other platforms on dokken for tests
+- Enable enforce_idempotency
+
+### Changed
+
+- Update README - formatting fixes
+- Update for Chef 15 license agreement and Chef Workstation
+- Testing updates
+- Simplify platform logic and remove foodcritic comments
+- Require Chef 12.15+
+
+### Fixed
+
+- Cookstyle fixes
+- MDL fixes
+- yamllint fixes
+- Standardise files with files in chef-cookbooks/repo-management
+- Update keys so test passes
+
+### Removed
+
+- Remove Ubuntu 14.04 testing
+- Remove one-off ubuntu-16.04-chef-12.7 suite
+- Remove .rubocop.yml as it's no longer needed
+
 ## 5.4.0 (2018-07-18)
 
 - Remove ChefSpec matchers which are now auto-generatedb y ChefSpec

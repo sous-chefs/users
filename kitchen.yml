@@ -1,3 +1,4 @@
+---
 driver:
   name: vagrant
 
@@ -24,7 +25,7 @@ platforms:
   - name: opensuse-leap-15
   - name: macosx-10.13
     driver:
-      box: chef/macosx-10.13 # private box in Chef's Atlas account
+      box: chef/macosx-10.13  # private box in Chef's Atlas account
       provider: vmware_fusion
   - name: opensuse-leap-15
   - name: ubuntu-16.04

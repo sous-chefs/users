@@ -5,6 +5,8 @@ driver:
 provisioner:
   name: chef_zero
   deprecations_as_errors: true
+  enforce_idempotency: true
+  multiple_converge: 2
   chef_license: accept-no-persist
 
 verifier:

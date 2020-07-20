@@ -283,13 +283,13 @@ If you have different requirements, for example:
   data_bag `mail`
   ```
 
-- You want to search for a different group attribute named `postmaster`. You may change the `search_group` attribute. This attribute defaults to the LWRP resource name.
+- You want to search for a different group attribute named `postmaster`. You may change the `search_group` attribute. This attribute defaults to the resource name.
 
   ```ruby
   search_group `postmaster`
   ```
 
-- You want to add the users to a security group other than the lightweight resource name. You may change the `group_name` attribute. This attribute also defaults to the LWRP resource name.
+- You want to add the users to a security group other than the lightweight resource name. You may change the `group_name` attribute. This attribute also defaults to the resource name.
 
   ```ruby
   group_name `wheel`

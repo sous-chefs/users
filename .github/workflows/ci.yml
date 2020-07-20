@@ -26,16 +26,8 @@ jobs:
       - name: Run yaml Lint
         uses: actionshub/yamllint@master
 
-  mdl:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@master
-      - name: Run Markdown Lint
-        uses: actionshub/markdownlint@master
-
   dokken:
-    needs: [mdl, yamllint, delivery]
+    needs: [yamllint, delivery]
     runs-on: ubuntu-latest
     strategy:
       matrix:

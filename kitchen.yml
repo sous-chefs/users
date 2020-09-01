@@ -1,9 +1,12 @@
+---
 driver:
   name: vagrant
 
 provisioner:
   name: chef_zero
   deprecations_as_errors: true
+  enforce_idempotency: true
+  multiple_converge: 2
   chef_license: accept-no-persist
 
 verifier:
@@ -24,7 +27,7 @@ platforms:
   - name: opensuse-leap-15
   - name: macosx-10.13
     driver:
-      box: chef/macosx-10.13 # private box in Chef's Atlas account
+      box: chef/macosx-10.13  # private box in Chef's Atlas account
       provider: vmware_fusion
   - name: opensuse-leap-15
   - name: ubuntu-16.04
@@ -34,6 +37,7 @@ platforms:
     provisioner:
       require_chef_omnibus: 12.7.2
   - name: ubuntu-18.04
+  - name: ubuntu-20.04
 
 suites:
   - name: default

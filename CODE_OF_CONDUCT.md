@@ -1,3 +1,1 @@
-# Community Guidelines
-
-This project follows the Chef Community Guidelines <https://docs.chef.io/community_guidelines.html>
+Please refer to the Chef Community Code of Conduct at <https://www.chef.io/code-of-conduct/>

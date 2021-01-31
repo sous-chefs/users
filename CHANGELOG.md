@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 5.6.0 - *2021-01-31*
 
 - Sous Chefs Adoption

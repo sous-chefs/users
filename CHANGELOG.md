@@ -8,6 +8,7 @@ This file is used to list changes made in each version of the users cookbook.
 - Standardise files with files in sous-chefs/repo-management
 - Add integration testing for MacOS
 - Remove testing for Amazon Linux 201x, CentOS 6 and Ubuntu 16.04
+- Exclude `uid` and `home` properties from `user` resource on MacOS
 
 ## 5.5.0 (2020-09-01)
 

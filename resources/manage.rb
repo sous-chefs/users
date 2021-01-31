@@ -62,7 +62,7 @@ action :create do
     # Create user object.
     # Do NOT try to manage null home directories.
     user u['username'] do
-      uid validate_id(u['uid'])
+      uid validate_id(u['uid']) unless platform_family?('mac_os_x')
       gid validate_id(u['gid']) if u['gid']
       shell shell_is_valid?(u['shell']) ? u['shell'] : '/bin/sh'
       comment u['comment']
@@ -70,7 +70,7 @@ action :create do
       salt u['salt'] if u['salt']
       iterations u['iterations'] if u['iterations']
       manage_home manage_home
-      home home_dir
+      home home_dir unless platform_family?('mac_os_x')
       action u['action'] if u['action']
     end
 

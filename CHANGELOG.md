@@ -2,8 +2,13 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## Unreleased
+
+- Sous Chefs Adoption
+- Standardise files with files in sous-chefs/repo-management
+- Add integration testing for MacOS
+- Remove testing for Amazon Linux 201x, CentOS 6 and Ubuntu 16.04
+- Exclude `uid` and `home` properties from `user` resource on MacOS
 
 ## 5.5.0 (2020-09-01)
 

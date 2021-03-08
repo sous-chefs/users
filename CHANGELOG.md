@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 5.7.0 - *2021-03-08*
 
 - Add manage_home to the remove action of the manage resource
 

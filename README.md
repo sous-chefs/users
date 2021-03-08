@@ -116,6 +116,7 @@ A sample user to remove from a system would like like:
 Other potential fields (optional):
 
 - `home`: _String_ User's home directory. If not assigned, will be set based on platform and username.
+- `manage_home`: _True, False_ Creates/removes the home directory. Defaults to false. 
 - `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 - `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
 - `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub

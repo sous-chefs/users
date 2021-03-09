@@ -17,15 +17,14 @@
 # limitations under the License.
 #
 
-# :data_bag is the object to search
-# :search_group is the groups name to search for, defaults to resource name
-# :group_name is the string name of the group to create, defaults to resource name
-# :group_id is the numeric id of the group to create, default is to allow the OS to pick next
-# :cookbook is the name of the cookbook that the authorized_keys template should be found in
-property :data_bag, String, default: 'users'
-property :search_group, String, name_property: true
+# :group_name is the string name of the group to create, defaults to resource name.
+# :group_id is the numeric id of the group to create, default is to allow the OS to pick next.
+# :users_hash is the Hash that contains all the users that you want to create with the users cookbook.
+# :cookbook is the name of the cookbook that the authorized_keys template should be found in.
+# :manage_nfs_home_dirs specifies if home_dirs should be managed when they are located on a NFS share.
 property :group_name, String, name_property: true
 property :group_id, Integer
+property :users_hash, Hash
 property :cookbook, String, default: 'users'
 property :manage_nfs_home_dirs, [true, false], default: true
 
@@ -33,7 +32,10 @@ action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
 
-  search(new_resource.data_bag, "groups:#{new_resource.search_group} AND NOT action:remove") do |u|
+  # Loop through all the users in the users_hash
+  # Break the loop if users is no in the specified group_name
+  new_resource.users_hash do |u|
+    next unless (u['groups'].include? new_resource.group_name) && (u['action'] == 'create' if u['action'])
     u['username'] ||= u['id']
     u['groups'].each do |g|
       users_groups[g] = [] unless users_groups.key?(g)
@@ -71,7 +73,7 @@ action :create do
       iterations u['iterations'] if u['iterations']
       manage_home manage_home
       home home_dir unless platform_family?('mac_os_x')
-      action u['action'] if u['action']
+      action :create
     end
 
     if manage_home_files?(home_dir, u['username'])
@@ -161,11 +163,12 @@ action :create do
 end
 
 action :remove do
-  search(new_resource.data_bag, "groups:#{new_resource.search_group} AND action:remove") do |rm_user|
-    user rm_user['username'] ||= rm_user['id'] do
+  new_resource.users_hash do |u|
+    next unless (u['groups'].include? new_resource.group_name) && u['action'] == 'remove'
+    user u['username'] ||= u['id'] do
       action :remove
-      manage_home rm_user['manage_home'] ||= false
-      force rm_user['force'] ||= false
+      manage_home u['manage_home'] ||= false
+      force u['force'] ||= false
     end
   end
 end

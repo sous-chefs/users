@@ -27,6 +27,5 @@ platforms:
 
 suites:
   - name: default
-    data_bags_path: "./test/fixtures/data_bags"
     run_list:
       - recipe[users_test::default]

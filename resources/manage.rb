@@ -16,17 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-# :group_name is the string name of the group to create, defaults to resource name.
-# :group_id is the numeric id of the group to create, default is to allow the OS to pick next.
-# :users is the Hash that contains all the users that you want to create with the users cookbook.
-# :cookbook is the name of the cookbook that the authorized_keys template should be found in.
-# :manage_nfs_home_dirs specifies if home_dirs should be managed when they are located on a NFS share.
-property :group_name, String, name_property: true
-property :group_id, Integer
-property :users, Array
-property :cookbook, String, default: 'users'
-property :manage_nfs_home_dirs, [true, false], default: true
+property :group_name, String, description: 'name of the group to create, defaults to resource name', name_property: true
+property :group_id, Integer, description: 'numeric id of the group to create, default is to allow the OS to pick next.'
+property :users, Array, description: 'Array of Hashses that contains all the users that you want to create with the users cookbook.'
+property :cookbook, String, description: 'name of the cookbook that the authorized_keys template should be found in.', default: 'users'
+property :manage_nfs_home_dirs, [true, false], description: 'specifies if home_dirs should be managed when they are located on a NFS share.', default: true
 
 action :create do
   users_groups = {}
@@ -37,6 +31,7 @@ action :create do
   new_resource.users.each do |user|
     next unless user[:groups].include? new_resource.group_name
     next if user[:action] == 'remove'
+
     username = user[:username] || user[:id]
     user[:groups].each do |group|
       users_groups[group] = [] unless users_groups.key?(group)
@@ -45,7 +40,7 @@ action :create do
 
     # Set home to location in data bag,
     # or a reasonable default ($home_basedir/$user).
-    home_dir = (user[:home] || "#{home_basedir}/#{username}")
+    home_dir = user[:home] || "#{home_basedir}/#{username}"
 
     # check whether home dir is null
     manage_home = !(home_dir == '/dev/null')
@@ -85,19 +80,17 @@ action :create do
         owner user['uid'] ? validate_id(user[:uid]) : username
         group validate_id(user[:gid]) if user[:gid]
         mode '0700'
-        only_if { !!(user[:ssh_keys] || user[:ssh_private_key] || user[:ssh_public_key]) }
+        not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
       end
 
       # loop over the keys and if we have a URL we should add each key
       # from the url response and append it to the list of keys
       ssh_keys = []
-      if user[:ssh_keys]
-        Array(user[:ssh_keys]).each do |key|
-          if key.start_with?('https')
-            ssh_keys += keys_from_url(key)
-          else
-            ssh_keys << key
-          end
+      Array(user[:ssh_keys]).each do |key|
+        if key.start_with?('https')
+          ssh_keys += keys_from_url(key)
+        else
+          ssh_keys << key
         end
       end
 
@@ -114,7 +107,7 @@ action :create do
         # ssh_keys should be a combination of user['ssh_keys'] and any keys
         # returned from a specified URL
         variables ssh_keys: ssh_keys
-        only_if { !!(user[:ssh_keys]) }
+        not_if { user[:ssh_keys].nil? }
       end
 
       if user[:ssh_private_key]
@@ -146,11 +139,13 @@ action :create do
   end
   # Populating users to appropriates groups
   users_groups.each do |group, user|
+    next unless group == new_resource.group_name # Dealing with managed group later
+
     group group do
       members user
       append true
       action :manage # Do nothing if group doesn't exist
-    end unless group == new_resource.group_name # Dealing with managed group later
+    end
   end
 
   group new_resource.group_name do
@@ -166,6 +161,7 @@ end
 action :remove do
   new_resource.users.each do |user|
     next unless (user[:groups].include? new_resource.group_name) && (user[:action] == 'remove' unless user[:action].nil?)
+
     user user[:username] || user[:id] do
       action :remove
       manage_home user[:manage_home] || false

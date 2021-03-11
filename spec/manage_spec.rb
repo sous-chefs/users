@@ -68,46 +68,56 @@ describe 'users_manage' do
     end
 
     it 'creates groups' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_group('testgroup')
     end
 
     it 'creates users' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_user('user_with_dev_null_home')
       is_expected.to create_user('user_with_local_home')
       is_expected.to create_user('user_with_nfs_home_first')
     end
 
     it 'removes users' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to remove_user('usertoremove')
     end
 
     it 'not supports managing /dev/null home dir' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_user('user_with_dev_null_home')
         .with(manage_home: false)
     end
 
     it 'supports managing local home dir' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_user('user_with_local_home')
         .with(manage_home: true)
     end
 
     it 'not tries to manage .ssh dir for user "user_with_dev_null_home"' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to_not create_directory('/dev/null')
     end
 
     it 'manages .ssh dir for local user' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_directory('/home/user_with_local_home/.ssh')
     end
 
     it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to_not create_directory('/home/user_with_nfs_home_first/.ssh')
     end
 
     it 'does not manage nfs home dir if manage_nfs_home_dirs is set to false' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to_not create_directory('/home/user_with_nfs_home_second/.ssh')
     end
 
     it 'manages groups' do
+      stub_command('getent group testgroup').and_return(false)
       is_expected.to create_users_manage('testgroup')
     end
   end
@@ -122,26 +132,32 @@ describe 'users_manage' do
     end
 
     it 'creates groups' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to create_group('nfsgroup')
     end
 
     it 'creates users' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to create_user('user_with_nfs_home_second')
     end
 
     it 'removes users' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to remove_user('bogus_user')
     end
 
     it 'manages nfs home dir if manage_nfs_home_dirs is set to true' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to_not create_directory('/home/user_with_nfs_home_first/.ssh')
     end
 
     it 'does not manage nfs home dir if manage_nfs_home_dirs is set to false' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to_not create_directory('/home/user_with_nfs_home_second/.ssh')
     end
 
     it 'manages groups' do
+      stub_command('getent group nfsgroup').and_return(false)
       is_expected.to create_users_manage('nfsgroup')
     end
   end

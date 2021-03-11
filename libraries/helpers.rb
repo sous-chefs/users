@@ -54,16 +54,6 @@ module Users
       false
     end
 
-    # Validates passed id.
-    #
-    # @return [Numeric, String]
-    # handles basic input validation and checking
-    # whether uid was specified as a string
-    def validate_id(id)
-      return if id.nil? || id == 0
-      id.to_i.to_s == id ? id.to_i : id
-    end
-
     # Returns the appropriate base user home directory per platform
     #
     # @return [String]
@@ -77,7 +67,7 @@ module Users
       end
     end
 
-    # Returns the type of the public key or nil
+    # Returns the type of the public key or rsa
     #
     # @return [String]
     def pubkey_type(pubkey)

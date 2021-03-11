@@ -19,13 +19,14 @@ end
 describe user('user_with_dev_null_home') do
   it { should exist }
   its('uid') { should eq 5000 } unless os_family == 'darwin'
+  its('gid') { should eq 4000 } unless os_family == 'darwin'
   case os_family
   when 'suse'
     its('groups') { should eq %w( users nfsgroup ) }
   when 'darwin'
     its('groups') { should include 'nfsgroup' }
   else
-    its('groups') { should eq %w( user_with_dev_null_home nfsgroup ) }
+    its('groups') { should eq %w( nfsgroup ) }
   end
   its('shell') { should eq '/bin/bash' }
 end

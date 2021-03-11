@@ -81,14 +81,7 @@ module Users
     #
     # @return [String]
     def pubkey_type(pubkey)
-      available_keytypes = %w(ed25519 dss rsa dsa ecdsa)
-      key_type = ''
-
-      available_keytypes.each do |key|
-        key_type = key if pubkey.split.first.include? key
-      end
-
-      key_type = key_type ||= 'rsa'
+      %w(ed25519 ecdsa dss rsa dsa).filter { |kt| pubkey.split.first.include? kt }.first || 'rsa'
     end
   end
 end

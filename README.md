@@ -159,6 +159,7 @@ Other potential fields (optional):
 
 - `home`: _String_ User's home directory. If not assigned, will be set based on platform and username.
 - `manage_home`: _True, False_ Creates/removes the home directory. Defaults to false.
+- `user_group`: _True, False_ Specifies if the user needs to get a group with the name of the users. Defaults to true.
 - `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 - `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
 - `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub

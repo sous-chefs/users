@@ -8,6 +8,7 @@ This file is used to list changes made in each version of the users cookbook.
 - Cleaned up the manage resource
 - Added pubkey_type helper
 - Added more integration tests and updated unit tests to chefspec.
+
 ## 5.7.0 - *2021-03-08*
 
 - Add manage_home to the remove action of the manage resource

@@ -57,7 +57,7 @@ module Users
     # Validates passed id.
     #
     # @return [Numeric, String]
-    # handles basic input validation and checking 
+    # handles basic input validation and checking
     # whether uid was specified as a string
     def validate_id(id)
       return if id.nil? || id == 0

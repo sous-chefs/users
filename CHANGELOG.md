@@ -5,6 +5,7 @@ This file is used to list changes made in each version of the users cookbook.
 ## Unreleased
 
 - Removed hard dependency on data bags. See upgrading.md for details
+- Added per user no_user_group option to skip creating user group with the same name.
 - Cleaned up the manage resource
 - Added pubkey_type helper
 - Added more integration tests and updated unit tests to chefspec.

@@ -71,7 +71,7 @@ module Users
     #
     # @return [String]
     def pubkey_type(pubkey)
-      %w(ed25519 ecdsa dss rsa dsa).filter { |kt| pubkey.split.first.include? kt }.first || 'rsa'
+      %w(ed25519 ecdsa dss rsa dsa).filter { |kt| pubkey.split.first.include?(kt) }.first || 'rsa'
     end
   end
 end

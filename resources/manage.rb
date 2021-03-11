@@ -32,7 +32,7 @@ action :create do
   # Loop through all the users in the users_hash
   # Break the loop if users is no in the specified group_name
   new_resource.users.each do |user|
-    next unless user[:groups].include? new_resource.group_name
+    next unless user[:groups].include?(new_resource.group_name)
     next if user[:action] == 'remove'
 
     username = user[:username] || user[:id]
@@ -152,7 +152,6 @@ action :create do
           variables private_key: user[:ssh_private_key]
         end
       end
-
     else
       Chef::Log.debug("Not managing home files for #{username}")
     end

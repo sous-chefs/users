@@ -22,7 +22,7 @@ describe user('user_with_dev_null_home') do
   its('gid') { should eq 4000 } unless os_family == 'darwin'
   case os_family
   when 'suse'
-    its('groups') { should eq %w( users nfsgroup ) }
+    its('groups') { should eq %w( nfsgroup ) }
   when 'darwin'
     its('groups') { should include 'nfsgroup' }
   else

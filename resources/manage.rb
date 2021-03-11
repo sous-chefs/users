@@ -22,6 +22,9 @@ property :users, Array, description: 'Array of Hashses that contains all the use
 property :cookbook, String, description: 'name of the cookbook that the authorized_keys template should be found in.', default: 'users'
 property :manage_nfs_home_dirs, [true, false], description: 'specifies if home_dirs should be managed when they are located on a NFS share.', default: true
 
+# Deprecated properties
+property :data_bag, String, deprecated: 'The data_bag property has been deprecated, please see upgrading.md for more information. The property will be removed in the next major release.'
+
 action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
@@ -110,21 +113,9 @@ action :create do
         not_if { user[:ssh_keys].nil? }
       end
 
-      if user[:ssh_private_key]
-        key_type = user[:ssh_private_key].include?('BEGIN RSA PRIVATE KEY') ? 'rsa' : 'dsa'
-        template "#{home_dir}/.ssh/id_#{key_type}" do
-          source 'private_key.erb'
-          cookbook new_resource.cookbook
-          owner user[:uid] ? validate_id(user[:uid]) : username
-          group validate_id(user[:gid]) if user[:gid]
-          mode '0400'
-          variables private_key: user[:ssh_private_key]
-        end
-      end
-
       if user[:ssh_public_key]
-        key_type = user[:ssh_public_key].include?('ssh-rsa') ? 'rsa' : 'dsa'
-        template "#{home_dir}/.ssh/id_#{key_type}.pub" do
+        pubkey_type = pubkey_type(user[:ssh_public_key])
+        template "#{home_dir}/.ssh/id_#{pubkey_type}.pub" do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? validate_id(user[:uid]) : username
@@ -133,6 +124,19 @@ action :create do
           variables public_key: user[:ssh_public_key]
         end
       end
+
+      if user[:ssh_private_key]
+        key_type = pubkey_type || 'rsa'
+        template "#{home_dir}/.ssh/id_#{key_type}" do
+          source 'private_key.erb'
+          cookbook new_resource.cookbook
+          owner validate_id(user[:uid]) || username
+          group validate_id(user[:gid]) if user[:gid]
+          mode '0400'
+          variables private_key: user[:ssh_private_key]
+        end
+      end
+
     else
       Chef::Log.debug("Not managing home files for #{username}")
     end

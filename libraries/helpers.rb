@@ -57,14 +57,16 @@ module Users
     # Validates passed id.
     #
     # @return [Numeric, String]
-    # handles checking whether uid was specified as a string
+    # handles basic input validation and checking 
+    # whether uid was specified as a string
     def validate_id(id)
+      return if id.nil? || id == 0
       id.to_i.to_s == id ? id.to_i : id
     end
 
     # Returns the appropriate base user home directory per platform
     #
-    # @return [ String]
+    # @return [String]
     def home_basedir
       if platform_family?('mac_os_x')
         '/Users'
@@ -73,6 +75,20 @@ module Users
       else
         '/home'
       end
+    end
+
+    # Returns the type of the public key or nil
+    #
+    # @return [String]
+    def pubkey_type(pubkey)
+      available_keytypes = %w(ed25519 dss rsa dsa ecdsa)
+      key_type = ''
+
+      available_keytypes.each do |key|
+        key_type = key if pubkey.split.first.include? key
+      end
+
+      key_type = key_type ||= 'rsa'
     end
   end
 end

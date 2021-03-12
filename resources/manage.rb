@@ -96,7 +96,7 @@ action :create do
 
       directory "#{home_dir}/.ssh" do
         recursive true
-        owner user[:uid].to_i || username
+        owner user[:uid] ? user[:uid].to_i : username
         group user[:gid].to_i if user[:gid]
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }

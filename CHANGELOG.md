@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 6.0.0 - *2021-03-12*
 
 - Removed hard dependency on data bags. See upgrading.md for details

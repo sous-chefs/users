@@ -6,7 +6,7 @@ description       'Creates users from a databag search'
 version           '5.7.0'
 source_url        'https://github.com/sous-chefs/users'
 issues_url        'https://github.com/sous-chefs/users/issues'
-chef_version      '>= 12.15'
+chef_version      '>= 14'
 
 supports 'aix'
 supports 'amazon'

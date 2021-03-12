@@ -1,18 +1,23 @@
-user 'mwaddams' do
+user 'databag_mwaddams' do
   manage_home true
   action :nothing
 end
 
+# Get the users from the data bag
+users = search('test_home_dir', '*:*')
+
+# Create the users from the data bag.
 users_manage 'testgroup' do
+  users users
   group_id 3000
   action [:remove, :create]
-  data_bag 'test_home_dir'
-  notifies :create, 'user[mwaddams]', :before
+  notifies :create, 'user[databag_mwaddams]', :before
 end
 
+# Create the users from an attribute
 users_manage 'nfsgroup' do
+  users node['users_test']['users']
   group_id 4000
   action [:remove, :create]
-  data_bag 'test_home_dir'
   manage_nfs_home_dirs false
 end

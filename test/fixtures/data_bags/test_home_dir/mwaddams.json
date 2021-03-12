@@ -1,5 +1,0 @@
-{
-  "id": "mwaddams",
-  "action": "remove",
-  "groups": [ "testgroup", "nfsgroup" ]
-}

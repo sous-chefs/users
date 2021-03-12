@@ -1,0 +1,6 @@
+{
+  "id": "databag_mwaddams",
+  "action": "remove",
+  "groups": [ "testgroup", "nfsgroup" ],
+  "manage_home": true
+}

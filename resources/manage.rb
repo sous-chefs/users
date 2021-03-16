@@ -119,7 +119,7 @@ action :create do
       template key_file do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
-        owner user['uid'] ? user[:uid].to_i : username
+        owner user[:uid] ? user[:uid].to_i : username
         group user[:gid].to_i if user[:gid]
         mode '0600'
         sensitive true

@@ -62,11 +62,15 @@ describe user('user_with_nfs_home_second') do
 end
 
 describe file('/home/user_with_nfs_home_second/.ssh/id_ecdsa') do
+  it { should exist }
   its('content') { should include("-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAaAAAABNlY2RzYS\n1zaGEyLW5pc3RwMjU2AAAACG5pc3RwMjU2AAAAQQQns8Ec3poQBm6r7zv/UZojvXjrUZVB\n59R4LzOBw8cS/2xSQrVH8qm2X8kB1y6nuyydK0bbQF1pnES1P+uvG6e9AAAAsD2Nf449jX\n+OAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCezwRzemhAGbqvv\nO/9RmiO9eOtRlUHn1HgvM4HDxxL/bFJCtUfyqbZfyQHXLqe7LJ0rRttAXWmcRLU/668bp7\n0AAAAgJp/B6o2OADM0+NlkgH1dFcOLK64jhr3ScbWK4iyRdOcAAAAVZm11bGxlckBzYnBs\ndGMxbWxsdmRsAQID\n-----END OPENSSH PRIVATE KEY-----\n") }
+  its('owner') { should eq 'user_with_nfs_home_second' }
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files
 
 describe file('/home/user_with_nfs_home_second/.ssh/id_ecdsa.pub') do
+  it { should exist }
   its('content') { should include('ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCezwRzemhAGbqvvO/9RmiO9eOtRlUHn1HgvM4HDxxL/bFJCtUfyqbZfyQHXLqe7LJ0rRttAXWmcRLU/668bp70=') }
+  its('owner') { should eq 'user_with_nfs_home_second' }
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files
 
 describe user('user_with_local_home') do
@@ -84,11 +88,54 @@ end
 
 describe directory('/home/user_with_local_home') do
   it { should exist }
+  its('owner') { should eq 'user_with_local_home' }
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files
 
 describe file('/home/user_with_local_home/.ssh/id_rsa') do
+  it { should exist }
   its('content') { should include("-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcgAAAJjzcJxA83Cc\nQAAAAAtzc2gtZWQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcg\nAAAEC7TGfA0MU0mh0V39qw5RSThUo0idTtU2vCe9bJrHmyFS6aZDF+x28xIlZSgyfyh3IA\nkencLp1VCU7JXBhJcXNyAAAAFWZtdWxsZXJAc2JwbHRjMW1sbHZkbA==\n-----END OPENSSH PRIVATE KEY-----\n") }
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files
+
+describe user('user_with_username_instead_of_id') do
+  it { should exist }
+  case os_family
+  when 'suse'
+    its('groups') { should eq %w( users nfsgroup ) }
+  when 'darwin'
+    its('groups') { should include 'nfsgroup' }
+  else
+    its('groups') { should eq %w( user_with_username_instead_of_id nfsgroup ) }
+  end
+  its('shell') { should eq '/bin/bash' }
+end
+
+describe directory('/home/user_with_username_instead_of_id') do
+  it { should exist }
+  its('owner') { should eq 'user_with_username_instead_of_id' }
+end unless os_family == 'darwin'
+
+describe directory('/home/user_with_username_instead_of_id/.ssh') do
+  it { should exist }
+  its('owner') { should eq 'user_with_username_instead_of_id' }
+end unless os_family == 'darwin'
+
+describe file('/home/user_with_username_instead_of_id/.ssh/authorized_keys') do
+  it { should exist }
+  its('owner') { should eq 'user_with_username_instead_of_id' }
+  its('content') { should include('ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aZDF+x28xIlZSgyfyh3IAkencLp1VCU7JXBhJcXNy cheftestuser@laptop') }
+end unless os_family == 'darwin'
+
+describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa') do
+  it { should exist }
+  its('owner') { should eq 'user_with_username_instead_of_id' }
+  its('content') { should include("-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcgAAAJjzcJxA83Cc\nQAAAAAtzc2gtZWQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcg\nAAAEC7TGfA0MU0mh0V39qw5RSThUo0idTtU2vCe9bJrHmyFS6aZDF+x28xIlZSgyfyh3IA\nkencLp1VCU7JXBhJcXNyAAAAFWZtdWxsZXJAc2JwbHRjMW1sbHZkbA==\n-----END OPENSSH PRIVATE KEY-----\n") }
+end unless os_family == 'darwin'
+
+describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa.pub') do
+  it { should exist }
+  its('owner') { should eq 'user_with_username_instead_of_id' }
+  its('content') { should include('ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCezwRzemhAGbqvvO/9RmiO9eOtRlUHn1HgvM4HDxxL/bFJCtUfyqbZfyQHXLqe7LJ0rRttAXWmcRLU/668bp70=') }
+end unless os_family == 'darwin'
 
 # Test users from databags
 describe user('databag_mwaddams') do
@@ -141,5 +188,6 @@ ssh_keys = [
 describe file('/home/databag_test_user_keys_from_url/.ssh/authorized_keys') do
   ssh_keys.each do |key|
     its('content') { should include(key) }
+    its('owner') { should eq 'databag_test_user_keys_from_url' }
   end
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files

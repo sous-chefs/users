@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- Fix invalid checking of user[:uid] which could lead to root owning the users folders and files. Thanks @evandam
+
 ## 6.0.0 - *2021-03-12*
 
 - Removed hard dependency on data bags. See upgrading.md for details

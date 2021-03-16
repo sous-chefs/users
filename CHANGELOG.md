@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 6.0.1 - *2021-03-16*
 
 - Fix invalid checking of user[:uid] which could lead to root owning the users folders and files. Thanks @evandam
 

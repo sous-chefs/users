@@ -96,7 +96,7 @@ action :create do
 
       directory "#{home_dir}/.ssh" do
         recursive true
-        owner user[:uid].to_i || username
+        owner user[:uid] ? user[:uid].to_i : username
         group user[:gid].to_i if user[:gid]
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
@@ -119,7 +119,7 @@ action :create do
       template key_file do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
-        owner user[:uid].to_i || username
+        owner user['uid'] ? user[:uid].to_i : username
         group user[:gid].to_i if user[:gid]
         mode '0600'
         sensitive true
@@ -146,7 +146,7 @@ action :create do
         template "#{home_dir}/.ssh/id_#{key_type}" do
           source 'private_key.erb'
           cookbook new_resource.cookbook
-          owner user[:uid].to_i || username
+          owner user[:uid] ? user[:uid].to_i : username
           group user[:gid].to_i if user[:gid]
           mode '0400'
           variables private_key: user[:ssh_private_key]

@@ -14,7 +14,11 @@ end
 describe group('emptygroup') do
   it { should exist }
   its('gid') { should eq 5000 }
-  its('members') { should be_nil }
+  if os_family == 'darwin'
+    its('members') { should eq [] }
+  else
+    its('members') { should be_nil }
+  end
 end
 
 # Test users from attributes

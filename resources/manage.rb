@@ -18,7 +18,7 @@
 #
 property :group_name, String, description: 'name of the group to create, defaults to resource name', name_property: true
 property :group_id, Integer, description: 'numeric id of the group to create, default is to allow the OS to pick next.'
-property :users, Array, description: 'Array of Hashses that contains all the users that you want to create with the users cookbook.'
+property :users, Array, description: 'Array of Hashes that contains all the users that you want to create with the users cookbook.', default: []
 property :cookbook, String, description: 'name of the cookbook that the authorized_keys template should be found in.', default: 'users'
 property :manage_nfs_home_dirs, [true, false], description: 'specifies if home_dirs should be managed when they are located on a NFS share.', default: true
 
@@ -29,8 +29,24 @@ action :create do
   users_groups = {}
   users_groups[new_resource.group_name] = []
 
+  # Create the group from the group property if it does not yet exist.
+  #
+  # The management of the members will be done in a seperate resource.
+  #
+  # Note that this is explicitly outside of the main user loop to accomodate
+  # https://github.com/sous-chefs/users/issues/450 .
+  group new_resource.group_name do
+    if platform_family?('mac_os_x')
+      gid new_resource.group_id unless gid_used?(new_resource.group_id)
+      not_if "dscl . list /Groups/#{new_resource.group_name}"
+    else
+      gid new_resource.group_id
+      not_if "getent group #{new_resource.group_name}"
+    end
+  end
+
   # Loop through all the users in the users_hash
-  # Break the loop if users is no in the specified group_name
+  # Break the loop if users is not in the specified group_name
   new_resource.users.each do |user|
     next unless user[:groups].include?(new_resource.group_name)
     next if user[:action] == 'remove'
@@ -47,18 +63,6 @@ action :create do
 
     # check whether home dir is null
     manage_home = !(home_dir == '/dev/null')
-
-    # Create the group from the group property if it does not yet exist.
-    # The management of the members will be done in a seperate resource.
-    group new_resource.group_name do
-      if platform_family?('mac_os_x')
-        gid new_resource.group_id unless gid_used?(new_resource.group_id)
-        not_if "dscl . list /Groups/#{new_resource.group_name}"
-      else
-        gid new_resource.group_id
-        not_if "getent group #{new_resource.group_name}"
-      end
-    end
 
     # Check if we need to create a user group for the user
     # True by default

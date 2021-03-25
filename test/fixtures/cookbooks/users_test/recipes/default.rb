@@ -21,3 +21,9 @@ users_manage 'nfsgroup' do
   action [:remove, :create]
   manage_nfs_home_dirs false
 end
+
+# Creates a group without users.
+users_manage 'emptygroup' do
+  group_id 5000
+  action [:remove, :create]
+end

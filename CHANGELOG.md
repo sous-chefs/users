@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 6.0.2 - *2021-03-29*
 
 - Allow `users` attribute to be unset, allowing to create a group without any users.
 

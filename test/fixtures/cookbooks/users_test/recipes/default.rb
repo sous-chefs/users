@@ -27,3 +27,9 @@ users_manage 'emptygroup' do
   group_id 5000
   action [:remove, :create]
 end
+
+# Creates a group where a user's name matches the group's name
+singleuser = [{ username: 'singleuser', groups: ['singleuser'] }]
+users_manage 'singleuser' do
+  users singleuser
+end

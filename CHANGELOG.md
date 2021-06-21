@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 7.0.0 - *2021-06-21*
 
 - Set unified_mode to `true` for the `users_manage` resource

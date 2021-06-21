@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- Set unified_mode to `true` for the `users_manage` resource
+- Set minium Chef version to 15.3 for unified_mode
+- Inspec fix from nil to ''
+
 ## 6.0.3 - *2021-06-01*
 
 ## 6.0.2 - *2021-03-29*

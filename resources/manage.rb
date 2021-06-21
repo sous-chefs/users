@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+unified_mode true
+
 property :group_name, String, description: 'name of the group to create, defaults to resource name', name_property: true
 property :group_id, Integer, description: 'numeric id of the group to create, default is to allow the OS to pick next.'
 property :users, Array, description: 'Array of Hashes that contains all the users that you want to create with the users cookbook.', default: []

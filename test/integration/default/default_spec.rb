@@ -17,7 +17,7 @@ describe group('emptygroup') do
   if os_family == 'darwin'
     its('members') { should eq [] }
   else
-    its('members') { should be_nil }
+    its('members') { should eq '' }
   end
 end
 

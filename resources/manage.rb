@@ -78,15 +78,16 @@ action :create do
         gid user[:gid].to_i unless gid_used?(user[:gid].to_i) || new_resource.group_name == username
       else
         gid user[:gid].to_i
-      end
-      only_if { user[:gid] && user[:gid].is_a?(Numeric) && username_group }
+      end if user[:gid] && user[:gid].is_a?(Numeric)
+      only_if { user[:gid] && user[:gid].is_a?(Numeric) && username_group || user[:groups].include?(username) }
+      append true
     end
 
     # Create user object.
     # Do NOT try to manage null home directories.
     user username do
       uid user[:uid].to_i unless platform_family?('mac_os_x') || !user[:uid]
-      gid user[:gid].to_i if user[:gid]
+      gid user_gid(user) if user[:gid] || user[:groups].include?(username)
       shell shell_is_valid?(user[:shell]) ? user[:shell] : '/bin/sh'
       comment user[:comment]
       password user[:password] if user[:password]

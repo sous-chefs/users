@@ -27,3 +27,7 @@ users_manage 'emptygroup' do
   group_id 5000
   action [:remove, :create]
 end
+
+users_manage 'explicituser' do
+  users node['users_test']['users']
+end

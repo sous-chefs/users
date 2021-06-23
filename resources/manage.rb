@@ -87,7 +87,7 @@ action :create do
     # Do NOT try to manage null home directories.
     user username do
       uid user[:uid].to_i unless platform_family?('mac_os_x') || !user[:uid]
-      gid user_gid(user) if user[:gid] || user[:groups].include?(username)
+      gid user[:gid] || username if user[:gid] || user[:groups].include?(username)
       shell shell_is_valid?(user[:shell]) ? user[:shell] : '/bin/sh'
       comment user[:comment]
       password user[:password] if user[:password]

@@ -73,17 +73,5 @@ module Users
     def pubkey_type(pubkey)
       %w(ed25519 ecdsa dss rsa dsa).filter { |kt| pubkey.split.first.include?(kt) }.first || 'rsa'
     end
-
-    # Returns a group for a new user to be added to
-    #
-    # @return [String, Integer]
-    def user_gid(user)
-      username = user[:username] || user[:id]
-      if user[:gid]
-        user[:gid].to_i
-      elsif user[:groups].include?(username)
-        username
-      end
-    end
   end
 end

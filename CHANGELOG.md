@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 7.0.1 - *2021-07-02*
 
 - Allows a given user to be in a group of the same name, that is already created or explicitly defined in its `groups` key

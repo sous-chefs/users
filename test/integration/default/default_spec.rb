@@ -21,6 +21,10 @@ describe group('emptygroup') do
   end
 end
 
+describe group('explicituser') do
+  it { should exist }
+end
+
 # Test users from attributes
 describe user('usertoremove') do
   it { should_not exist }
@@ -94,6 +98,16 @@ describe user('user_with_local_home') do
     its('groups') { should eq %w( user_with_local_home nfsgroup ) }
   end
   its('shell') { should eq '/bin/sh' }
+end
+
+describe user('explicituser') do
+  it { should exist }
+  case os_family
+  when 'darwin'
+    its('groups') { should include 'explicituser' }
+  else
+    its('groups') { should eq %w( explicituser ) }
+  end
 end
 
 describe directory('/home/user_with_local_home') do

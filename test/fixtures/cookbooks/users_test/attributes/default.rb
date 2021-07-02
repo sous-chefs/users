@@ -44,4 +44,8 @@ default['users_test']['users'] = [{
   'ssh_keys': ['ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aZDF+x28xIlZSgyfyh3IAkencLp1VCU7JXBhJcXNy cheftestuser@laptop'],
   'ssh_private_key': "-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcgAAAJjzcJxA83Cc\nQAAAAAtzc2gtZWQyNTUxOQAAACAummQxfsdvMSJWUoMn8odyAJHp3C6dVQlOyVwYSXFzcg\nAAAEC7TGfA0MU0mh0V39qw5RSThUo0idTtU2vCe9bJrHmyFS6aZDF+x28xIlZSgyfyh3IA\nkencLp1VCU7JXBhJcXNyAAAAFWZtdWxsZXJAc2JwbHRjMW1sbHZkbA==\n-----END OPENSSH PRIVATE KEY-----\n",
   'ssh_public_key': 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCezwRzemhAGbqvvO/9RmiO9eOtRlUHn1HgvM4HDxxL/bFJCtUfyqbZfyQHXLqe7LJ0rRttAXWmcRLU/668bp70=',
-  }]
+},
+{
+  'username': 'explicituser',
+  'groups': ['explicituser'],
+}]

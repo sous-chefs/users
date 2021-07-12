@@ -31,3 +31,12 @@ end
 users_manage 'explicituser' do
   users node['users_test']['users']
 end
+
+users_manage 'spawns_next_group' do
+  users node['users_test']['users']
+end
+
+users_manage 'user_before_group' do
+  group_id 6000
+  users node['users_test']['users']
+end

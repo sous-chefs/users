@@ -163,8 +163,9 @@ Other potential fields (optional):
 - `action`: _String_ Supported actions are one's supported by the [user](https://docs.chef.io/resource_user.html#actions) resource. If not specified, the default action is `create`.
 - `ssh_private_key`: _String_ manages user's private key generally ~/.ssh/id_*
 - `ssh_public_key`: _String_ manages user's public key generally ~/.ssh/id_*.pub
-- `authorized_keys_file`:_String_ a nonstandard location for the authorized_keys file
-
+- `authorized_keys_file`: _String_ a nonstandard location for the authorized_keys file
+- `gid`: _String, Integer_ Specefies the primary group of a user by the gid number or the group name. The group will be created if it doesn't exist.
+- `primary_group`: _String_ To be used in combination with the `gid` field when it is an integer. Specifying the group name prevents errors when the user is created before its primary group.
 ## Resources Overview
 
 ### users_manage

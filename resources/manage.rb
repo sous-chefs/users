@@ -73,7 +73,7 @@ action :create do
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
     # This should correct that without breaking functionality.
-    group primary_group(user) do
+    group primary_gid(user).is_a?(Numeric) ? username : primary_gid(user) do
       if platform_family?('mac_os_x')
         gid user[:gid].to_i unless gid_used?(user[:gid].to_i) || new_resource.group_name == username
       else
@@ -98,17 +98,18 @@ action :create do
       action :create
     end
 
+    # The username group may not be the primary group, but still need to exist.
     group username do
       members username
       append true
-    end if username_group && primary_group(user) != username
+    end if username_group && (primary_gid(user).is_a?(Numeric) || primary_gid(user) != username)
 
     if manage_home_files?(home_dir, username)
       Chef::Log.debug("Managing home files for #{username}")
       directory "#{home_dir}/.ssh" do
         recursive true
         owner user[:uid] ? user[:uid].to_i : username
-        group primary_gid(user)
+        group platform_family?('suse') ? 'users' : primary_gid(user)
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
       end
@@ -131,7 +132,7 @@ action :create do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner user[:uid] ? user[:uid].to_i : username
-        group primary_gid(user)
+        group platform_family?('suse') ? 'users' : primary_gid(user)
         mode '0600'
         sensitive true
         # ssh_keys should be a combination of user['ssh_keys'] and any keys
@@ -146,7 +147,7 @@ action :create do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group primary_gid(user)
+          group platform_family?('suse') ? 'users' : primary_gid(user)
           mode '0400'
           variables public_key: user[:ssh_public_key]
         end
@@ -158,7 +159,7 @@ action :create do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group primary_gid(user)
+          group platform_family?('suse') ? 'users' : primary_gid(user)
           mode '0400'
           variables private_key: user[:ssh_private_key]
         end

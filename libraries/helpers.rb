@@ -74,18 +74,6 @@ module Users
       %w(ed25519 ecdsa dss rsa dsa).filter { |kt| pubkey.split.first.include?(kt) }.first || 'rsa'
     end
 
-    def primary_group(user)
-      if user[:gid]
-        if user[:gid].is_a?(Numeric)
-          user[:primary_group] || user[:id] || user[:username]
-        else
-          user[:gid]
-        end
-      else
-        user[:id] || user[:username]
-      end
-    end
-
     def primary_gid(user)
       if user[:gid]
         if user[:gid].is_a?(Numeric)

@@ -58,6 +58,50 @@ describe user('user_with_nfs_home_first') do
   its('shell') { should eq '/bin/sh' }
 end
 
+describe directory('/home/user_with_nfs_home_first') do
+  it { should exist }
+  its('owner') { should cmp 'user_with_nfs_home_first' }
+  case os_family
+  when 'suse'
+    its('group') { should cmp 'users' }
+  else
+    its('group') { should cmp 'user_with_nfs_home_first' }
+  end
+end unless os_family == 'darwin'
+
+describe directory('/home/user_with_nfs_home_second') do
+  it { should exist }
+  its('owner') { should cmp 'user_with_nfs_home_second' }
+  case os_family
+  when 'suse'
+    its('group') { should cmp 'users' }
+  else
+    its('group') { should cmp 'user_with_nfs_home_second' }
+  end
+end unless os_family == 'darwin'
+
+describe directory('/home/user_with_local_home') do
+  it { should exist }
+  its('owner') { should cmp 'user_with_local_home' }
+  case os_family
+  when 'suse'
+    its('group') { should cmp 'users' }
+  else
+    its('group') { should cmp 'user_with_local_home' }
+  end
+end unless os_family == 'darwin'
+
+describe directory('/home/user_with_username_instead_of_id') do
+  it { should exist }
+  its('owner') { should cmp 'user_with_username_instead_of_id' }
+  case os_family
+  when 'suse'
+    its('group') { should cmp 'users' }
+  else
+    its('group') { should cmp 'user_with_username_instead_of_id' }
+  end
+end unless os_family == 'darwin'
+
 describe file('/home/user_with_nfs_home_first/.ssh/id_ed25519.pub') do
   its('content') { should include('ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aZDF+x28xIlZSgyfyh3IAkencLp1VCU7JXBhJcXNy cheftestuser@laptop') }
 end unless os_family == 'darwin' # InSpec runs as non-root and can't see these files
@@ -116,7 +160,11 @@ describe user('explicituser') do
   it { should exist }
   case os_family
   when 'darwin'
-    its('groups') { should include 'explicituser' }
+    %w(staff explicituser).each do |g|
+      its('groups') { should include g }
+    end
+  when 'suse'
+    its('groups') { should eq %w( users explicituser ) }
   else
     its('groups') { should eq %w( explicituser ) }
   end
@@ -191,6 +239,8 @@ describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -203,6 +253,8 @@ describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa.pub') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -274,9 +326,10 @@ describe user('joins_spawned_group') do
   it { should exist }
   case os_family
   when 'darwin'
-    %w(group_b group_c).each do |g|
+    %w(string_gid user_before_group).each do |g|
       its('groups') { should include g }
-    end else
+    end
+  else
     its('groups') { should eq %w(string_gid user_before_group) }
   end
 end
@@ -285,10 +338,50 @@ describe user('primary_integer_gid') do
   it { should exist }
   case os_family
   when 'darwin'
-    %w(group_a group_b in_group_a_b).each do |g|
+    %w(user_before_group spawns_next_group).each do |g|
       its('groups') { should include g }
     end
+  when 'suse'
+    its('groups') { should eq %w(user_before_group spawns_next_group) }
   else
     its('groups') { should eq %w(user_before_group spawns_next_group primary_integer_gid) }
   end
 end
+
+describe directory('/home/joins_spawned_group') do
+  it { should exist }
+  its('owner') { should eq 'joins_spawned_group' }
+  its('group') { should eq 'string_gid' }
+end unless os_family == 'darwin'
+
+describe directory('/home/primary_integer_gid') do
+  it { should exist }
+  its('owner') { should eq 'primary_integer_gid' }
+  its('group') { should eq 'user_before_group' }
+end unless os_family == 'darwin'
+
+describe directory('/home/nonstandard_homedir_perms') do
+  it { should exist }
+  its('owner') { should eq 'nonstandard_homedir_perms' }
+  case os_family
+  when 'suse'
+    its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq nil }
+  else
+    its('group') { should eq 'nonstandard_homedir_perms' }
+  end
+  its('mode') { should cmp '02755' }
+end unless os_family == 'darwin'
+
+describe directory('/home/nonstandard_homedir_perms/.ssh') do
+  it { should exist }
+  its('owner') { should eq 'nonstandard_homedir_perms' }
+  case os_family
+  when 'suse'
+    its('group') { should eq 'users' }
+  else
+    its('group') { should eq 'nonstandard_homedir_perms' }
+  end
+  its('mode') { should cmp '0700' }
+end unless os_family == 'darwin'

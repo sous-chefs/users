@@ -60,4 +60,10 @@ default['users_test']['users'] = [{
   'groups': %w(spawns_next_group user_before_group),
   'primary_group': 'user_before_group',
   'gid': 6000,
+},
+{
+  'username': 'nonstandard_homedir_perms',
+  'homedir_mode': '02755',
+  'ssh_keys': ['ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aZDF+x28xIlZSgyfyh3IAkencLp1VCU7JXBhJcXNy cheftestuser@laptop'],
+  'groups': ['nonstandard_homedir_perms'],
 }]

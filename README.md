@@ -166,6 +166,7 @@ Other potential fields (optional):
 - `authorized_keys_file`: _String_ a nonstandard location for the authorized_keys file
 - `gid`: _String, Integer_ Specefies the primary group of a user by the gid number or the group name. The group will be created if it doesn't exist.
 - `primary_group`: _String_ To be used in combination with the `gid` field when the `gid` is an integer. Specifying the group name prevents errors when the user is created before their primary group.
+
 ## Resources Overview
 
 ### users_manage

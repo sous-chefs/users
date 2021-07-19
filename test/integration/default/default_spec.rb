@@ -290,7 +290,7 @@ describe user('joins_spawned_group') do
   it { should exist }
   case os_family
   when 'darwin'
-    %w(user_before_group spawns_next_group primary_integer_gid).each do |g|
+    %w(string_gid user_before_group).each do |g|
       its('groups') { should include g }
     end
   else
@@ -302,7 +302,7 @@ describe user('primary_integer_gid') do
   it { should exist }
   case os_family
   when 'darwin'
-    %w(user_before_group spawns_next_group primary_integer_gid).each do |g|
+    %w(user_before_group spawns_next_group).each do |g|
       its('groups') { should include g }
     end
   when 'suse'

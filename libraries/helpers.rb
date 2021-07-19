@@ -85,5 +85,15 @@ module Users
         user[:id] || user[:username]
       end
     end
+
+    def get_home_group(user)
+      if platform_family?('suse')
+        'users'
+      elsif platform_family?('mac_os_x')
+        'staff'
+      else
+        primary_gid(user)
+      end
+    end
   end
 end

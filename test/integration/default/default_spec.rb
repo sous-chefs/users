@@ -82,6 +82,8 @@ describe file('/home/user_with_nfs_home_second/.ssh/id_ecdsa') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_nfs_home_second' }
   end
@@ -94,6 +96,8 @@ describe file('/home/user_with_nfs_home_second/.ssh/id_ecdsa.pub') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_nfs_home_second' }
   end
@@ -128,6 +132,8 @@ describe directory('/home/user_with_local_home') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_local_home' }
   end
@@ -157,6 +163,8 @@ describe directory('/home/user_with_username_instead_of_id') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -168,6 +176,8 @@ describe directory('/home/user_with_username_instead_of_id/.ssh') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -179,6 +189,8 @@ describe file('/home/user_with_username_instead_of_id/.ssh/authorized_keys') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -191,6 +203,8 @@ describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end
@@ -203,6 +217,8 @@ describe file('/home/user_with_username_instead_of_id/.ssh/id_ecdsa.pub') do
   case os_family
   when 'suse'
     its('group') { should eq 'users' }
+  when 'darwin'
+    its('group') { should eq 'staff' }
   else
     its('group') { should eq 'user_with_username_instead_of_id' }
   end

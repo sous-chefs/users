@@ -102,14 +102,14 @@ action :create do
     group username do
       members username
       append true
-    end if username_group && (primary_gid(user).is_a?(Numeric) || primary_gid(user) != username)
+    end if username_group && primary_gid(user) != username
 
     if manage_home_files?(home_dir, username)
       Chef::Log.debug("Managing home files for #{username}")
       directory "#{home_dir}/.ssh" do
         recursive true
         owner user[:uid] ? user[:uid].to_i : username
-        group platform_family?('suse') ? 'users' : primary_gid(user)
+        group get_home_group(user)
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
       end
@@ -132,7 +132,7 @@ action :create do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner user[:uid] ? user[:uid].to_i : username
-        group platform_family?('suse') ? 'users' : primary_gid(user)
+        group get_home_group(user)
         mode '0600'
         sensitive true
         # ssh_keys should be a combination of user['ssh_keys'] and any keys
@@ -147,7 +147,7 @@ action :create do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group platform_family?('suse') ? 'users' : primary_gid(user)
+          group get_home_group(user)
           mode '0400'
           variables public_key: user[:ssh_public_key]
         end
@@ -159,7 +159,7 @@ action :create do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group platform_family?('suse') ? 'users' : primary_gid(user)
+          group get_home_group(user)
           mode '0400'
           variables private_key: user[:ssh_private_key]
         end

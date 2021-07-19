@@ -68,7 +68,7 @@ action :create do
 
     # Check if we need to create a user group for the user
     # True by default
-    username_group = user[:no_user_group] ? false : true
+    username_group = !(user[:no_user_group] || platform_family?('suse') || platform_family?('mac_os_x'))
 
     # The user block will fail if the group does not yet exist.
     # See the -g option limitations in man 8 useradd for an explanation.
@@ -79,7 +79,7 @@ action :create do
       else
         gid user[:gid].to_i
       end if user[:gid] && user[:gid].is_a?(Numeric)
-      only_if { (user[:gid] || user[:groups].include?(username)) && (username_group || user[:gid].is_a?(String) || user[:primary_group]) }
+      only_if { (user[:gid] || user[:groups].include?(username)) && (user[:gid].is_a?(String) || user[:primary_group]) }
       append true
     end
 
@@ -98,7 +98,9 @@ action :create do
       action :create
     end
 
-    # The username group may not be the primary group, but still need to exist.
+    # This section creates a group for linux users. By convention suse and macos are not expected to have a user group
+    # But in the case where the primary group is not the username and the no_user_gtoup property is false we create a
+    # user group
     group username do
       members username
       append true

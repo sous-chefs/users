@@ -94,8 +94,8 @@ module Users
     def username_is_primary?(user)
       if user[:gid]
         user[:gid].is_a?(Numeric) && user[:primary_group].nil? && creates_user_group?(user)
-      elsif creates_user_group?(user)
-        true
+      else
+        creates_user_group?(user)
       end
     end
 

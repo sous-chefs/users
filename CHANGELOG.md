@@ -5,8 +5,8 @@ This file is used to list changes made in each version of the users cookbook.
 ## Unreleased
 
 - Give group ownership of each users .ssh/* files to that users primary group
-- Allow user to set file permisions for their home directory
-- Add a 'primary_group' and 'homedir_mode' key to the user hash options
+- Allow user to set file permissions for their home directory
+- Add a `primary_group` and `homedir_mode` key to the user hash options
 
 ## 7.0.1 - *2021-07-02*
 

@@ -88,7 +88,7 @@ module Users
       user[:gid] && !username_is_primary?(user) && !primary_gid(user).is_a?(Numeric)
     end
 
-    # Returns a bool, deciding wether a users primary group is its username group based on their user hash
+    # Returns a bool, deciding whether a users primary group is its username group based on their user hash
     #
     # @return [Bool]
     def username_is_primary?(user)

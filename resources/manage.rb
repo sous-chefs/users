@@ -70,7 +70,7 @@ action :create do
     # See the -g option limitations in man 8 useradd for an explanation.
     # This section should correct that without breaking functionality.
 
-    # This creats a custom primary group if defined using the 'gid' and 'primary_group' keys
+    # This creates a custom primary group if defined using the 'gid' and 'primary_group' keys
     group primary_gid(user) do
       if platform_family?('mac_os_x')
         gid user[:gid].to_i unless gid_used?(user[:gid].to_i) || new_resource.group_name == username

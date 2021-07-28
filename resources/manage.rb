@@ -66,28 +66,38 @@ action :create do
     # check whether home dir is null
     manage_home = !(home_dir == '/dev/null')
 
-    # Check if we need to create a user group for the user
-    # True by default
-    username_group = user[:no_user_group] ? false : true
-
-    # The user block will fail if the group does not yet exist.
+    # The user block will fail if its primary group doesn't exist.
     # See the -g option limitations in man 8 useradd for an explanation.
-    # This should correct that without breaking functionality.
+    # This section should correct that without breaking functionality.
+
+    # This creates a custom primary group if defined using the 'gid' and 'primary_group' keys
+    group primary_gid(user) do
+      if platform_family?('mac_os_x')
+        gid user[:gid].to_i unless gid_used?(user[:gid].to_i) || new_resource.group_name == username
+      else
+        gid user[:gid].to_i
+      end if user[:gid].is_a?(Numeric)
+      append true
+    end if creates_primary_group?(user)
+
+    # This creates a username group, it needs to be notified by another block so that it doesnt attempt to add a user
+    # that doesnt exist
     group username do
       if platform_family?('mac_os_x')
         gid user[:gid].to_i unless gid_used?(user[:gid].to_i) || new_resource.group_name == username
       else
         gid user[:gid].to_i
-      end if user[:gid] && user[:gid].is_a?(Numeric)
-      only_if { user[:gid] && user[:gid].is_a?(Numeric) && username_group || user[:groups].include?(username) }
+      end if user[:gid] && username_is_primary?(user)
+      members username unless username_is_primary?(user)
       append true
+      action :nothing
     end
 
     # Create user object.
     # Do NOT try to manage null home directories.
     user username do
       uid user[:uid].to_i unless platform_family?('mac_os_x') || !user[:uid]
-      gid user[:gid] || username if user[:gid] || user[:groups].include?(username)
+      gid user[:gid] ? primary_gid(user) : get_default_group(user)
       shell shell_is_valid?(user[:shell]) ? user[:shell] : '/bin/sh'
       comment user[:comment]
       password user[:password] if user[:password]
@@ -96,15 +106,23 @@ action :create do
       manage_home manage_home
       home home_dir unless platform_family?('mac_os_x')
       action :create
+      if username_is_primary?(user)
+        notifies :create, "group[#{username}]", :before
+      elsif creates_user_group?(user)
+        notifies :create, "group[#{username}]", :immediately
+      end
     end
 
     if manage_home_files?(home_dir, username)
       Chef::Log.debug("Managing home files for #{username}")
+      directory home_dir do
+        mode user[:homedir_mode]
+      end if user[:homedir_mode]
 
       directory "#{home_dir}/.ssh" do
         recursive true
         owner user[:uid] ? user[:uid].to_i : username
-        group user[:gid].to_i if user[:gid]
+        group user[:gid] ? primary_gid(user) : get_default_group(user)
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
       end
@@ -127,7 +145,7 @@ action :create do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner user[:uid] ? user[:uid].to_i : username
-        group user[:gid].to_i if user[:gid]
+        group user[:gid] ? primary_gid(user) : get_default_group(user)
         mode '0600'
         sensitive true
         # ssh_keys should be a combination of user['ssh_keys'] and any keys
@@ -142,7 +160,7 @@ action :create do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group user[:gid].to_i if user[:gid]
+          group user[:gid] ? primary_gid(user) : get_default_group(user)
           mode '0400'
           variables public_key: user[:ssh_public_key]
         end
@@ -154,7 +172,7 @@ action :create do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group user[:gid].to_i if user[:gid]
+          group user[:gid] ? primary_gid(user) : get_default_group(user)
           mode '0400'
           variables private_key: user[:ssh_private_key]
         end

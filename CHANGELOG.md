@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 7.1.0 - *2021-07-28*
 
 - Give group ownership of each users .ssh/* files to that users primary group
 - Allow user to set file permissions for their home directory

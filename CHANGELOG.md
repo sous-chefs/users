@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 7.1.1 - *2021-08-02*
 
 - CI: Use the chef-infra provisioner instead of chef-zero

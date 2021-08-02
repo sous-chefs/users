@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- CI: Use the chef-infra provisioner instead of chef-zero
+
 ## 7.1.0 - *2021-07-28*
 
 - Give group ownership of each users .ssh/* files to that users primary group

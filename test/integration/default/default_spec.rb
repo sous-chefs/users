@@ -385,3 +385,18 @@ describe directory('/home/nonstandard_homedir_perms/.ssh') do
   end
   its('mode') { should cmp '0700' }
 end unless os_family == 'darwin'
+
+describe user('username_gid') do
+  it { should exist }
+  case os_family
+  when 'suse'
+    its('groups') { should cmp %w(users testgroup) }
+  when 'darwin'
+    %w(staff testgroup).each do |g|
+      its('groups') { should include g }
+    end
+  else
+    its('groups') { should cmp %w(username_gid testgroup) }
+    its('gid') { should eq 7000 }
+  end
+end

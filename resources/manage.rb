@@ -97,7 +97,11 @@ action :create do
     # Do NOT try to manage null home directories.
     user username do
       uid user[:uid].to_i unless platform_family?('mac_os_x') || !user[:uid]
-      gid user[:gid] ? primary_gid(user) : get_default_group(user)
+      if user[:gid] && !primary_gid(user).is_a?(Numeric)
+        gid primary_gid(user)
+      else
+        gid get_default_group(user)
+      end
       shell shell_is_valid?(user[:shell]) ? user[:shell] : '/bin/sh'
       comment user[:comment]
       password user[:password] if user[:password]
@@ -122,7 +126,11 @@ action :create do
       directory "#{home_dir}/.ssh" do
         recursive true
         owner user[:uid] ? user[:uid].to_i : username
-        group user[:gid] ? primary_gid(user) : get_default_group(user)
+        if user[:gid] && !primary_gid(user).is_a?(Numeric)
+          group primary_gid(user)
+        else
+          group get_default_group(user)
+        end
         mode '0700'
         not_if { user[:ssh_keys].nil? && user[:ssh_private_key].nil? && user[:ssh_public_key].nil? }
       end
@@ -145,7 +153,11 @@ action :create do
         source 'authorized_keys.erb'
         cookbook new_resource.cookbook
         owner user[:uid] ? user[:uid].to_i : username
-        group user[:gid] ? primary_gid(user) : get_default_group(user)
+        if user[:gid] && !primary_gid(user).is_a?(Numeric)
+          group primary_gid(user)
+        else
+          group get_default_group(user)
+        end
         mode '0600'
         sensitive true
         # ssh_keys should be a combination of user['ssh_keys'] and any keys
@@ -160,7 +172,11 @@ action :create do
           source 'public_key.pub.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group user[:gid] ? primary_gid(user) : get_default_group(user)
+          if user[:gid] && !primary_gid(user).is_a?(Numeric)
+            group primary_gid(user)
+          else
+            group get_default_group(user)
+          end
           mode '0400'
           variables public_key: user[:ssh_public_key]
         end
@@ -172,7 +188,11 @@ action :create do
           source 'private_key.erb'
           cookbook new_resource.cookbook
           owner user[:uid] ? user[:uid].to_i : username
-          group user[:gid] ? primary_gid(user) : get_default_group(user)
+          if user[:gid] && !primary_gid(user).is_a?(Numeric)
+            group primary_gid(user)
+          else
+            group get_default_group(user)
+          end
           mode '0400'
           variables private_key: user[:ssh_private_key]
         end

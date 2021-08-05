@@ -1,0 +1,5 @@
+{
+  "username": "username_gid",
+  "groups": ["testgroup"],
+  "gid": 7000
+}

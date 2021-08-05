@@ -16,6 +16,7 @@ default['users_test']['users'] = [{
   'uid': 5000,
   'gid': 4000,
   'groups': ['nfsgroup'],
+  'primary_group': 'nfsgroup',
   'shell': '/bin/bash',
   'home': '/dev/null',
   'no_user_group': true,

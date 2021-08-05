@@ -167,6 +167,7 @@ Other potential fields (optional):
 - `authorized_keys_file`: _String_ a nonstandard location for the authorized_keys file
 - `gid`: _String, Integer_ Specifies the primary group of a user by the gid number or the group name. If `gid` is an integer and no `primary_group` is specefied than the gid will be assigned to the username group, if applicable. The group will be created if it doesn't exist.
 - `primary_group`: _String_ To be used in combination with the `gid` field when the `gid` is an integer. Specifying the group name prevents errors where the user is created before their primary group.
+- `system`: _True, False_ Specefies if a user is a system account. See the `-r` option of `useradd`.
 
 ## Resources Overview
 
@@ -217,6 +218,7 @@ end
 - `group_id` _Integer_ numeric id of the group to create, default is to allow the OS to pick next
 - `cookbook` _String_ name of the cookbook that the authorized_keys template should be found in
 - `manage_nfs_home_dirs` _Boolean_ whether to manage nfs home directories.
+- `system` _True, False_ Specefies if a group is a system group. See the `-r` option of `groupadd`.
 
 ## Recipe Overview
 

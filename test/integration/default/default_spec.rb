@@ -400,3 +400,13 @@ describe user('username_gid') do
     its('gid') { should eq 7000 }
   end
 end
+
+describe user('system_user') do
+  it { should exist }
+  its('uid') { should be < 1000 } unless os_family == 'darwin'
+end
+
+describe group('system_group') do
+  it { should exist }
+  its('gid') { should be < 1000 } unless os_family == 'darwin'
+end

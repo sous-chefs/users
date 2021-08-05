@@ -67,4 +67,9 @@ default['users_test']['users'] = [{
   'homedir_mode': '02755',
   'ssh_keys': ['ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6aZDF+x28xIlZSgyfyh3IAkencLp1VCU7JXBhJcXNy cheftestuser@laptop'],
   'groups': ['nonstandard_homedir_perms'],
+},
+{
+  'id': 'system_user',
+  'groups': ['system_group'],
+  'system': true,
 }]

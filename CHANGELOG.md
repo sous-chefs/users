@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- add system option to resource
+- add system option to user json
+- add corresponding integration tests
+
 ## 8.0.0 - *2021-08-05*
 
 - Patch bug causing the cookbook to fail on suse and macos.

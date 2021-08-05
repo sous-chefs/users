@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 8.0.0 - *2021-08-05*
 
 - Patch bug causing the cookbook to fail on suse and macos.
 - Update README to lessen confusion.

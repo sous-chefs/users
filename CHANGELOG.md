@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- Patch bug causing the cookbook to fail on suse and macos.
+- Update README to lessen confusion.
+- This may still be a breaking change for some users, but is hopefully no longer a bug.
+
 ## 7.1.1 - *2021-08-02*
 
 - CI: Use the chef-infra provisioner instead of chef-zero

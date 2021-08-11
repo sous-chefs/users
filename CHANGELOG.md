@@ -4,9 +4,9 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
-- add system option to resource
-- add system option to user json
-- add corresponding integration tests
+- Add `system` property to `users_manage` resource
+- Add `system` property to user json test data
+- Add corresponding integration tests
 
 ## 8.0.0 - *2021-08-05*
 

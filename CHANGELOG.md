@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
+## Unreleased
+
 ## 8.1.0 - *2021-08-26*
 
 - Add `system` property to `users_manage` resource

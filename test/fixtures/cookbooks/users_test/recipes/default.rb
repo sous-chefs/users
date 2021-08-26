@@ -44,3 +44,8 @@ end
 users_manage 'nonstandard_homedir_perms' do
   users node['users_test']['users']
 end
+
+users_manage 'system_group' do
+  users node['users_test']['users']
+  system true
+end

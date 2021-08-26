@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- Add `system` property to `users_manage` resource
+- Add `system` property to user json test data
+- Add corresponding integration tests
+
 ## 8.0.0 - *2021-08-05*
 
 - Patch bug causing the cookbook to fail on suse and macos.

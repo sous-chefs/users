@@ -23,7 +23,7 @@ property :group_id, Integer, description: 'numeric id of the group to create, de
 property :users, Array, description: 'Array of Hashes that contains all the users that you want to create with the users cookbook.', default: []
 property :cookbook, String, description: 'name of the cookbook that the authorized_keys template should be found in.', default: 'users'
 property :manage_nfs_home_dirs, [true, false], description: 'specifies if home_dirs should be managed when they are located on a NFS share.', default: true
-
+property :system, [true, false], description: 'specifies if the group should be a system group. See the -r option of groupadd', default: false
 # Deprecated properties
 property :data_bag, String, deprecated: 'The data_bag property has been deprecated, please see upgrading.md for more information. The property will be removed in the next major release.'
 
@@ -45,6 +45,7 @@ action :create do
       gid new_resource.group_id
       not_if "getent group #{new_resource.group_name}"
     end
+    system new_resource.system
   end
 
   # Loop through all the users in the users_hash
@@ -109,6 +110,7 @@ action :create do
       iterations user[:iterations] if user[:iterations]
       manage_home manage_home
       home home_dir unless platform_family?('mac_os_x')
+      system user[:system] unless user[:system].nil?
       action :create
       if username_is_primary?(user)
         notifies :create, "group[#{username}]", :before

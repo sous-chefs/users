@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+- Standardise files with files in sous-chefs/repo-management
+
 ## 8.1.0 - *2021-08-26*
 
 - Add `system` property to `users_manage` resource
@@ -37,6 +39,8 @@ This file is used to list changes made in each version of the users cookbook.
 - Inspec fix from nil to ''
 
 ## 6.0.3 - *2021-06-01*
+
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.2 - *2021-03-29*
 

@@ -220,9 +220,8 @@ end
 - `manage_nfs_home_dirs` _Boolean_ whether to manage nfs home directories.
 - `system` _True, False_ Specifies if a group is a system group. See the `-r` option of `groupadd`.
 
-**Reminder**  
+**Reminder**
 `users_manage` module will only create the user as long as the user's group (`groups` array) in the attribute or databag includes the users_manage's group name.
-
 
 ## Recipe Overview
 

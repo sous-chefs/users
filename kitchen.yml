@@ -23,6 +23,12 @@ platforms:
   - name: opensuse-leap-15
   - name: ubuntu-20.04
   - name: ubuntu-22.04
+  - name: windows-2022
+    driver:
+      box: stromweld/windows_2022
+      customize:
+        cpus: 2
+        memory: 4096
 
 suites:
   - name: default

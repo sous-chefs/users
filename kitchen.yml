@@ -25,7 +25,7 @@ platforms:
   - name: ubuntu-22.04
   - name: windows-2022
     driver:
-      box: stromweld/windows_2022
+      box: stromweld/windows-2022
       customize:
         cpus: 2
         memory: 4096

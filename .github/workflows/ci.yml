@@ -24,7 +24,6 @@ jobs:
           - debian-10
           - debian-11
           - fedora-latest
-          - opensuse-leap-15
           - rockylinux-8
           - ubuntu-2004
           - ubuntu-2204

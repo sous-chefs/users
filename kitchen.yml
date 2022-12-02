@@ -16,14 +16,13 @@ platforms:
   - name: amazonlinux-2
   - name: centos-7
   - name: centos-8
-  - name: debian-9
   - name: debian-10
+  - name: debian-11
   - name: fedora-latest
   - name: freebsd-12
   - name: opensuse-leap-15
-  - name: opensuse-leap-15
-  - name: ubuntu-18.04
   - name: ubuntu-20.04
+  - name: ubuntu-22.04
 
 suites:
   - name: default

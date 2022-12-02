@@ -8,56 +8,39 @@ name: ci
       - main
 
 jobs:
-  delivery:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run Chef Delivery
-        uses: actionshub/chef-delivery@main
-        env:
-          CHEF_LICENSE: accept-no-persist
-
-  yamllint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run yaml Lint
-        uses: actionshub/yamllint@main
-
-  mdl:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Run Markdown Lint
-        uses: actionshub/markdownlint@main
+  lint-unit:
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@0.0.3
 
   integration:
-    needs: [yamllint, delivery]
-    runs-on: ubuntu-latest
+    needs: lint-unit
+    runs-on: macos-latest
     strategy:
       matrix:
         os:
-          - 'amazonlinux-2'
-          - 'centos-7'
-          - 'centos-8'
-          - 'debian-9'
-          - 'debian-10'
-          - 'ubuntu-1804'
-          - 'ubuntu-2004'
-          - 'opensuse-leap-15'
+          - almalinux-8
+          - amazonlinux-2
+          - centos-7
+          - centos-8
+          - debian-10
+          - debian-11
+          - fedora-latest
+          - opensuse-leap-15
+          - rockylinux-8
+          - ubuntu-1804
+          - ubuntu-2004
+          # Disabled due to image problems:
+          # https://github.com/chef/bento/issues/1405
+          # - ubuntu-2204
         suite:
-          - 'default'
+          - default
       fail-fast: false
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Chef
         uses: actionshub/chef-install@main
-      - name: Dokken
+      - name: test-kitchen
         uses: actionshub/test-kitchen@main
         env:
           CHEF_LICENSE: accept-no-persist
@@ -67,12 +50,12 @@ jobs:
           os: ${{ matrix.os }}
 
   integration-macos:
-    needs: [mdl, yamllint, delivery]
+    needs: lint-unit
     runs-on: macos-latest
     strategy:
       matrix:
         os:
-          - 'macos-latest'
+          - macos-latest
         suite:
           - 'default'
       fail-fast: false

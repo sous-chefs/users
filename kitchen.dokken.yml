@@ -12,21 +12,26 @@ provisioner:
   name: dokken
 
 platforms:
+  - name: almalinux-8
+    driver:
+      image: dokken/almalinux-8
+      pid_one_command: /usr/lib/systemd/systemd
+
   - name: amazonlinux-2
     driver:
       image: dokken/amazonlinux-2
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: debian-9
+  - name: debian-10
     driver:
-      image: dokken/debian-9
+      image: dokken/debian-10
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
 
-  - name: debian-10
+  - name: debian-11
     driver:
-      image: dokken/debian-10
+      image: dokken/debian-11
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
@@ -46,16 +51,21 @@ platforms:
       image: dokken/fedora-latest
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: ubuntu-18.04
+  - name: rockylinux-8
     driver:
-      image: dokken/ubuntu-18.04
+      image: dokken/rockylinux-8
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: ubuntu-20.04
+    driver:
+      image: dokken/ubuntu-20.04
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
 
-  - name: ubuntu-20.04
+  - name: ubuntu-22.04
     driver:
-      image: dokken/ubuntu-18.04
+      image: dokken/ubuntu-22.04
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update

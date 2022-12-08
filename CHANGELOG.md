@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the users cookbook.
 
 ## Unreleased
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 8.1.3 - *2022-12-03*
 
 - Updated readme, Make it obvious that user creation will be skipped if the user's groups do not include the user_manage module's group name

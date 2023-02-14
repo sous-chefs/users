@@ -12,6 +12,8 @@ Standardise files with files in sous-chefs/repo-management
 
 Standardise files with files in sous-chefs/repo-management
 
+- Fix issues on Windows and add CI testing
+
 ## 8.1.3 - *2022-12-03*
 
 - Updated readme, Make it obvious that user creation will be skipped if the user's groups do not include the user_manage module's group name

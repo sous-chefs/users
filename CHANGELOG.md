@@ -6,6 +6,8 @@ This file is used to list changes made in each version of the users cookbook.
 
 Standardise files with files in sous-chefs/repo-management
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 8.1.8 - *2023-02-27*
 
 ## 8.1.7 - *2023-02-27*

@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the users cookbook.
 
-## Unreleased
+## 8.1.19 - *2024-05-03*
 
 ## 8.1.18 - *2023-09-29*
 

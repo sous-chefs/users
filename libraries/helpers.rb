@@ -25,7 +25,7 @@ module Users
       begin
         response = Chef::HTTP.new(host).get(path)
         response.split("\n")
-      rescue Net::HTTPServerException => e
+      rescue Net::HTTPClientException => e
         p "request: #{host}#{path}, error: #{e}"
       end
     end

@@ -5,6 +5,13 @@ This file is used to list changes made in each version of the users cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [8.1.24](https://github.com/sous-chefs/users/compare/8.1.23...v8.1.24) (2025-10-16)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#508](https://github.com/sous-chefs/users/issues/508)) ([8ba2b1c](https://github.com/sous-chefs/users/commit/8ba2b1c25f654b42448abddc3779067d0a09edc1))
+
 ## 8.1.22 - *2025-06-08*
 
 Standardise files with files in sous-chefs/repo-management

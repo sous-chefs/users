@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Users
   # Helpers for Users
   module Helpers

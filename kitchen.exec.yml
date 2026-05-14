@@ -2,6 +2,9 @@
 driver: { name: exec }
 transport: { name: exec }
 
+provisioner:
+  product_name: cinc
+  chef_omnibus_install: false
+
 platforms:
   - name: macos-latest
-  - name: windows-latest

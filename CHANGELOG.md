@@ -5,6 +5,22 @@ This file is used to list changes made in each version of the users cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [9.0.0](https://github.com/sous-chefs/users/compare/v8.1.24...v9.0.0) (2026-05-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate users to custom resources ([#514](https://github.com/sous-chefs/users/issues/514))
+
+### Features
+
+* migrate users to custom resources ([#514](https://github.com/sous-chefs/users/issues/514)) ([6be82e5](https://github.com/sous-chefs/users/commit/6be82e544fd6c6b0c64c503ed1b7caa5b46657b4))
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#508](https://github.com/sous-chefs/users/issues/508)) ([8ba2b1c](https://github.com/sous-chefs/users/commit/8ba2b1c25f654b42448abddc3779067d0a09edc1))
+
 ## [8.1.24](https://github.com/sous-chefs/users/compare/8.1.23...v8.1.24) (2025-10-16)
 
 

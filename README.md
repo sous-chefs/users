@@ -18,23 +18,25 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Requirements
 
-If you are upgrading from a version < 6.0.0 please see [upgrading.md](https://github.com/sous-chefs/users/upgrading.md)
+If you are upgrading from a version < 6.0.0 please see [upgrading.md](https://github.com/sous-chefs/users/upgrading.md). If you are upgrading from a recipe-based wrapper, see [migration.md](migration.md).
 
 ### Platforms
 
 The following platforms have been tested with Test Kitchen:
 
-- Debian / Ubuntu derivatives
-- RHEL and derivatives
+- AlmaLinux
+- Amazon Linux
+- CentOS Stream
+- Debian
 - Fedora
-- openSUSE / SUSE Linux Enterprises
-- FreeBSD / OpenBSD
+- Oracle Linux
+- Rocky Linux
+- Ubuntu
 - macOS
-- AIX
 
 ### Chef
 
-- Chef 12.7+
+- Chef 15.3+
 
 ### Cookbooks
 
@@ -44,13 +46,13 @@ The following platforms have been tested with Test Kitchen:
 
 To use the resource `users_manage`, make sure to add the dependency on the users cookbook by the following line to your wrapper cookbook's [metadata.rb](https://docs.chef.io/config_rb_metadata.html):
 
-```
+```ruby
 depends 'users'
 ```
 
 or to pin to a specific version of the users cookbook, in this case any version of 6.X:
 
-```
+```ruby
 depends 'users', '~> 6'
 ```
 
@@ -225,7 +227,7 @@ end
 
 ## Recipe Overview
 
-Recipes are not directly used. Please include the `users_manage` resource directly in your cookbook.
+Root recipes have been removed. Please include the `users_manage` resource directly in your cookbook. See [migration.md](migration.md) for migration examples.
 
 ## Data bag Overview
 

@@ -7,6 +7,12 @@ name: ci
     branches:
       - main
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   lint-unit:
     uses: sous-chefs/.github/.github/workflows/lint-unit.yml@6.0.0
@@ -18,15 +24,21 @@ jobs:
       matrix:
         os:
           - almalinux-8
-          - amazonlinux-2
-          - centos-7
-          - centos-8
-          - debian-10
-          - debian-11
+          - almalinux-9
+          - almalinux-10
+          - amazonlinux-2023
+          - centos-stream-9
+          - centos-stream-10
+          - debian-12
+          - debian-13
           - fedora-latest
+          - oraclelinux-8
+          - oraclelinux-9
           - rockylinux-8
-          - ubuntu-2004
+          - rockylinux-9
+          - rockylinux-10
           - ubuntu-2204
+          - ubuntu-2404
         suite:
           - default
       fail-fast: false
@@ -34,8 +46,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v6
-      - name: Install Chef
-        uses: actionshub/chef-install@6.0.0
+      - name: Install Cinc Workstation
+        uses: sous-chefs/.github/.github/actions/install-workstation@6.0.0
       - name: test-kitchen
         uses: actionshub/test-kitchen@3.0.0
         env:
@@ -59,8 +71,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v6
-      - name: Install Chef
-        uses: actionshub/chef-install@6.0.0
+      - name: Install Cinc Workstation
+        uses: sous-chefs/.github/.github/actions/install-workstation@6.0.0
       - name: test-kitchen
         uses: actionshub/test-kitchen@3.0.0
         env:
@@ -69,28 +81,3 @@ jobs:
         with:
           suite: ${{ matrix.suite }}
           os: ${{ matrix.os }}
-# TODO: Fix windows testing
-#  integration-windows:
-#    needs: lint-unit
-#    runs-on: windows-latest
-#    strategy:
-#      matrix:
-#        os:
-#          - windows-latest
-#        suite:
-#          - default
-#      fail-fast: false
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v3
-#      - name: Install Chef
-#        uses: actionshub/chef-install@2.0.4
-#      - name: test-kitchen
-#        uses: actionshub/test-kitchen@2.1.0
-#        env:
-#          CHEF_LICENSE: accept-no-persist
-#          KITCHEN_LOCAL_YAML: kitchen.exec.yml
-#        with:
-#          suite: ${{ matrix.suite }}
-#          os: ${{ matrix.os }}

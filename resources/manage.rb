@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Cookbook:: users
 # Resources:: manage
@@ -16,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+provides :users_manage
 unified_mode true
 
 property :group_name, String, description: 'name of the group to create, defaults to resource name', name_property: true

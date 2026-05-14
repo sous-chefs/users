@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Users
   # Helpers for Users
   module OsxHelper
     def dscl(*args)
       host = '.'
-      stdout_result = ''
-      stderr_result = ''
+      stdout_result = String.new
+      stderr_result = String.new
       cmd = "dscl #{host} -#{args.join(' ')}"
       status = shell_out(cmd)
       status.stdout.each_line { |line| stdout_result << line }

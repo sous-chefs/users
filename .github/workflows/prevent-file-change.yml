@@ -14,6 +14,6 @@ permissions:
 
 jobs:
   prevent-file-change:
-    uses: sous-chefs/.github/.github/workflows/prevent-file-change.yml@6.0.0
+    uses: sous-chefs/.github/.github/workflows/prevent-file-change.yml@8.0.1
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}

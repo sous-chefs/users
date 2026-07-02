@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   lint-unit:
-    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@8.0.2
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@9.0.0
 
   integration-linux:
     needs: lint-unit
@@ -47,7 +47,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v7
       - name: Install Cinc Workstation
-        uses: sous-chefs/.github/.github/actions/install-workstation@8.0.2
+        uses: sous-chefs/.github/.github/actions/install-workstation@9.0.0
       - name: Install cookbooks
         run: chef install Policyfile.rb
       - name: test-kitchen
@@ -74,7 +74,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v7
       - name: Install Cinc Workstation
-        uses: sous-chefs/.github/.github/actions/install-workstation@8.0.2
+        uses: sous-chefs/.github/.github/actions/install-workstation@9.0.0
       - name: Install cookbooks
         run: chef install Policyfile.rb
       - name: test-kitchen

@@ -1,4 +1,4 @@
-# Limitations
+# AGENTS.md
 
 ## Package Availability
 

@@ -9,6 +9,7 @@ transport:
 
 provisioner:
   name: chef_infra
+  policyfile: Policyfile.rb
   product_name: chef
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   channel: stable
@@ -39,10 +40,6 @@ platforms:
   - name: ubuntu-22.04
   - name: ubuntu-24.04
 
-x-run_lists:
-  default: &default_run_list
-    - recipe[test::default]
-
 x-verifiers:
   default: &default_verifier
     inspec_tests:
@@ -51,5 +48,6 @@ x-verifiers:
 suites:
   - name: default
     data_bags_path: "./test/fixtures/data_bags"
-    run_list: *default_run_list
+    provisioner:
+      named_run_list: default
     verifier: *default_verifier

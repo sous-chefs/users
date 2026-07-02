@@ -48,6 +48,8 @@ jobs:
         uses: actions/checkout@v7
       - name: Install Cinc Workstation
         uses: sous-chefs/.github/.github/actions/install-workstation@8.0.2
+      - name: Install cookbooks
+        run: chef install Policyfile.rb
       - name: test-kitchen
         uses: actionshub/test-kitchen@3.0.0
         env:
@@ -73,6 +75,8 @@ jobs:
         uses: actions/checkout@v7
       - name: Install Cinc Workstation
         uses: sous-chefs/.github/.github/actions/install-workstation@8.0.2
+      - name: Install cookbooks
+        run: chef install Policyfile.rb
       - name: test-kitchen
         uses: actionshub/test-kitchen@3.0.0
         env:
